@@ -1,7 +1,9 @@
+```python
 #!/usr/bin/env python3
 """
 📚 Professional Book Generator - Powered by Groq
 Generates complete, sellable ebooks — PDF direct sell or Amazon KDP
+Optimized with Two-Step Generation to eliminate repetitions and PDF clipping.
 """
 
 import os
@@ -69,16 +71,16 @@ BOOK_THEMES = {
         "cover_accent": "#ffd700"
     },
     "self_help": {
-        "primary": "#1e1b4b",
-        "secondary": "#312e81",
+        "primary": "#0a0a0a",
+        "secondary": "#111111",
         "accent": "#a78bfa",
         "text": "#ede9fe",
         "highlight": "#c4b5fd",
-        "font_title": "Nunito",
+        "font_title": "Montserrat",
         "font_body": "Open Sans",
         "emoji": "✨",
-        "gradient": "linear-gradient(160deg, #1e1b4b 0%, #312e81 50%, #3730a3 100%)",
-        "cover_gradient": "linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
+        "gradient": "linear-gradient(160deg, #0a0a0a 0%, #111111 50%, #1c1c1c 100%)",
+        "cover_gradient": "linear-gradient(160deg, #0b0b0b 0%, #111111 50%, #1a1a1a 100%)",
         "cover_accent": "#a78bfa"
     },
     "technology": {
@@ -148,13 +150,27 @@ BOOK_THEMES = {
     }
 }
 
+def clean_french_grammar(text: str) -> str:
+    """Post-processing filter to fix common AI French mistakes"""
+    replacements = {
+        r"\bla conditionnement\b": "le conditionnement",
+        r"\bLa conditionnement\b": "Le conditionnement",
+        r"\bvos douts\b": "vos doutes",
+        r"\bcombien de fois as-built\b": "combien de fois as-tu bâti",
+        r"\blalaitoall\b": "",  # Remove random AI hallucinations
+        r"\btexploiter\b": "l'exploiter"
+    }
+    for pattern, repl in replacements.items():
+        text = re.sub(pattern, repl, text, flags=re.IGNORECASE)
+    return text
+
 def detect_theme(title: str, language: str = "en") -> str:
     title_lower = title.lower()
     keywords = {
         "business": ["business","startup","entrepreneur","marketing","sales","brand","عمل","تجارة","ريادة","affaires","negocio"],
         "health": ["health","fitness","wellness","diet","nutrition","صحة","لياقة","تغذية","santé","salud"],
         "finance": ["money","invest","finance","wealth","rich","مال","استثمار","ثروة","argent","dinero"],
-        "self_help": ["confidence","mindset","habit","success","motivation","ثقة","عادات","نجاح","confiance","confianza","secret","réussir","réussite"],
+        "self_help": ["confidence","mindset","habit","success","motivation","discipline","ombre","shadow","protocole","ثقة","عادات","نجاح","confiance","confianza","secret","réussir","réussite"],
         "technology": ["ai","coding","tech","software","digital","تقنية","برمجة","ذكاء اصطناعي","technologie"],
         "spirituality": ["spiritual","meditation","soul","mindfulness","روحانية","تأمل","روح","spiritualité"],
         "cooking": ["cook","recipe","food","kitchen","طبخ","وصفة","طعام","cuisine","cocina"],
@@ -174,7 +190,7 @@ def call_groq(messages: list, max_tokens: int = 4000) -> str:
         "model": MODEL,
         "messages": messages,
         "max_tokens": max_tokens,
-        "temperature": 0.7,
+        "temperature": 0.75,
         "top_p": 0.9
     }
     response = requests.post(GROQ_API_URL, headers=headers, json=payload)
@@ -182,54 +198,44 @@ def call_groq(messages: list, max_tokens: int = 4000) -> str:
         raise Exception(f"Groq API Error: {response.status_code} - {response.text}")
     return response.json()["choices"][0]["message"]["content"]
 
+
+# ============================================================
+# 🔥 NEW TWO-STEP ENGINE GENERATORS
+# ============================================================
+
 def generate_book_structure(title: str, language: str = "en") -> dict:
-    """Generate book structure optimized like bestselling books"""
-
+    """Step 1: Generates ONLY the structural metadata and chapter list with briefs"""
+    
     lang_prompts = {
-        "en": "You are a professional bestselling author. Your books follow the structure of top sellers like Atomic Habits, The Psychology of Money, and Think and Grow Rich.",
-        "ar": "أنت مؤلف محترف ومتخصص في الكتب الأكثر مبيعًا. كتبك تتبع هيكل أفضل الكتب مبيعًا مثل العادات الذرية وعلم النفس والمال.",
-        "fr": "Vous êtes un auteur professionnel spécialisé dans les best-sellers. Vos livres suivent la structure des meilleures ventes comme Atomic Habits et Thinking Fast and Slow.",
-        "es": "Eres un autor profesional de bestsellers. Tus libros siguen la estructura de los más vendidos como Hábitos Atómicos.",
-        "de": "Sie sind ein professioneller Autor, spezialisiert auf Bestseller. Ihre Bücher folgen der Struktur von Top-Sellern wie Atomic Habits.",
-        "pt": "Você é um autor profissional especializado em bestsellers. Seus livros seguem a estrutura dos mais vendidos como Hábitos Atômicos.",
-        "it": "Sei un autore professionista specializzato in bestseller. I tuoi libri seguono la struttura dei più venduti come Le Abitudini Atomiche.",
-        "zh": "您是一位专业畅销书作者。您的书籍遵循《原子习惯》等顶级畅销书的结构。",
-        "ja": "あなたはプロのベストセラー作家です。あなたの本は『習慣の力』などのトップセラーの構成に従っています。",
-        "ru": "Вы профессиональный автор бестселлеров. Ваши книги следуют структуре таких бестселлеров, как «Атомные привычки»."
+        "en": "You are a professional bestselling author. Your books follow the structure of top sellers like Atomic Habits and The Psychology of Money.",
+        "ar": "أنت مؤلف محترف ومتخصص في الكتب الأكثر مبيعًا. كتبك تتبع هيكل أفضل الكتب مبيعًا.",
+        "fr": "Vous êtes un auteur professionnel de best-sellers. Votre ton est froid, élégant, stoïque et percutant (Maria Talks d'élite).",
     }
-
+    
     system_msg = lang_prompts.get(language, lang_prompts["en"])
 
     messages = [
         {"role": "system", "content": system_msg},
         {"role": "user", "content": f"""
-Create a complete, professional, sellable ebook about: "{title}"
+Create the metadata and strategic chapter index for a premium workbook about: "{title}"
 
-CRITICAL RULES FOR BESTSELLING BOOKS:
-1. Hook the reader from the FIRST sentence — start with a shocking fact, story, or bold claim
-2. Every chapter must solve ONE specific problem with actionable steps
-3. Use real-world examples and mini-stories (Malcolm Gladwell style)
-4. Each chapter: Problem → Science/Evidence → Solution → Action Steps
-5. Write like talking to a smart friend, not giving a lecture
-6. Short paragraphs (2-4 sentences max) for easy reading
-7. Include specific numbers, stats, and named techniques
-8. Chapters build on each other (progressive revelation)
-9. IMPORTANT: Write DETAILED content for each chapter — minimum 800 words of real substance
-10. NO filler, NO repetition — every sentence must earn its place
+Rules:
+1. Return ONLY a valid JSON object. No intro/outro commentary, no markdown ticks.
+2. Formulate chapters to address progressive levels of deep psychology or stoicism.
+3. Language of output: {language}.
 
-Return ONLY valid JSON (no markdown, no backticks, no commentary):
-
+Format EXACTLY as:
 {{
   "title": "powerful book title",
-  "subtitle": "specific, benefit-driven subtitle (what reader GETS)",
-  "author": "Professional Author",
-  "tagline": "one sentence that makes someone NEED this book",
-  "description": "200 words: start with the problem, agitate it, then promise the solution. Be specific about transformation.",
-  "target_audience": "exactly who this is for (be specific)",
-  "keywords": ["keyword1","keyword2","keyword3","keyword4","keyword5"],
-  "categories": ["Primary Category","Secondary Category"],
+  "subtitle": "benefit-driven subtitle",
+  "author": "Maria Talks",
+  "tagline": "one percutant sentence that makes someone NEED this workbook",
+  "description": "200 words explaining the psychological transition this workbook will trigger.",
+  "target_audience": "young adults seeking raw mental performance",
+  "keywords": ["keyword1", "keyword2"],
+  "categories": ["Personal Growth", "Stoicism"],
   "key_benefits": [
-    "Specific benefit 1 with number (e.g. Build 3 income streams in 90 days)",
+    "Specific benefit 1",
     "Specific benefit 2",
     "Specific benefit 3",
     "Specific benefit 4",
@@ -238,32 +244,62 @@ Return ONLY valid JSON (no markdown, no backticks, no commentary):
   "chapters": [
     {{
       "number": 1,
-      "title": "Chapter Title (power words)",
-      "subtitle": "The specific promise of this chapter",
-      "hook": "One shocking opening sentence",
-      "key_points": ["specific point 1", "specific point 2", "specific point 3"],
-      "content": "Write 800-1000 words of PREMIUM content. Structure: 1) Open with a mini-story or shocking fact (100w). 2) Explain the core problem with evidence (200w). 3) Reveal the solution with a specific named technique (200w). 4) Real-world example of how it works (150w). 5) 3-5 numbered actionable steps (250w). Short paragraphs. NO filler.",
-      "key_technique": "Name the main technique taught (e.g. The 2-Minute Rule)",
-      "exercises": [
-        "Exercise 1: Specific, doable action with clear instructions",
-        "Exercise 2: Follow-up action to reinforce the lesson"
-      ],
-      "summary": "The one thing to remember from this chapter (one powerful sentence)"
+      "title": "Chapter Title",
+      "subtitle": "The specific promise/goal of this chapter",
+      "focus": "A short brief of what psychological problem this chapter must address."
+    }},
+    {{
+      "number": 2,
+      "title": "Chapter Title",
+      "subtitle": "Chapter promise",
+      "focus": "Brief"
+    }},
+    {{
+      "number": 3,
+      "title": "Chapter Title",
+      "subtitle": "Chapter promise",
+      "focus": "Brief"
+    }},
+    {{
+      "number": 4,
+      "title": "Chapter Title",
+      "subtitle": "Chapter promise",
+      "focus": "Brief"
+    }},
+    {{
+      "number": 5,
+      "title": "Chapter Title",
+      "subtitle": "Chapter promise",
+      "focus": "Brief"
+    }},
+    {{
+      "number": 6,
+      "title": "Chapter Title",
+      "subtitle": "Chapter promise",
+      "focus": "Brief"
+    }},
+    {{
+      "number": 7,
+      "title": "Chapter Title",
+      "subtitle": "Chapter promise",
+      "focus": "Brief"
+    }},
+    {{
+      "number": 8,
+      "title": "Chapter Title",
+      "subtitle": "Chapter promise",
+      "focus": "Brief"
     }}
   ],
-  "introduction": "300 words: Start with a relatable struggle. Promise transformation. Explain what makes this book different. Give roadmap of chapters. End with motivating call to action.",
-  "conclusion": "300 words: Celebrate the reader. Recap the 3 biggest transformations. Paint a vivid picture of their new life. Give ONE final action step. End with inspiring challenge.",
-  "about_author": "150 words: Third-person bio. Real-sounding credentials, personal struggle overcome, why they wrote this book.",
-  "back_cover_description": "120 words of compelling back cover copy. Hook, 3 bullet promises, call to action."
+  "introduction": "300 words introducing the concept of this book with zero fluff. Go straight to raw, percutant truths.",
+  "conclusion": "300 words summarizing the ultimate transition and final call to action.",
+  "about_author": "150 words third-person strategic biography of Maria Talks.",
+  "back_cover_description": "Compelling back cover copy."
 }}
-
-Write 8 chapters. Language: {language}. Make this worth $19.99-$29.99 USD.
 """}
     ]
 
-    content = call_groq(messages, max_tokens=8000)
-    content = content.strip()
-
+    content = call_groq(messages, max_tokens=3000).strip()
     if "```json" in content:
         content = content.split("```json")[1].split("```")[0]
     elif "```" in content:
@@ -272,17 +308,86 @@ Write 8 chapters. Language: {language}. Make this worth $19.99-$29.99 USD.
 
     start = content.find('{')
     end = content.rfind('}') + 1
-    if start >= 0 and end > start:
-        content = content[start:end]
+    structure = json.loads(content[start:end])
+    
+    # Clean structure texts
+    structure["introduction"] = clean_french_grammar(structure.get("introduction", ""))
+    structure["conclusion"] = clean_french_grammar(structure.get("conclusion", ""))
+    structure["description"] = clean_french_grammar(structure.get("description", ""))
+    return structure
 
-    return json.loads(content)
+
+def generate_single_chapter_content(book_title: str, chapter: dict, language: str = "en") -> dict:
+    """Step 2: Generates deep, premium content for exactly ONE chapter to prevent repetitions"""
+    
+    system_prompt = (
+        "You are an elite psychological coach and stoic philosopher. You write in flawless, "
+        "cold, gender-neutral, and highly strategic French. Your persona is 'Maria Talks'. "
+        "Never use fluffy clichés. Always write in short, punchy paragraphs (2-4 sentences max)."
+    )
+
+    user_prompt = f"""
+Book: "{book_title}"
+Write all the internal sections for Chapter {chapter['number']}: "{chapter['title']}"
+Chapter Promise: {chapter['subtitle']}
+Focus/Brief of this Chapter: {chapter.get('focus', '')}
+
+CRITICAL RULES:
+1. Write in flawless, elegant, and neutral/unisexe French (No brackets like 'fatigué(e)', use terms like 'Si la fatigue te freine').
+2. Do NOT use introductory filler phrases like 'Dans ce chapitre nous allons voir...' or 'Dans cette section...'. Jump directly into the raw content.
+3. Write a deep and detailed master content of minimum 800 words. Split it into multiple short paragraphs. 
+4. Provide a powerful, unsettling Shadow Work question.
+
+Output ONLY a raw, valid JSON matching this schema:
+{{
+  "hook": "One shocking and percutant opening hook sentence.",
+  "key_points": [
+    "Specific point 1",
+    "Specific point 2",
+    "Specific point 3"
+  ],
+  "content": "A highly detailed, raw, cold 800-word analysis. Give specific names, psychological reasons, and a concrete stoic strategy. Make it extremely valuable.",
+  "key_technique": "A named advanced stoic or psychological technique.",
+  "exercises": [
+    "Exercise 1: Actionable, difficult but necessary practical real-world task.",
+    "Exercise 2: An uncomfortable, deep Shadow Work question confronting their ego."
+  ],
+  "summary": "One powerful, icy, memorable closing takeaway sentence."
+}}
+"""
+
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt}
+    ]
+
+    content = call_groq(messages, max_tokens=4000).strip()
+    if "```json" in content:
+        content = content.split("```json")[1].split("```")[0]
+    elif "```" in content:
+        content = content.split("```")[1].split("```")[0]
+    content = content.strip()
+
+    start = content.find('{')
+    end = content.rfind('}') + 1
+    ch_data = json.loads(content[start:end])
+    
+    # Post-process grammar cleaning on output text
+    if "content" in ch_data:
+        ch_data["content"] = clean_french_grammar(ch_data["content"])
+    if "hook" in ch_data:
+        ch_data["hook"] = clean_french_grammar(ch_data["hook"])
+    if "summary" in ch_data:
+        ch_data["summary"] = clean_french_grammar(ch_data["summary"])
+        
+    return ch_data
 
 
 # ============================================================
 # FORMAT 1: PDF DIRECT SELL (dark, mobile-optimized)
 # ============================================================
 def generate_pdf_html(book_data: dict, theme: dict, language: str = "en") -> str:
-    """Dark mobile-optimized HTML for direct PDF selling"""
+    """Dark mobile-optimized HTML for direct PDF selling (Fully Responsive & Non-Clipping)"""
 
     is_rtl = language == "ar"
     dir_attr = 'dir="rtl"' if is_rtl else ''
@@ -431,13 +536,13 @@ body {{
 
 /* ====== COVER ====== */
 .cover-page {{
-    min-height: 100vh;
+    height: 297mm; /* Standard static height to prevent layout shifting on PDF engine */
+    box-sizing: border-box;
     background: var(--cover-gradient);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-start;
-    padding: 60px var(--side) 50px;
+    display: block;
+    padding-top: 85mm; /* Flexless center positioning */
+    padding-left: var(--side);
+    padding-right: var(--side);
     position: relative;
     overflow: hidden;
 }}
@@ -834,7 +939,7 @@ body {{
 
 <div id="reading-progress"></div>
 
-<section class="cover-page">
+<section class="cover-page page-break">
     <div class="cover-circle-big"></div>
     <div class="cover-top-bar">
         <span class="cover-genre-tag">{theme["emoji"]} Book</span>
@@ -942,7 +1047,7 @@ async function downloadPDF() {{
             format: [120, 213],
             orientation: 'portrait'
         }},
-        // FIXED: smart rendering mode instead of legacy to eliminate layout shifting
+        // FIXED: avoid-all mode strictly eliminates shifted empty page breaks
         pagebreak: {{ mode: ['avoid-all', 'css'] }}
     }};
     try {{
@@ -1077,12 +1182,11 @@ body {{
     width: 152mm;
     height: 228mm;
     background: linear-gradient(170deg, #111 0%, #222 60%, #333 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display: block;
+    padding-top: 45mm; /* Block layout without flex */
     text-align: center;
-    padding: 20mm 15mm;
+    padding-left: 15mm;
+    padding-right: 15mm;
     position: relative;
     overflow: hidden;
 }}
@@ -1153,12 +1257,11 @@ body {{
 /* ====== FRONT MATTER ====== */
 .title-page {{
     height: 228mm;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display: block;
+    padding-top: 60mm;
     text-align: center;
-    padding: 20mm;
+    padding-left: 20mm;
+    padding-right: 20mm;
 }}
 .tp-title {{
     font-family: var(--font-title);
@@ -1187,7 +1290,7 @@ body {{
     text-transform: uppercase;
     color: #333;
 }}
-.tp-year {{ margin-top: 60px; font-size: 0.8rem; color: #999; }}
+.tp-year {{ margin-top: 30px; font-size: 0.8rem; color: #999; }}
 
 .copyright-page {{ padding: 20mm; font-size: 9pt; color: #666; line-height: 1.7; }}
 .copyright-page p {{ margin-bottom: 10px; }}
@@ -1489,7 +1592,7 @@ h3{{font-size:1rem;margin-bottom:7px}}
 
 def main():
     book_title  = os.environ.get("BOOK_TITLE", "")
-    language    = os.environ.get("BOOK_LANGUAGE", "en")
+    language    = os.environ.get("BOOK_LANGUAGE", "fr")  # Default to French for Maria Talks
     action      = os.environ.get("ACTION", "generate")
     author_name = os.environ.get("BOOK_AUTHOR", "").strip()
     book_format = os.environ.get("BOOK_FORMAT", "pdf")  # "pdf" or "kdp"
@@ -1518,10 +1621,29 @@ def main():
 
         theme_key = detect_theme(book_title, language)
         theme = BOOK_THEMES[theme_key]
-        print(f"🎨 Theme: {theme_key} {theme['emoji']}")
+        print(f"🎨 Theme Detected: {theme_key} {theme['emoji']}")
 
-        print("✍️  Writing content with Groq AI...")
+        # STEP 1: Generate structural skeleton metadata
+        print("✍️  [Phase 1] Writing Book Structure Skeleton...")
         book_data = generate_book_structure(book_title, language)
+
+        # STEP 2: Loop through chapters and generate deep focused content for each one independently
+        print("✍️  [Phase 2] Generating non-repetitive focused chapters...")
+        completed_chapters = []
+        for ch in book_data.get("chapters", []):
+            print(f"🚀 Generating Chapter {ch['number']}: {ch['title']}...")
+            try:
+                ch_details = generate_single_chapter_content(book_title, ch, language)
+                ch.update(ch_details)  # Merge details into chapter skeleton
+                completed_chapters.append(ch)
+            except Exception as e:
+                print(f"⚠️ Error generating Chapter {ch['number']}: {e}. Retrying once...")
+                # Simple single-retry mechanism to ensure robustness against API timeouts
+                ch_details = generate_single_chapter_content(book_title, ch, language)
+                ch.update(ch_details)
+                completed_chapters.append(ch)
+                
+        book_data["chapters"] = completed_chapters
 
         if author_name:
             book_data["author"] = author_name
@@ -1529,7 +1651,7 @@ def main():
         with open("output/book_data.json", "w", encoding="utf-8") as f:
             json.dump(book_data, f, ensure_ascii=False, indent=2)
 
-        print("🎨 Designing layout...")
+        print("🎨 Designing layout and compiling HTML...")
         if book_format == "kdp":
             html = generate_kdp_html(book_data, theme, language)
             format_suffix = "_KDP"
@@ -1564,3 +1686,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+```
