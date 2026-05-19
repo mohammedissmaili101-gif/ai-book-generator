@@ -50,5 +50,3 @@ def generate_single_chapter_content(book_title: str, chapter: dict, language: st
     return {"hook": "...", "content": "...", "exercises": [], "summary": "..."}
 
 # ملاحظة: يجب استبدال الدوال القديمة بهذه النسخ المحسنة في ملفك الأصلي.
-
-```
