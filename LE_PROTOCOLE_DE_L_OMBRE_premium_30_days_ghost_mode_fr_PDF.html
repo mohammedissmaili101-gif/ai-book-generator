@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LE PROTOCOLE DE L'OMBRE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat,wght@400;700;900&family=Source+Sans+Pro,wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat,wght@400;700;900&family=Open+Sans,wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 :root {
-    --primary:   #030712;
-    --secondary: #0f172a;
-    --accent:    #22d3ee;
-    --text:      #e2e8f0;
-    --highlight: #38bdf8;
-    --gradient:  linear-gradient(160deg, #030712 0%, #0f172a 50%, #1e293b 100%);
-    --cover-gradient: linear-gradient(160deg, #020617 0%, #0f172a 60%, #1e293b 100%);
-    --cover-accent:   #22d3ee;
+    --primary:   #0a0a0a;
+    --secondary: #111111;
+    --accent:    #a78bfa;
+    --text:      #ede9fe;
+    --highlight: #c4b5fd;
+    --gradient:  linear-gradient(160deg, #0a0a0a 0%, #111111 50%, #1c1c1c 100%);
+    --cover-gradient: linear-gradient(160deg, #0b0b0b 0%, #111111 50%, #1a1a1a 100%);
+    --cover-accent:   #a78bfa;
     --font-title: 'Montserrat', Georgia, serif;
-    --font-body:  'Source Sans Pro', Georgia, serif;
+    --font-body:  'Open Sans', Georgia, serif;
     --size-xs: 0.75rem; --size-sm: 0.875rem; --size-base: 1rem;
     --size-lg: 1.125rem; --size-xl: 1.375rem;
     --size-2xl: 1.75rem; --size-3xl: 2.25rem;
@@ -27,433 +27,112 @@
 }
 html { scroll-behavior: smooth; }
 body {
-    background: var(--primary);
-    color: var(--text);
-    font-family: var(--font-body);
-    font-size: var(--size-base);
-    line-height: 1.85;
-    max-width: 480px;
-    margin: 0 auto;
-    -webkit-font-smoothing: antialiased;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+    background: var(--primary); color: var(--text);
+    font-family: var(--font-body); font-size: var(--size-base);
+    line-height: 1.85; max-width: 480px; margin: 0 auto;
+    -webkit-font-smoothing: antialiased; word-wrap: break-word; overflow-wrap: break-word;
 }
-
-/* ====== COVER ====== */
 .cover-page {
-    min-height: 100vh;
-    background: var(--cover-gradient);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-start;
-    padding: 60px var(--side) 50px;
-    position: relative;
-    overflow: hidden;
+    height: 297mm; box-sizing: border-box; background: var(--cover-gradient); display: block;
+    padding-top: 85mm; padding-left: var(--side); padding-right: var(--side); position: relative; overflow: hidden;
 }
-.cover-page::before {
-    content: '';
-    position: absolute;
-    top: -80px; right: -80px;
-    width: 320px; height: 320px;
-    border-radius: 50%;
-    background: var(--cover-accent);
-    opacity: 0.08;
-}
-.cover-page::after {
-    content: '';
-    position: absolute;
-    bottom: 120px; right: -40px;
-    width: 180px; height: 180px;
-    border-radius: 50%;
-    border: 2px solid var(--cover-accent);
-    opacity: 0.15;
-}
-.cover-circle-big {
-    position: absolute;
-    top: 30px; left: 50%;
-    transform: translateX(-50%);
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    border: 40px solid var(--cover-accent);
-    opacity: 0.06;
-}
-.cover-top-bar {
-    position: absolute;
-    top: var(--side); left: var(--side); right: var(--side);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.cover-genre-tag {
-    background: var(--cover-accent);
-    color: var(--primary);
-    font-size: var(--size-xs);
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border-radius: 20px;
-}
+.cover-page::before { content: ''; position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; border-radius: 50%; background: var(--cover-accent); opacity: 0.08; }
+.cover-page::after { content: ''; position: absolute; bottom: 120px; right: -40px; width: 180px; height: 180px; border-radius: 50%; border: 2px solid var(--cover-accent); opacity: 0.15; }
+.cover-circle-big { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); width: 200px; height: 200px; border-radius: 50%; border: 40px solid var(--cover-accent); opacity: 0.06; }
+.cover-top-bar { position: absolute; top: var(--side); left: var(--side); right: var(--side); display: flex; justify-content: space-between; align-items: center; }
+.cover-genre-tag { background: var(--cover-accent); color: var(--primary); font-size: var(--size-xs); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; }
 .cover-year { font-size: var(--size-xs); color: rgba(255,255,255,0.35); letter-spacing: 2px; }
-.cover-emoji {
-    font-size: 64px;
-    margin-bottom: 28px;
-    display: block;
-    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
-}
-.cover-line {
-    width: 60px; height: 4px;
-    background: var(--cover-accent);
-    border-radius: 2px;
-    margin-bottom: 20px;
-}
-.cover-title {
-    font-family: var(--font-title);
-    font-size: clamp(1.9rem, 6vw, 2.6rem);
-    font-weight: 900;
-    color: #fff;
-    line-height: 1.15;
-    margin-bottom: 14px;
-    letter-spacing: -0.5px;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
-}
-.cover-subtitle {
-    font-size: var(--size-sm);
-    color: var(--cover-accent);
-    font-style: italic;
-    margin-bottom: 36px;
-    line-height: 1.5;
-    opacity: 0.9;
-}
-.cover-author-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-top: 24px;
-    border-top: 1px solid rgba(255,255,255,0.12);
-    width: 100%;
-}
-.cover-author-dot {
-    width: 36px; height: 36px;
-    background: var(--cover-accent);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    font-weight: 900;
-    color: var(--primary);
-}
-.cover-author-name {
-    font-size: var(--size-xs);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.6);
-}
-
-/* ====== NAV ====== */
-.nav-bar {
-    position: sticky; top: 0;
-    background: rgba(0,0,0,0.92);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    padding: 13px var(--side);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 100;
-}
-.nav-title {
-    font-family: var(--font-title);
-    font-size: var(--size-xs);
-    color: var(--accent);
-    font-weight: 700;
-}
+.cover-emoji { font-size: 64px; margin-bottom: 28px; display: block; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5)); }
+.cover-line { width: 60px; height: 4px; background: var(--cover-accent); border-radius: 2px; margin-bottom: 20px; }
+.cover-title { font-family: var(--font-title); font-size: clamp(1.9rem, 6vw, 2.6rem); font-weight: 900; color: #fff; line-height: 1.15; margin-bottom: 14px; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
+.cover-subtitle { font-size: var(--size-sm); color: var(--cover-accent); font-style: italic; margin-bottom: 36px; opacity: 0.9; }
+.cover-author-row { display: flex; align-items: center; gap: 10px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12); }
+.cover-author-dot { width: 36px; height: 36px; background: var(--cover-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: var(--primary); }
+.cover-author-name { font-size: var(--size-xs); letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+.nav-bar { position: sticky; top: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 13px var(--side); display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-title { font-family: var(--font-title); font-size: var(--size-xs); color: var(--accent); font-weight: 700; }
 .nav-progress-text { font-size: var(--size-xs); color: rgba(255,255,255,0.35); }
-
-/* ====== DESCRIPTION ====== */
-.description-page {
-    padding: var(--gap-xl) var(--side);
-    background: var(--secondary);
-    border-bottom: 3px solid var(--accent);
-}
-.section-label {
-    font-size: var(--size-xs);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 14px;
-    display: block;
-}
-.description-text {
-    font-size: var(--size-base);
-    line-height: 1.85;
-    color: rgba(255,255,255,0.78);
-    margin-bottom: var(--gap-lg);
-}
+.description-page { padding: var(--gap-xl) var(--side); background: var(--secondary); border-bottom: 3px solid var(--accent); }
+.section-label { font-size: var(--size-xs); letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: block; }
+.description-text { font-size: var(--size-base); color: rgba(255,255,255,0.78); margin-bottom: var(--gap-lg); }
 .benefits-list { display: flex; flex-direction: column; gap: 10px; }
-.benefit-item {
-    display: flex; align-items: flex-start; gap: 12px;
-    padding: 13px 15px;
-    background: rgba(255,255,255,0.04);
-    border-radius: var(--radius);
-    border-left: 3px solid var(--accent);
-}
+.benefit-item { display: flex; align-items: flex-start; gap: 12px; padding: 13px 15px; background: rgba(255,255,255,0.04); border-radius: var(--radius); border-left: 3px solid var(--accent); }
 .benefit-check { color: var(--accent); font-weight: 900; font-size: var(--size-lg); flex-shrink: 0; line-height: 1.3; }
-.benefit-text { font-size: var(--size-sm); line-height: 1.6; color: rgba(255,255,255,0.82); }
-
-/* ====== TOC ====== */
+.benefit-text { font-size: var(--size-sm); color: rgba(255,255,255,0.82); }
 .toc-page { padding: var(--gap-xl) var(--side); background: var(--primary); }
-.page-title {
-    font-family: var(--font-title);
-    font-size: var(--size-2xl);
-    font-weight: 900;
-    color: #fff;
-    margin-bottom: var(--gap-md);
-    line-height: 1.2;
-}
-.toc-item {
-    display: flex; align-items: center; gap: 14px;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    cursor: pointer;
-}
-.toc-num {
-    font-family: var(--font-title);
-    font-size: var(--size-lg);
-    font-weight: 900;
-    color: var(--accent);
-    min-width: 34px;
-}
+.page-title { font-family: var(--font-title); font-size: var(--size-2xl); font-weight: 900; color: #fff; margin-bottom: var(--gap-md); }
+.toc-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; }
+.toc-num { font-family: var(--font-title); font-size: var(--size-lg); font-weight: 900; color: var(--accent); min-width: 34px; }
 .toc-text { flex: 1; display: flex; flex-direction: column; gap: 3px; }
-.toc-title { font-size: var(--size-sm); font-weight: 600; color: #fff; line-height: 1.3; }
+.toc-title { font-size: var(--size-sm); font-weight: 600; color: #fff; }
 .toc-sub { font-size: var(--size-xs); color: rgba(255,255,255,0.4); }
 .toc-arrow { color: rgba(255,255,255,0.25); font-size: var(--size-base); flex-shrink: 0; }
-
-/* ====== INTRO ====== */
-.intro-page {
-    padding: var(--gap-xl) var(--side);
-    background: var(--secondary);
-    position: relative;
-}
-
-/* ====== CHAPTERS ====== */
-.chapter-wrapper {
-    display: block;
-    position: relative;
-}
-.chapter {
-    border-bottom: 3px solid var(--accent);
-}
-.chapter-header {
-    background: var(--gradient);
-    padding: var(--gap-xl) var(--side) var(--gap-lg);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
+.intro-page { padding: var(--gap-xl) var(--side); background: var(--secondary); position: relative; }
+.chapter-wrapper { display: block; position: relative; }
+.chapter { border-bottom: 3px solid var(--accent); }
+.chapter-header { background: var(--gradient); padding: var(--gap-xl) var(--side) var(--gap-lg); text-align: center; position: relative; overflow: hidden; }
 .chapter-meta { display: flex; justify-content: center; margin-bottom: 20px; }
-.chapter-number-badge {
-    display: inline-flex; flex-direction: column; align-items: center;
-    background: rgba(255,255,255,0.08);
-    border: 2px solid var(--accent);
-    border-radius: var(--radius);
-    padding: 8px 22px;
-}
+.chapter-number-badge { display: inline-flex; flex-direction: column; align-items: center; background: rgba(255,255,255,0.08); border: 2px solid var(--accent); border-radius: var(--radius); padding: 8px 22px; }
 .ch-label { font-size: 0.6rem; letter-spacing: 4px; color: var(--accent); text-transform: uppercase; }
 .ch-num { font-family: var(--font-title); font-size: 2rem; font-weight: 900; color: #fff; line-height: 1; }
-.chapter-title {
-    font-family: var(--font-title);
-    font-size: var(--size-2xl);
-    font-weight: 900;
-    color: #fff;
-    line-height: 1.25;
-    margin-bottom: 10px;
-}
-.chapter-subtitle { color: var(--accent); font-size: var(--size-sm); font-style: italic; opacity: 0.88; line-height: 1.5; }
-.chapter-hook {
-    margin: var(--gap-md) var(--side) 0;
-    padding: 18px 20px;
-    border-left: 4px solid var(--accent);
-    background: rgba(255,255,255,0.03);
-    font-style: italic;
-    font-size: var(--size-base);
-    color: rgba(255,255,255,0.75);
-    line-height: 1.75;
-}
+.chapter-title { font-family: var(--font-title); font-size: var(--size-2xl); font-weight: 900; color: #fff; margin-bottom: 10px; }
+.chapter-subtitle { color: var(--accent); font-size: var(--size-sm); font-style: italic; opacity: 0.88; }
+.chapter-hook { margin: var(--gap-md) var(--side) 0; padding: 18px 20px; border-left: 4px solid var(--accent); background: rgba(255,255,255,0.03); font-style: italic; font-size: var(--size-base); color: rgba(255,255,255,0.75); line-height: 1.75; }
 .chapter-body { padding: var(--gap-md) var(--side) var(--gap-lg); }
-.body-text {
-    display: block;
-    font-size: var(--size-base);
-    line-height: 1.9;
-    color: rgba(255,255,255,0.82);
-    margin-bottom: 18px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-}
-.box-label {
-    font-size: var(--size-xs);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    display: block;
-}
-.key-points-box {
-    padding: 20px;
-    background: rgba(255,255,255,0.03);
-    border-radius: var(--radius);
-    border: 1px solid rgba(255,255,255,0.08);
-    margin-bottom: var(--gap-md);
-}
+.body-text { display: block; font-size: var(--size-base); line-height: 1.9; color: rgba(255,255,255,0.82); margin-bottom: 18px; word-break: break-word; overflow-wrap: break-word; }
+.box-label { font-size: var(--size-xs); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; display: block; }
+.key-points-box { padding: 20px; background: rgba(255,255,255,0.03); border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.08); margin-bottom: var(--gap-md); }
 .key-points-box .box-label { color: var(--accent); }
 .key-points-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-.key-point {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 9px 12px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 8px;
-    font-size: var(--size-sm);
-    line-height: 1.55;
-    color: rgba(255,255,255,0.85);
-}
+.key-point { display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px; background: rgba(255,255,255,0.04); border-radius: 8px; font-size: var(--size-sm); color: rgba(255,255,255,0.85); }
 .kp-arrow { color: var(--accent); flex-shrink: 0; }
-.technique-badge {
-    display: flex; flex-direction: column; gap: 6px;
-    padding: 16px 18px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
-    border-radius: var(--radius);
-    border: 1px solid var(--accent);
-    margin-bottom: var(--gap-md);
-}
+.technique-badge { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03)); border-radius: var(--radius); border: 1px solid var(--accent); margin-bottom: var(--gap-md); }
 .technique-label { font-size: var(--size-xs); letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
-.technique-name { font-family: var(--font-title); font-size: var(--size-lg); font-weight: 700; color: #fff; line-height: 1.3; }
-.exercises-section {
-    padding: 20px;
-    background: rgba(255,255,255,0.03);
-    border-radius: var(--radius);
-    border-left: 4px solid var(--highlight);
-    margin-bottom: var(--gap-md);
-}
+.technique-name { font-family: var(--font-title); font-size: var(--size-lg); font-weight: 700; color: #fff; }
+.exercises-section { padding: 20px; background: rgba(255,255,255,0.03); border-radius: var(--radius); border-left: 4px solid var(--highlight); margin-bottom: var(--gap-md); }
 .exercises-section .box-label { color: var(--highlight); }
 .exercises-list { display: flex; flex-direction: column; gap: 12px; }
 .exercise-item { display: flex; gap: 12px; align-items: flex-start; }
-.exercise-num {
-    background: var(--highlight);
-    color: var(--primary);
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: var(--size-xs); font-weight: 900;
-    flex-shrink: 0; margin-top: 2px;
-}
-.exercise-item p { font-size: var(--size-sm); line-height: 1.65; color: rgba(255,255,255,0.8); }
-.chapter-summary {
-    display: flex; gap: 14px; align-items: flex-start;
-    padding: 18px 20px;
-    background: rgba(255,255,255,0.04);
-    border-radius: var(--radius);
-    margin-bottom: var(--gap-md);
-    font-style: italic;
-}
+.exercise-num { background: var(--highlight); color: var(--primary); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: var(--size-xs); font-weight: 900; flex-shrink: 0; margin-top: 2px; }
+.exercise-item p { font-size: var(--size-sm); color: rgba(255,255,255,0.8); }
+.chapter-summary { display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; background: rgba(255,255,255,0.04); border-radius: var(--radius); margin-bottom: var(--gap-md); font-style: italic; }
 .summary-icon { font-size: 1.4rem; flex-shrink: 0; }
-.summary-text { font-size: var(--size-sm); line-height: 1.75; color: rgba(255,255,255,0.88); }
-
-/* ====== CONCLUSION / AUTHOR / BACK ====== */
+.summary-text { font-size: var(--size-sm); color: rgba(255,255,255,0.88); }
 .conclusion-page { padding: var(--gap-xl) var(--side); background: var(--gradient); }
 .author-page { padding: var(--gap-xl) var(--side); background: var(--secondary); }
-.author-card {
-    background: rgba(255,255,255,0.04);
-    border-radius: 20px; padding: 30px 24px;
-    text-align: center;
-    border: 1px solid rgba(255,255,255,0.08);
-}
-.author-avatar {
-    width: 72px; height: 72px;
-    background: var(--gradient);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.8rem;
-    margin: 0 auto 18px;
-    border: 3px solid var(--accent);
-}
+.author-card { background: rgba(255,255,255,0.04); border-radius: 20px; padding: 30px 24px; text-align: center; border: 1px solid rgba(255,255,255,0.08); }
+.author-avatar { width: 72px; height: 72px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 18px; border: 3px solid var(--accent); }
 .author-name { font-family: var(--font-title); font-size: var(--size-xl); font-weight: 700; color: #fff; margin-bottom: 6px; }
-.author-bio { font-size: var(--size-sm); line-height: 1.8; color: rgba(255,255,255,0.65); margin-top: 12px; }
-.back-cover {
-    min-height: 55vh;
-    background: var(--cover-gradient);
-    padding: var(--gap-xl) var(--side);
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    text-align: center; gap: 20px;
-    position: relative; overflow: hidden;
-}
-.back-cover-title { font-family: var(--font-title); font-size: var(--size-2xl); font-weight: 900; color: #fff; line-height: 1.2; }
+.author-bio { font-size: var(--size-sm); color: rgba(255,255,255,0.65); margin-top: 12px; }
+.back-cover { min-height: 55vh; background: var(--cover-gradient); padding: var(--gap-xl) var(--side); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 20px; position: relative; overflow: hidden; }
+.back-cover-title { font-family: var(--font-title); font-size: var(--size-2xl); font-weight: 900; color: #fff; }
 .back-cover-text { font-size: var(--size-sm); color: rgba(255,255,255,0.75); line-height: 1.75; max-width: 340px; }
-.edition-badge {
-    background: var(--cover-accent); color: var(--primary);
-    font-size: var(--size-sm); font-weight: 900;
-    font-family: var(--font-title);
-    padding: 12px 28px; border-radius: 50px;
-}
-
-/* ====== PROGRESS ====== */
-#reading-progress {
-    position: fixed; top: 0; left: 0;
-    height: 3px; background: var(--accent);
-    z-index: 999; transition: width 0.15s linear; width: 0%;
-}
-
-/* ====== PDF BUTTON ====== */
-.pdf-btn {
-    position: fixed; bottom: 22px; right: 18px;
-    background: var(--accent); color: var(--primary);
-    border: none; border-radius: 50px;
-    padding: 13px 20px; font-size: var(--size-sm);
-    font-weight: 900; cursor: pointer; z-index: 998;
-    display: flex; align-items: center; gap: 7px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-    transition: transform 0.15s;
-    font-family: var(--font-body);
-}
-.pdf-btn:active { transform: scale(0.95); }
-
-/* ====== CRITICAL RESOLUTION FOR BLANK PAGES & CLIPPING ====== */
-.page-break {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    margin-bottom: 0 !important;
-    padding-bottom: 10px !important;
-}
-
+.edition-badge { background: var(--cover-accent); color: var(--primary); font-size: var(--size-sm); font-weight: 900; font-family: var(--font-title); padding: 12px 28px; border-radius: 50px; }
+#reading-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 999; transition: width 0.15s linear; width: 0%; }
+.pdf-btn { position: fixed; bottom: 22px; right: 18px; background: var(--accent); color: var(--primary); border: none; border-radius: 50px; padding: 13px 20px; font-size: var(--size-sm); font-weight: 900; cursor: pointer; z-index: 998; display: flex; align-items: center; gap: 7px; box-shadow: 0 4px 20px rgba(0,0,0,0.45); transition: transform 0.15s; font-family: var(--font-body); }
+.page-break { page-break-inside: avoid !important; break-inside: avoid !important; margin-bottom: 0 !important; padding-bottom: 10px !important; }
 @media print {
     .nav-bar, .pdf-btn, #reading-progress { display: none !important; }
     body { max-width: 100% !important; width: 100% !important; font-size: 11pt; background: var(--primary) !important; }
-    .cover-page, .description-page, .toc-page, .intro-page, .chapter-wrapper, .conclusion-page, .author-page, .back-cover {
-        page-break-after: always !important;
-        break-after: always !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
+    .cover-page, .description-page, .toc-page, .intro-page, .chapter-wrapper, .conclusion-page, .author-page, .back-cover { page-break-after: always !important; break-after: always !important; }
 }
 ::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
-
 <div id="reading-progress"></div>
-
-<section class="cover-page">
+<section class="cover-page page-break">
     <div class="cover-circle-big"></div>
     <div class="cover-top-bar">
-        <span class="cover-genre-tag">🤖 Book</span>
+        <span class="cover-genre-tag">✨ Book</span>
         <span class="cover-year">2026</span>
     </div>
-    <span class="cover-emoji">🤖</span>
+    <span class="cover-emoji">✨</span>
     <div class="cover-line"></div>
     <h1 class="cover-title">LE PROTOCOLE DE L'OMBRE</h1>
-    <p class="cover-subtitle">30 jours de conditionnement mental et de discipline stoïcienne pour les jeunes adultes</p>
+    <p class="cover-subtitle">30 jours de conditionnement mental et de discipline stoïque pour les jeunes adultes</p>
     <div class="cover-author-row">
         <div class="cover-author-dot">M</div>
         <span class="cover-author-name">by Maria</span>
@@ -467,9 +146,9 @@ body {
 
 <section class="description-page page-break">
     <span class="section-label">About This Book</span>
-    <p class="description-text">Vous vous sentez perdu et sans direction ? Vous avez l'impression de vivre dans l'ombre de vos rêves ? Ce livre est conçu pour vous aider à sortir de cette zone de confort et à devenir la personne que vous avez toujours voulu être. En 30 jours, vous apprendrez à développer une mentalité gagnante, à surmonter vos peurs et à atteindre vos objectifs. Vous découvrirez les secrets de la discipline stoïcienne et de la conditionnement mental pour devenir la meilleure version de vous-même.</p>
+    <p class="description-text">Ce cahier de travail premium de 30 jours est conçu pour les jeunes adultes qui cherchent à développer une mentalité stoïque et une discipline de fer. À travers des exercices de travail d'ombre et des actions quotidiennes stratégiques, vous apprendrez à maîtriser vos émotions, à renforcer votre résilience et à atteindre vos objectifs. Ce protocole vous guidera à travers un processus de transformation profonde, vous permettant de dépasser vos limites et de devenir la meilleure version de vous-même. Avec des questions de travail d'ombre et des actions quotidiennes ciblées, vous développerez une compréhension plus profonde de vous-même et de vos capacités. Ce cahier de travail est votre guide vers une vie plus épanouie et plus équilibrée.</p>
     <span class="section-label">What You Will Learn</span>
-    <div class="benefits-list"><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Développez une mentalité gagnante en 30 jours</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Apprenez à surmonter vos peurs et à atteindre vos objectifs</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Découvrez les secrets de la discipline stoïcienne pour améliorer votre vie</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Améliorez votre confiance en vous et votre estime de soi</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Devenez la meilleure version de vous-même</span></div></div>
+    <div class="benefits-list"><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Développer une mentalité stoïque</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Améliorer la résilience et la maîtrise de soi</span></div></div>
 </section>
 
 <section class="toc-page page-break">
@@ -477,57 +156,71 @@ body {
     <div class="toc-item" onclick="scrollToChapter(1)">
             <span class="toc-num">01</span>
             <div class="toc-text">
-                <span class="toc-title">La découverte de l'ombre</span>
-                <span class="toc-sub">Comprendre les origines de vos peurs et de vos doutes</span>
+                <span class="toc-title">Comprendre l'ombre</span>
+                <span class="toc-sub">Découvrez les secrets de votre esprit</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(2)">
             <span class="toc-num">02</span>
             <div class="toc-text">
-                <span class="toc-title">La discipline stoïcienne</span>
-                <span class="toc-sub">Apprendre à contrôler vos émotions et vos pensées</span>
+                <span class="toc-title">La discipline stoïque</span>
+                <span class="toc-sub">Apprenez à maîtriser vos émotions</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(3)">
             <span class="toc-num">03</span>
             <div class="toc-text">
-                <span class="toc-title">La conditionnement mental</span>
-                <span class="toc-sub">Apprendre à développer une mentalité gagnante</span>
+                <span class="toc-title">Le lancement du protocole</span>
+                <span class="toc-sub">Commencez votre transformation</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(4)">
             <span class="toc-num">04</span>
             <div class="toc-text">
-                <span class="toc-title">La gestion du stress</span>
-                <span class="toc-sub">Apprendre à gérer vos émotions et vos pensées</span>
+                <span class="toc-title">La gestion des émotions</span>
+                <span class="toc-sub">Apprenez à gérer vos émotions</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(5)">
             <span class="toc-num">05</span>
             <div class="toc-text">
-                <span class="toc-title">La motivation</span>
-                <span class="toc-sub">Apprendre à trouver votre motivation et à la maintenir</span>
+                <span class="toc-title">La résilience et la persévérance</span>
+                <span class="toc-sub">Développez votre capacité à résister</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(6)">
             <span class="toc-num">06</span>
             <div class="toc-text">
-                <span class="toc-title">La créativité</span>
-                <span class="toc-sub">Apprendre à développer votre créativité et à la utiliser pour atteindre vos objectifs</span>
+                <span class="toc-title">La maîtrise de soi</span>
+                <span class="toc-sub">Atteignez un niveau supérieur de conscience</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(7)">
             <span class="toc-num">07</span>
             <div class="toc-text">
-                <span class="toc-title">La résilience</span>
-                <span class="toc-sub">Apprendre à développer votre résilience et à surmonter les obstacles</span>
+                <span class="toc-title">L'intégration du protocole</span>
+                <span class="toc-sub">Intégrez les principes dans votre vie quotidienne</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(8)">
             <span class="toc-num">08</span>
             <div class="toc-text">
+                <span class="toc-title">La poursuite de la transformation</span>
+                <span class="toc-sub">Continuez sur la voie de la croissance</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div><div class="toc-item" onclick="scrollToChapter(9)">
+            <span class="toc-num">09</span>
+            <div class="toc-text">
                 <span class="toc-title">La mise en pratique</span>
-                <span class="toc-sub">Apprendre à mettre en pratique vos nouvelles compétences et à atteindre vos objectifs</span>
+                <span class="toc-sub">Mettez en pratique vos nouvelles compétences</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div><div class="toc-item" onclick="scrollToChapter(10)">
+            <span class="toc-num">010</span>
+            <div class="toc-text">
+                <span class="toc-title">La conclusion</span>
+                <span class="toc-sub">Récapitulez vos progrès</span>
             </div>
             <span class="toc-arrow">→</span>
         </div>
@@ -535,7 +228,7 @@ body {
 
 <section class="intro-page page-break">
     <h2 class="page-title">Introduction</h2>
-    <p class="body-text">Bienvenue dans ce livre qui va vous aider à atteindre vos objectifs et à devenir la meilleure version de vous-même. Dans les prochains chapitres, nous allons explorer les principes de la conditionnement mental, de la discipline stoïcienne et de la motivation. Nous allons apprendre à développer une mentalité gagnante, à gérer notre stress et à trouver notre motivation. Nous allons également apprendre à mettre en pratique nos nouvelles compétences et à atteindre nos objectifs. Ce livre est conçu pour vous aider à atteindre vos objectifs et à devenir la personne que vous avez toujours voulu être.</p>
+    <p class="body-text">Bienvenue dans LE PROTOCOLE DE L'OMBRE, un cahier de travail premium conçu pour les jeunes adultes qui cherchent à développer une mentalité stoïque et une discipline de fer. Dans les pages qui suivent, vous découvrirez un processus de transformation profonde qui vous guidera à travers les principes fondamentaux de la discipline stoïque et du travail d'ombre. Vous apprendrez à maîtriser vos émotions, à renforcer votre résilience et à atteindre vos objectifs. Ce cahier de travail est votre guide vers une vie plus épanouie et plus équilibrée. Nous allons commencer par explorer les secrets de votre esprit et les principes fondamentaux de la discipline stoïque. Ensuite, nous allons lancer le protocole et commencer votre transformation. Vous découvrirez des stratégies pour gérer vos émotions, renforcer votre résilience et améliorer votre maîtrise de soi. Vous apprendrez également à intégrer les principes du protocole dans votre vie quotidienne et à poursuivre la transformation. Nous allons mettre en pratique vos nouvelles compétences et récapituler vos progrès. Ce cahier de travail est votre outil pour atteindre la maîtrise de l'ombre et devenir la meilleure version de vous-même.</p>
 </section>
 
 
@@ -548,41 +241,24 @@ body {
                 <span class="ch-num">1</span>
             </div>
         </div>
-        <h2 class="chapter-title">La découverte de l'ombre</h2>
-        <p class="chapter-subtitle">Comprendre les origines de vos peurs et de vos doutes</p>
+        <h2 class="chapter-title">Comprendre l'ombre</h2>
+        <p class="chapter-subtitle">Découvrez les secrets de votre esprit</p>
     </div>
-
-    <div class="chapter-hook">&ldquo;Vous savez que vous avez un potentiel immense, mais vous ne savez pas comment l'exploiter&rdquo;</div>
-
+    
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les origines de vos peurs</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Identifier vos doutes</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir votre potentiel</span></li></ul>
+            <ul class="key-points-list"></ul>
         </div>
-
-        <div class="chapter-content">
-            <p class="body-text">Vous avez toujours rêvé de réussir, mais vous avez peur de l'échec. Vous vous sentez perdu et sans direction. Mais qu'est-ce qui vous empêche de réaliser vos rêves ? C'est souvent vos peurs et vos douts qui vous tiennent en arrière. Dans ce chapitre, nous allons explorer les origines de vos peurs et de vos doutes. Nous allons découvrir comment ils se sont développés et comment ils vous empêchent de réaliser vos objectifs. Nous allons également découvrir votre potentiel et comment l'exploiter. Nous allons utiliser la technique de la réflexion introspective pour comprendre vos pensées et vos émotions. Nous allons également utiliser des exercices pratiques pour vous aider à surmonter vos peurs et à atteindre vos objectifs.</p>
-        </div>
-
-        <div class="technique-badge">
-            <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La réflexion introspective</span>
-        </div>
-
+        <div class="chapter-content"><p class="body-text">Contenu indisponible suite à une erreur.</p></div>
+        
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
-            <div class="exercises-list"><div class="exercise-item">
-                    <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Écrivez vos peurs et vos doutes sur un papier</p>
-                </div><div class="exercise-item">
-                    <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Réfléchissez à vos pensées et à vos émotions</p>
-                </div></div>
+            <div class="exercises-list"></div>
         </div>
-
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La découverte de l'ombre est le premier pas vers la liberté</p>
+            <p class="summary-text"></p>
         </div>
     </div>
 </section>
@@ -596,41 +272,24 @@ body {
                 <span class="ch-num">2</span>
             </div>
         </div>
-        <h2 class="chapter-title">La discipline stoïcienne</h2>
-        <p class="chapter-subtitle">Apprendre à contrôler vos émotions et vos pensées</p>
+        <h2 class="chapter-title">La discipline stoïque</h2>
+        <p class="chapter-subtitle">Apprenez à maîtriser vos émotions</p>
     </div>
-
-    <div class="chapter-hook">&ldquo;Les stoïciens étaient connus pour leur capacité à contrôler leurs émotions et leurs pensées&rdquo;</div>
-
+    
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les principes de la discipline stoïcienne</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à contrôler vos émotions</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de la pensée positive</span></li></ul>
+            <ul class="key-points-list"></ul>
         </div>
-
-        <div class="chapter-content">
-            <p class="body-text">Les stoïciens étaient des maîtres de la discipline mentale. Ils savaient comment contrôler leurs émotions et leurs pensées pour atteindre leurs objectifs. Dans ce chapitre, nous allons explorer les principes de la discipline stoïcienne. Nous allons apprendre à contrôler nos émotions et nos pensées pour atteindre nos objectifs. Nous allons utiliser la technique de la méditation pour calmer notre esprit et nous concentrer sur nos objectifs. Nous allons également utiliser des exercices pratiques pour vous aider à développer une mentalité positive.</p>
-        </div>
-
-        <div class="technique-badge">
-            <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La méditation</span>
-        </div>
-
+        <div class="chapter-content"><p class="body-text">Contenu indisponible suite à une erreur.</p></div>
+        
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
-            <div class="exercises-list"><div class="exercise-item">
-                    <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Pratiquez la méditation pendant 10 minutes par jour</p>
-                </div><div class="exercise-item">
-                    <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Écrivez vos pensées positives sur un journal</p>
-                </div></div>
+            <div class="exercises-list"></div>
         </div>
-
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La discipline stoïcienne est la clé pour contrôler vos émotions et vos pensées</p>
+            <p class="summary-text"></p>
         </div>
     </div>
 </section>
@@ -644,41 +303,24 @@ body {
                 <span class="ch-num">3</span>
             </div>
         </div>
-        <h2 class="chapter-title">La conditionnement mental</h2>
-        <p class="chapter-subtitle">Apprendre à développer une mentalité gagnante</p>
+        <h2 class="chapter-title">Le lancement du protocole</h2>
+        <p class="chapter-subtitle">Commencez votre transformation</p>
     </div>
-
-    <div class="chapter-hook">&ldquo;Les champions sont ceux qui ont une mentalité gagnante&rdquo;</div>
-
+    
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les principes de la conditionnement mental</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à développer une mentalité gagnante</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de l'autosuggestion</span></li></ul>
+            <ul class="key-points-list"></ul>
         </div>
-
-        <div class="chapter-content">
-            <p class="body-text">Les champions sont ceux qui ont une mentalité gagnante. Ils savent comment développer une mentalité positive et comment utiliser l'autosuggestion pour atteindre leurs objectifs. Dans ce chapitre, nous allons explorer les principes de la conditionnement mental. Nous allons apprendre à développer une mentalité gagnante et à utiliser l'autosuggestion pour atteindre nos objectifs. Nous allons utiliser la technique de l'affirmation pour renforcer notre mentalité positive. Nous allons également utiliser des exercices pratiques pour vous aider à développer une mentalité gagnante.</p>
-        </div>
-
-        <div class="technique-badge">
-            <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">L'affirmation</span>
-        </div>
-
+        <div class="chapter-content"><p class="body-text">Contenu indisponible suite à une erreur.</p></div>
+        
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
-            <div class="exercises-list"><div class="exercise-item">
-                    <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Écrivez vos affirmations positives sur un papier</p>
-                </div><div class="exercise-item">
-                    <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Répétez vos affirmations pendant 10 minutes par jour</p>
-                </div></div>
+            <div class="exercises-list"></div>
         </div>
-
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La conditionnement mental est la clé pour développer une mentalité gagnante</p>
+            <p class="summary-text"></p>
         </div>
     </div>
 </section>
@@ -692,41 +334,24 @@ body {
                 <span class="ch-num">4</span>
             </div>
         </div>
-        <h2 class="chapter-title">La gestion du stress</h2>
-        <p class="chapter-subtitle">Apprendre à gérer vos émotions et vos pensées</p>
+        <h2 class="chapter-title">La gestion des émotions</h2>
+        <p class="chapter-subtitle">Apprenez à gérer vos émotions</p>
     </div>
-
-    <div class="chapter-hook">&ldquo;Le stress est un des principaux facteurs de l'échec&rdquo;</div>
-
+    
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les causes du stress</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à gérer vos émotions et vos pensées</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de la respiration profonde</span></li></ul>
+            <ul class="key-points-list"></ul>
         </div>
-
-        <div class="chapter-content">
-            <p class="body-text">Le stress est un des principaux facteurs de l'échec. Il peut vous empêcher de réaliser vos rêves et de atteindre vos objectifs. Dans ce chapitre, nous allons explorer les causes du stress et les moyens de le gérer. Nous allons apprendre à gérer nos émotions et nos pensées pour réduire le stress. Nous allons utiliser la technique de la respiration profonde pour calmer notre esprit et nous concentrer sur nos objectifs. Nous allons également utiliser des exercices pratiques pour vous aider à gérer votre stress.</p>
-        </div>
-
-        <div class="technique-badge">
-            <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La respiration profonde</span>
-        </div>
-
+        <div class="chapter-content"><p class="body-text">Contenu indisponible suite à une erreur.</p></div>
+        
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
-            <div class="exercises-list"><div class="exercise-item">
-                    <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Pratiquez la respiration profonde pendant 10 minutes par jour</p>
-                </div><div class="exercise-item">
-                    <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Écrivez vos pensées et vos émotions sur un journal</p>
-                </div></div>
+            <div class="exercises-list"></div>
         </div>
-
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La gestion du stress est la clé pour atteindre vos objectifs</p>
+            <p class="summary-text"></p>
         </div>
     </div>
 </section>
@@ -740,41 +365,24 @@ body {
                 <span class="ch-num">5</span>
             </div>
         </div>
-        <h2 class="chapter-title">La motivation</h2>
-        <p class="chapter-subtitle">Apprendre à trouver votre motivation et à la maintenir</p>
+        <h2 class="chapter-title">La résilience et la persévérance</h2>
+        <p class="chapter-subtitle">Développez votre capacité à résister</p>
     </div>
-
-    <div class="chapter-hook">&ldquo;La motivation est la clé pour atteindre vos objectifs&rdquo;</div>
-
+    
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les sources de la motivation</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à trouver votre motivation</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de la récompense</span></li></ul>
+            <ul class="key-points-list"></ul>
         </div>
-
-        <div class="chapter-content">
-            <p class="body-text">La motivation est la clé pour atteindre vos objectifs. Mais comment trouver et maintenir la motivation ? Dans ce chapitre, nous allons explorer les sources de la motivation et les moyens de la trouver. Nous allons apprendre à trouver notre motivation et à la maintenir. Nous allons utiliser la technique de la récompense pour renforcer notre motivation. Nous allons également utiliser des exercices pratiques pour vous aider à trouver et à maintenir votre motivation.</p>
-        </div>
-
-        <div class="technique-badge">
-            <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La récompense</span>
-        </div>
-
+        <div class="chapter-content"><p class="body-text">Contenu indisponible suite à une erreur.</p></div>
+        
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
-            <div class="exercises-list"><div class="exercise-item">
-                    <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Écrivez vos objectifs et vos récompenses sur un papier</p>
-                </div><div class="exercise-item">
-                    <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Créez un système de récompense pour vous-même</p>
-                </div></div>
+            <div class="exercises-list"></div>
         </div>
-
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La motivation est la clé pour atteindre vos objectifs</p>
+            <p class="summary-text"></p>
         </div>
     </div>
 </section>
@@ -788,41 +396,24 @@ body {
                 <span class="ch-num">6</span>
             </div>
         </div>
-        <h2 class="chapter-title">La créativité</h2>
-        <p class="chapter-subtitle">Apprendre à développer votre créativité et à la utiliser pour atteindre vos objectifs</p>
+        <h2 class="chapter-title">La maîtrise de soi</h2>
+        <p class="chapter-subtitle">Atteignez un niveau supérieur de conscience</p>
     </div>
-
-    <div class="chapter-hook">&ldquo;La créativité est la clé pour trouver des solutions innovantes&rdquo;</div>
-
+    
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les principes de la créativité</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à développer votre créativité</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de la pensée latérale</span></li></ul>
+            <ul class="key-points-list"></ul>
         </div>
-
-        <div class="chapter-content">
-            <p class="body-text">La créativité est la clé pour trouver des solutions innovantes et atteindre vos objectifs. Mais comment développer votre créativité ? Dans ce chapitre, nous allons explorer les principes de la créativité et les moyens de la développer. Nous allons apprendre à développer notre créativité et à l'utiliser pour atteindre nos objectifs. Nous allons utiliser la technique de la pensée latérale pour trouver des solutions innovantes. Nous allons également utiliser des exercices pratiques pour vous aider à développer votre créativité.</p>
-        </div>
-
-        <div class="technique-badge">
-            <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La pensée latérale</span>
-        </div>
-
+        <div class="chapter-content"><p class="body-text">Contenu indisponible suite à une erreur.</p></div>
+        
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
-            <div class="exercises-list"><div class="exercise-item">
-                    <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Pratiquez la pensée latérale pendant 10 minutes par jour</p>
-                </div><div class="exercise-item">
-                    <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Écrivez vos idées et vos solutions sur un journal</p>
-                </div></div>
+            <div class="exercises-list"></div>
         </div>
-
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La créativité est la clé pour trouver des solutions innovantes</p>
+            <p class="summary-text"></p>
         </div>
     </div>
 </section>
@@ -836,41 +427,24 @@ body {
                 <span class="ch-num">7</span>
             </div>
         </div>
-        <h2 class="chapter-title">La résilience</h2>
-        <p class="chapter-subtitle">Apprendre à développer votre résilience et à surmonter les obstacles</p>
+        <h2 class="chapter-title">L'intégration du protocole</h2>
+        <p class="chapter-subtitle">Intégrez les principes dans votre vie quotidienne</p>
     </div>
-
-    <div class="chapter-hook">&ldquo;La résilience est la clé pour surmonter les obstacles et atteindre vos objectifs&rdquo;</div>
-
+    
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les principes de la résilience</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à développer votre résilience</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de la persévérance</span></li></ul>
+            <ul class="key-points-list"></ul>
         </div>
-
-        <div class="chapter-content">
-            <p class="body-text">La résilience est la clé pour surmonter les obstacles et atteindre vos objectifs. Mais comment développer votre résilience ? Dans ce chapitre, nous allons explorer les principes de la résilience et les moyens de la développer. Nous allons apprendre à développer notre résilience et à surmonter les obstacles. Nous allons utiliser la technique de la persévérance pour renforcer notre résilience. Nous allons également utiliser des exercices pratiques pour vous aider à développer votre résilience.</p>
-        </div>
-
-        <div class="technique-badge">
-            <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La persévérance</span>
-        </div>
-
+        <div class="chapter-content"><p class="body-text">Contenu indisponible suite à une erreur.</p></div>
+        
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
-            <div class="exercises-list"><div class="exercise-item">
-                    <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Écrivez vos objectifs et vos obstacles sur un papier</p>
-                </div><div class="exercise-item">
-                    <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Créez un plan pour surmonter les obstacles</p>
-                </div></div>
+            <div class="exercises-list"></div>
         </div>
-
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La résilience est la clé pour surmonter les obstacles et atteindre vos objectifs</p>
+            <p class="summary-text"></p>
         </div>
     </div>
 </section>
@@ -884,41 +458,86 @@ body {
                 <span class="ch-num">8</span>
             </div>
         </div>
-        <h2 class="chapter-title">La mise en pratique</h2>
-        <p class="chapter-subtitle">Apprendre à mettre en pratique vos nouvelles compétences et à atteindre vos objectifs</p>
+        <h2 class="chapter-title">La poursuite de la transformation</h2>
+        <p class="chapter-subtitle">Continuez sur la voie de la croissance</p>
     </div>
-
-    <div class="chapter-hook">&ldquo;La mise en pratique est la clé pour atteindre vos objectifs&rdquo;</div>
-
+    
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les principes de la mise en pratique</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à mettre en pratique vos nouvelles compétences</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de l'action</span></li></ul>
+            <ul class="key-points-list"></ul>
         </div>
-
-        <div class="chapter-content">
-            <p class="body-text">La mise en pratique est la clé pour atteindre vos objectifs. Mais comment mettre en pratique vos nouvelles compétences ? Dans ce chapitre, nous allons explorer les principes de la mise en pratique et les moyens de la mettre en œuvre. Nous allons apprendre à mettre en pratique nos nouvelles compétences et à atteindre nos objectifs. Nous allons utiliser la technique de l'action pour renforcer notre motivation. Nous allons également utiliser des exercices pratiques pour vous aider à mettre en pratique vos nouvelles compétences.</p>
-        </div>
-
-        <div class="technique-badge">
-            <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">L'action</span>
-        </div>
-
+        <div class="chapter-content"><p class="body-text">Contenu indisponible suite à une erreur.</p></div>
+        
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
-            <div class="exercises-list"><div class="exercise-item">
-                    <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Écrivez vos objectifs et vos plans d'action sur un papier</p>
-                </div><div class="exercise-item">
-                    <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Mettez en pratique vos plans d'action</p>
-                </div></div>
+            <div class="exercises-list"></div>
         </div>
-
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La mise en pratique est la clé pour atteindre vos objectifs</p>
+            <p class="summary-text"></p>
+        </div>
+    </div>
+</section>
+</div>
+<div class="chapter-wrapper page-break">
+<section class="chapter" id="chapter-9">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">9</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">La mise en pratique</h2>
+        <p class="chapter-subtitle">Mettez en pratique vos nouvelles compétences</p>
+    </div>
+    
+    <div class="chapter-body">
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"></ul>
+        </div>
+        <div class="chapter-content"><p class="body-text">Contenu indisponible suite à une erreur.</p></div>
+        
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"></div>
+        </div>
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text"></p>
+        </div>
+    </div>
+</section>
+</div>
+<div class="chapter-wrapper page-break">
+<section class="chapter" id="chapter-10">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">10</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">La conclusion</h2>
+        <p class="chapter-subtitle">Récapitulez vos progrès</p>
+    </div>
+    
+    <div class="chapter-body">
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"></ul>
+        </div>
+        <div class="chapter-content"><p class="body-text">Contenu indisponible suite à une erreur.</p></div>
+        
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"></div>
+        </div>
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text"></p>
         </div>
     </div>
 </section>
@@ -926,21 +545,21 @@ body {
 
 <section class="conclusion-page page-break">
     <h2 class="page-title">Conclusion</h2>
-    <p class="body-text">Félicitations pour avoir lu ce livre et pour avoir pris le premier pas vers la réalisation de vos rêves. Nous espérons que vous avez appris à développer une mentalité gagnante, à gérer votre stress et à trouver votre motivation. Nous espérons également que vous avez appris à mettre en pratique vos nouvelles compétences et à atteindre vos objectifs. N'oubliez pas que la réussite est un processus qui prend du temps et de l'effort. Mais avec la bonne mentalité et les bonnes compétences, vous pouvez atteindre tout ce que vous voulez.</p>
+    <p class="body-text">Félicitations pour avoir achevé LE PROTOCOLE DE L'OMBRE ! Vous avez maintenant les outils et les compétences nécessaires pour développer une mentalité stoïque et une discipline de fer. Vous avez appris à maîtriser vos émotions, à renforcer votre résilience et à atteindre vos objectifs. Vous avez découvert les secrets de votre esprit et les principes fondamentaux de la discipline stoïque. Vous avez intégré les principes du protocole dans votre vie quotidienne et vous avez mis en pratique vos nouvelles compétences. Vous êtes maintenant prêt à poursuivre la transformation et à devenir la meilleure version de vous-même. N'oubliez pas que la transformation est un processus continu et que vous devez continuer à travailler sur vous-même pour maintenir et améliorer vos compétences. Nous vous souhaitons bonne chance sur votre chemin vers la maîtrise de l'ombre et nous sommes fiers de vous avoir accompagné dans ce voyage de transformation.</p>
 </section>
 
 <section class="author-page page-break">
     <h2 class="page-title">About the Author</h2>
     <div class="author-card">
-        <div class="author-avatar">🤖</div>
+        <div class="author-avatar">✨</div>
         <p class="author-name">Maria</p>
-        <p class="author-bio">Maria Talks est une auteure et une coach qui a aidé des milliers de personnes à atteindre leurs objectifs et à devenir la meilleure version d'elles-mêmes. Elle est connue pour ses compétences en conditionnement mental, en discipline stoïcienne et en motivation. Elle a écrit ce livre pour vous aider à atteindre vos objectifs et à devenir la personne que vous avez toujours voulu être.</p>
+        <p class="author-bio">Maria Talks est une auteur et une coach qui se spécialise dans la développement personnel et la discipline stoïque. Elle a aidé des milliers de personnes à développer une mentalité stoïque et à atteindre leurs objectifs. Elle est connue pour son approche unique et efficace qui combine les principes de la discipline stoïque avec les stratégies de développement personnel. Elle est l'auteur de plusieurs livres et cahiers de travail sur le développement personnel et la discipline stoïque.</p>
     </div>
 </section>
 
 <section class="back-cover page-break">
     <h2 class="back-cover-title">LE PROTOCOLE DE L'OMBRE</h2>
-    <p class="back-cover-text">Découvrez le secret pour devenir la meilleure version de vous-même en 30 jours</p>
+    <p class="back-cover-text">Transformez votre esprit en 30 jours avec une discipline de fer et une maîtrise de l'ombre</p>
     <div class="edition-badge">✦ Professional Edition 2026</div>
 </section>
 
@@ -963,7 +582,6 @@ async function downloadPDF() {
     btn.style.opacity = '0.6';
     btn.textContent = '⏳ Preparing...';
     
-    // Hide UI elements completely before capture
     ['pdf-btn','reading-progress'].forEach(id => {
         const el = document.getElementById(id);
         if(el) el.style.setProperty('display', 'none', 'important');
@@ -971,28 +589,15 @@ async function downloadPDF() {
     const navbar = document.querySelector('.nav-bar');
     if(navbar) navbar.style.setProperty('display', 'none', 'important');
     
-    const title = document.querySelector('.cover-title')?.textContent || 'book';
-    const safeName = title.replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'_').substring(0,50);
+    const titleText = document.querySelector('.cover-title')?.textContent || 'book';
+    const safeName = titleText.replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'_').substring(0,50);
     
     const opt = {
         margin: 0,
         filename: safeName + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: {
-            scale: 2, 
-            useCORS: true,
-            backgroundColor: '#030712',
-            logging: false, 
-            letterRendering: true,
-            scrollY: 0,
-            scrollX: 0
-        },
-        jsPDF: {
-            unit: 'mm',
-            format: [120, 213],
-            orientation: 'portrait'
-        },
-        // FIXED: smart rendering mode instead of legacy to eliminate layout shifting
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0a0a0a', logging: false, letterRendering: true },
+        jsPDF: { unit: 'mm', format: [120, 213], orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css'] }
     };
     try {
@@ -1001,7 +606,6 @@ async function downloadPDF() {
         console.error(e);
         window.print();
     } finally {
-        // Restore UI elements safely
         ['pdf-btn','reading-progress'].forEach(id => {
             const el = document.getElementById(id);
             if(el) el.style.display = '';

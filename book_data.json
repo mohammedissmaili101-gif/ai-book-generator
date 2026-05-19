@@ -1,176 +1,107 @@
 {
   "title": "LE PROTOCOLE DE L'OMBRE",
-  "subtitle": "30 jours de conditionnement mental et de discipline stoïcienne pour les jeunes adultes",
+  "subtitle": "30 jours de conditionnement mental et de discipline stoïque pour les jeunes adultes",
   "author": "Maria",
-  "tagline": "Découvrez le secret pour devenir la meilleure version de vous-même en 30 jours",
-  "description": "Vous vous sentez perdu et sans direction ? Vous avez l'impression de vivre dans l'ombre de vos rêves ? Ce livre est conçu pour vous aider à sortir de cette zone de confort et à devenir la personne que vous avez toujours voulu être. En 30 jours, vous apprendrez à développer une mentalité gagnante, à surmonter vos peurs et à atteindre vos objectifs. Vous découvrirez les secrets de la discipline stoïcienne et de la conditionnement mental pour devenir la meilleure version de vous-même.",
-  "target_audience": "Jeunes adultes de 18 à 30 ans qui cherchent à améliorer leur vie et à atteindre leurs objectifs",
-  "keywords": [
-    "conditionnement mental",
-    "discipline stoïcienne",
-    "développement personnel",
-    "jeunes adultes",
-    "objectifs"
-  ],
-  "categories": [
-    "Développement personnel",
-    "Psychologie"
-  ],
+  "tagline": "Transformez votre esprit en 30 jours avec une discipline de fer et une maîtrise de l'ombre",
+  "description": "Ce cahier de travail premium de 30 jours est conçu pour les jeunes adultes qui cherchent à développer une mentalité stoïque et une discipline de fer. À travers des exercices de travail d'ombre et des actions quotidiennes stratégiques, vous apprendrez à maîtriser vos émotions, à renforcer votre résilience et à atteindre vos objectifs. Ce protocole vous guidera à travers un processus de transformation profonde, vous permettant de dépasser vos limites et de devenir la meilleure version de vous-même. Avec des questions de travail d'ombre et des actions quotidiennes ciblées, vous développerez une compréhension plus profonde de vous-même et de vos capacités. Ce cahier de travail est votre guide vers une vie plus épanouie et plus équilibrée.",
+  "target_audience": "jeunes adultes",
   "key_benefits": [
-    "Développez une mentalité gagnante en 30 jours",
-    "Apprenez à surmonter vos peurs et à atteindre vos objectifs",
-    "Découvrez les secrets de la discipline stoïcienne pour améliorer votre vie",
-    "Améliorez votre confiance en vous et votre estime de soi",
-    "Devenez la meilleure version de vous-même"
+    "Développer une mentalité stoïque",
+    "Améliorer la résilience et la maîtrise de soi"
   ],
   "chapters": [
     {
       "number": 1,
-      "title": "La découverte de l'ombre",
-      "subtitle": "Comprendre les origines de vos peurs et de vos doutes",
-      "hook": "Vous savez que vous avez un potentiel immense, mais vous ne savez pas comment l'exploiter",
-      "key_points": [
-        "Comprendre les origines de vos peurs",
-        "Identifier vos doutes",
-        "Découvrir votre potentiel"
-      ],
-      "content": "Vous avez toujours rêvé de réussir, mais vous avez peur de l'échec. Vous vous sentez perdu et sans direction. Mais qu'est-ce qui vous empêche de réaliser vos rêves ? C'est souvent vos peurs et vos douts qui vous tiennent en arrière. Dans ce chapitre, nous allons explorer les origines de vos peurs et de vos doutes. Nous allons découvrir comment ils se sont développés et comment ils vous empêchent de réaliser vos objectifs. Nous allons également découvrir votre potentiel et comment l'exploiter. Nous allons utiliser la technique de la réflexion introspective pour comprendre vos pensées et vos émotions. Nous allons également utiliser des exercices pratiques pour vous aider à surmonter vos peurs et à atteindre vos objectifs.",
-      "key_technique": "La réflexion introspective",
-      "exercises": [
-        "Exercice 1 : Écrivez vos peurs et vos doutes sur un papier",
-        "Exercice 2 : Réfléchissez à vos pensées et à vos émotions"
-      ],
-      "summary": "La découverte de l'ombre est le premier pas vers la liberté"
+      "title": "Comprendre l'ombre",
+      "subtitle": "Découvrez les secrets de votre esprit",
+      "focus": "Introduction au travail d'ombre",
+      "content": "Contenu indisponible suite à une erreur.",
+      "hook": "",
+      "summary": ""
     },
     {
       "number": 2,
-      "title": "La discipline stoïcienne",
-      "subtitle": "Apprendre à contrôler vos émotions et vos pensées",
-      "hook": "Les stoïciens étaient connus pour leur capacité à contrôler leurs émotions et leurs pensées",
-      "key_points": [
-        "Comprendre les principes de la discipline stoïcienne",
-        "Apprendre à contrôler vos émotions",
-        "Découvrir la puissance de la pensée positive"
-      ],
-      "content": "Les stoïciens étaient des maîtres de la discipline mentale. Ils savaient comment contrôler leurs émotions et leurs pensées pour atteindre leurs objectifs. Dans ce chapitre, nous allons explorer les principes de la discipline stoïcienne. Nous allons apprendre à contrôler nos émotions et nos pensées pour atteindre nos objectifs. Nous allons utiliser la technique de la méditation pour calmer notre esprit et nous concentrer sur nos objectifs. Nous allons également utiliser des exercices pratiques pour vous aider à développer une mentalité positive.",
-      "key_technique": "La méditation",
-      "exercises": [
-        "Exercice 1 : Pratiquez la méditation pendant 10 minutes par jour",
-        "Exercice 2 : Écrivez vos pensées positives sur un journal"
-      ],
-      "summary": "La discipline stoïcienne est la clé pour contrôler vos émotions et vos pensées"
+      "title": "La discipline stoïque",
+      "subtitle": "Apprenez à maîtriser vos émotions",
+      "focus": "Principes fondamentaux de la discipline stoïque",
+      "content": "Contenu indisponible suite à une erreur.",
+      "hook": "",
+      "summary": ""
     },
     {
       "number": 3,
-      "title": "La conditionnement mental",
-      "subtitle": "Apprendre à développer une mentalité gagnante",
-      "hook": "Les champions sont ceux qui ont une mentalité gagnante",
-      "key_points": [
-        "Comprendre les principes de la conditionnement mental",
-        "Apprendre à développer une mentalité gagnante",
-        "Découvrir la puissance de l'autosuggestion"
-      ],
-      "content": "Les champions sont ceux qui ont une mentalité gagnante. Ils savent comment développer une mentalité positive et comment utiliser l'autosuggestion pour atteindre leurs objectifs. Dans ce chapitre, nous allons explorer les principes de la conditionnement mental. Nous allons apprendre à développer une mentalité gagnante et à utiliser l'autosuggestion pour atteindre nos objectifs. Nous allons utiliser la technique de l'affirmation pour renforcer notre mentalité positive. Nous allons également utiliser des exercices pratiques pour vous aider à développer une mentalité gagnante.",
-      "key_technique": "L'affirmation",
-      "exercises": [
-        "Exercice 1 : Écrivez vos affirmations positives sur un papier",
-        "Exercice 2 : Répétez vos affirmations pendant 10 minutes par jour"
-      ],
-      "summary": "La conditionnement mental est la clé pour développer une mentalité gagnante"
+      "title": "Le lancement du protocole",
+      "subtitle": "Commencez votre transformation",
+      "focus": "Premiers pas vers la maîtrise de l'ombre",
+      "content": "Contenu indisponible suite à une erreur.",
+      "hook": "",
+      "summary": ""
     },
     {
       "number": 4,
-      "title": "La gestion du stress",
-      "subtitle": "Apprendre à gérer vos émotions et vos pensées",
-      "hook": "Le stress est un des principaux facteurs de l'échec",
-      "key_points": [
-        "Comprendre les causes du stress",
-        "Apprendre à gérer vos émotions et vos pensées",
-        "Découvrir la puissance de la respiration profonde"
-      ],
-      "content": "Le stress est un des principaux facteurs de l'échec. Il peut vous empêcher de réaliser vos rêves et de atteindre vos objectifs. Dans ce chapitre, nous allons explorer les causes du stress et les moyens de le gérer. Nous allons apprendre à gérer nos émotions et nos pensées pour réduire le stress. Nous allons utiliser la technique de la respiration profonde pour calmer notre esprit et nous concentrer sur nos objectifs. Nous allons également utiliser des exercices pratiques pour vous aider à gérer votre stress.",
-      "key_technique": "La respiration profonde",
-      "exercises": [
-        "Exercice 1 : Pratiquez la respiration profonde pendant 10 minutes par jour",
-        "Exercice 2 : Écrivez vos pensées et vos émotions sur un journal"
-      ],
-      "summary": "La gestion du stress est la clé pour atteindre vos objectifs"
+      "title": "La gestion des émotions",
+      "subtitle": "Apprenez à gérer vos émotions",
+      "focus": "Stratégies pour une meilleure gestion des émotions",
+      "content": "Contenu indisponible suite à une erreur.",
+      "hook": "",
+      "summary": ""
     },
     {
       "number": 5,
-      "title": "La motivation",
-      "subtitle": "Apprendre à trouver votre motivation et à la maintenir",
-      "hook": "La motivation est la clé pour atteindre vos objectifs",
-      "key_points": [
-        "Comprendre les sources de la motivation",
-        "Apprendre à trouver votre motivation",
-        "Découvrir la puissance de la récompense"
-      ],
-      "content": "La motivation est la clé pour atteindre vos objectifs. Mais comment trouver et maintenir la motivation ? Dans ce chapitre, nous allons explorer les sources de la motivation et les moyens de la trouver. Nous allons apprendre à trouver notre motivation et à la maintenir. Nous allons utiliser la technique de la récompense pour renforcer notre motivation. Nous allons également utiliser des exercices pratiques pour vous aider à trouver et à maintenir votre motivation.",
-      "key_technique": "La récompense",
-      "exercises": [
-        "Exercice 1 : Écrivez vos objectifs et vos récompenses sur un papier",
-        "Exercice 2 : Créez un système de récompense pour vous-même"
-      ],
-      "summary": "La motivation est la clé pour atteindre vos objectifs"
+      "title": "La résilience et la persévérance",
+      "subtitle": "Développez votre capacité à résister",
+      "focus": "Conseils pour renforcer votre résilience",
+      "content": "Contenu indisponible suite à une erreur.",
+      "hook": "",
+      "summary": ""
     },
     {
       "number": 6,
-      "title": "La créativité",
-      "subtitle": "Apprendre à développer votre créativité et à la utiliser pour atteindre vos objectifs",
-      "hook": "La créativité est la clé pour trouver des solutions innovantes",
-      "key_points": [
-        "Comprendre les principes de la créativité",
-        "Apprendre à développer votre créativité",
-        "Découvrir la puissance de la pensée latérale"
-      ],
-      "content": "La créativité est la clé pour trouver des solutions innovantes et atteindre vos objectifs. Mais comment développer votre créativité ? Dans ce chapitre, nous allons explorer les principes de la créativité et les moyens de la développer. Nous allons apprendre à développer notre créativité et à l'utiliser pour atteindre nos objectifs. Nous allons utiliser la technique de la pensée latérale pour trouver des solutions innovantes. Nous allons également utiliser des exercices pratiques pour vous aider à développer votre créativité.",
-      "key_technique": "La pensée latérale",
-      "exercises": [
-        "Exercice 1 : Pratiquez la pensée latérale pendant 10 minutes par jour",
-        "Exercice 2 : Écrivez vos idées et vos solutions sur un journal"
-      ],
-      "summary": "La créativité est la clé pour trouver des solutions innovantes"
+      "title": "La maîtrise de soi",
+      "subtitle": "Atteignez un niveau supérieur de conscience",
+      "focus": "Exercices pour améliorer la maîtrise de soi",
+      "content": "Contenu indisponible suite à une erreur.",
+      "hook": "",
+      "summary": ""
     },
     {
       "number": 7,
-      "title": "La résilience",
-      "subtitle": "Apprendre à développer votre résilience et à surmonter les obstacles",
-      "hook": "La résilience est la clé pour surmonter les obstacles et atteindre vos objectifs",
-      "key_points": [
-        "Comprendre les principes de la résilience",
-        "Apprendre à développer votre résilience",
-        "Découvrir la puissance de la persévérance"
-      ],
-      "content": "La résilience est la clé pour surmonter les obstacles et atteindre vos objectifs. Mais comment développer votre résilience ? Dans ce chapitre, nous allons explorer les principes de la résilience et les moyens de la développer. Nous allons apprendre à développer notre résilience et à surmonter les obstacles. Nous allons utiliser la technique de la persévérance pour renforcer notre résilience. Nous allons également utiliser des exercices pratiques pour vous aider à développer votre résilience.",
-      "key_technique": "La persévérance",
-      "exercises": [
-        "Exercice 1 : Écrivez vos objectifs et vos obstacles sur un papier",
-        "Exercice 2 : Créez un plan pour surmonter les obstacles"
-      ],
-      "summary": "La résilience est la clé pour surmonter les obstacles et atteindre vos objectifs"
+      "title": "L'intégration du protocole",
+      "subtitle": "Intégrez les principes dans votre vie quotidienne",
+      "focus": "Conseils pour intégrer les principes du protocole dans votre vie",
+      "content": "Contenu indisponible suite à une erreur.",
+      "hook": "",
+      "summary": ""
     },
     {
       "number": 8,
+      "title": "La poursuite de la transformation",
+      "subtitle": "Continuez sur la voie de la croissance",
+      "focus": "Stratégies pour poursuivre la transformation",
+      "content": "Contenu indisponible suite à une erreur.",
+      "hook": "",
+      "summary": ""
+    },
+    {
+      "number": 9,
       "title": "La mise en pratique",
-      "subtitle": "Apprendre à mettre en pratique vos nouvelles compétences et à atteindre vos objectifs",
-      "hook": "La mise en pratique est la clé pour atteindre vos objectifs",
-      "key_points": [
-        "Comprendre les principes de la mise en pratique",
-        "Apprendre à mettre en pratique vos nouvelles compétences",
-        "Découvrir la puissance de l'action"
-      ],
-      "content": "La mise en pratique est la clé pour atteindre vos objectifs. Mais comment mettre en pratique vos nouvelles compétences ? Dans ce chapitre, nous allons explorer les principes de la mise en pratique et les moyens de la mettre en œuvre. Nous allons apprendre à mettre en pratique nos nouvelles compétences et à atteindre nos objectifs. Nous allons utiliser la technique de l'action pour renforcer notre motivation. Nous allons également utiliser des exercices pratiques pour vous aider à mettre en pratique vos nouvelles compétences.",
-      "key_technique": "L'action",
-      "exercises": [
-        "Exercice 1 : Écrivez vos objectifs et vos plans d'action sur un papier",
-        "Exercice 2 : Mettez en pratique vos plans d'action"
-      ],
-      "summary": "La mise en pratique est la clé pour atteindre vos objectifs"
+      "subtitle": "Mettez en pratique vos nouvelles compétences",
+      "focus": "Exercices pour mettre en pratique les compétences acquises",
+      "content": "Contenu indisponible suite à une erreur.",
+      "hook": "",
+      "summary": ""
+    },
+    {
+      "number": 10,
+      "title": "La conclusion",
+      "subtitle": "Récapitulez vos progrès",
+      "focus": "Bilan de la transformation et perspectives d'avenir",
+      "content": "Contenu indisponible suite à une erreur.",
+      "hook": "",
+      "summary": ""
     }
   ],
-  "introduction": "Bienvenue dans ce livre qui va vous aider à atteindre vos objectifs et à devenir la meilleure version de vous-même. Dans les prochains chapitres, nous allons explorer les principes de la conditionnement mental, de la discipline stoïcienne et de la motivation. Nous allons apprendre à développer une mentalité gagnante, à gérer notre stress et à trouver notre motivation. Nous allons également apprendre à mettre en pratique nos nouvelles compétences et à atteindre nos objectifs. Ce livre est conçu pour vous aider à atteindre vos objectifs et à devenir la personne que vous avez toujours voulu être.",
-  "conclusion": "Félicitations pour avoir lu ce livre et pour avoir pris le premier pas vers la réalisation de vos rêves. Nous espérons que vous avez appris à développer une mentalité gagnante, à gérer votre stress et à trouver votre motivation. Nous espérons également que vous avez appris à mettre en pratique vos nouvelles compétences et à atteindre vos objectifs. N'oubliez pas que la réussite est un processus qui prend du temps et de l'effort. Mais avec la bonne mentalité et les bonnes compétences, vous pouvez atteindre tout ce que vous voulez.",
-  "about_author": "Maria Talks est une auteure et une coach qui a aidé des milliers de personnes à atteindre leurs objectifs et à devenir la meilleure version d'elles-mêmes. Elle est connue pour ses compétences en conditionnement mental, en discipline stoïcienne et en motivation. Elle a écrit ce livre pour vous aider à atteindre vos objectifs et à devenir la personne que vous avez toujours voulu être.",
-  "back_cover_description": "Découvrez le secret pour atteindre vos objectifs et devenir la meilleure version de vous-même. Ce livre vous enseigne les principes de la conditionnement mental, de la discipline stoïcienne et de la motivation. Vous apprendrez à développer une mentalité gagnante, à gérer votre stress et à trouver votre motivation. Vous apprendrez également à mettre en pratique vos nouvelles compétences et à atteindre vos objectifs. Achetez ce livre aujourd'hui et commencez à réaliser vos rêves !"
+  "introduction": "Bienvenue dans LE PROTOCOLE DE L'OMBRE, un cahier de travail premium conçu pour les jeunes adultes qui cherchent à développer une mentalité stoïque et une discipline de fer. Dans les pages qui suivent, vous découvrirez un processus de transformation profonde qui vous guidera à travers les principes fondamentaux de la discipline stoïque et du travail d'ombre. Vous apprendrez à maîtriser vos émotions, à renforcer votre résilience et à atteindre vos objectifs. Ce cahier de travail est votre guide vers une vie plus épanouie et plus équilibrée. Nous allons commencer par explorer les secrets de votre esprit et les principes fondamentaux de la discipline stoïque. Ensuite, nous allons lancer le protocole et commencer votre transformation. Vous découvrirez des stratégies pour gérer vos émotions, renforcer votre résilience et améliorer votre maîtrise de soi. Vous apprendrez également à intégrer les principes du protocole dans votre vie quotidienne et à poursuivre la transformation. Nous allons mettre en pratique vos nouvelles compétences et récapituler vos progrès. Ce cahier de travail est votre outil pour atteindre la maîtrise de l'ombre et devenir la meilleure version de vous-même.",
+  "conclusion": "Félicitations pour avoir achevé LE PROTOCOLE DE L'OMBRE ! Vous avez maintenant les outils et les compétences nécessaires pour développer une mentalité stoïque et une discipline de fer. Vous avez appris à maîtriser vos émotions, à renforcer votre résilience et à atteindre vos objectifs. Vous avez découvert les secrets de votre esprit et les principes fondamentaux de la discipline stoïque. Vous avez intégré les principes du protocole dans votre vie quotidienne et vous avez mis en pratique vos nouvelles compétences. Vous êtes maintenant prêt à poursuivre la transformation et à devenir la meilleure version de vous-même. N'oubliez pas que la transformation est un processus continu et que vous devez continuer à travailler sur vous-même pour maintenir et améliorer vos compétences. Nous vous souhaitons bonne chance sur votre chemin vers la maîtrise de l'ombre et nous sommes fiers de vous avoir accompagné dans ce voyage de transformation.",
+  "about_author": "Maria Talks est une auteur et une coach qui se spécialise dans la développement personnel et la discipline stoïque. Elle a aidé des milliers de personnes à développer une mentalité stoïque et à atteindre leurs objectifs. Elle est connue pour son approche unique et efficace qui combine les principes de la discipline stoïque avec les stratégies de développement personnel. Elle est l'auteur de plusieurs livres et cahiers de travail sur le développement personnel et la discipline stoïque."
 }
