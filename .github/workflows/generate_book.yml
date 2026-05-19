@@ -4,22 +4,22 @@ on:
   workflow_dispatch:
     inputs:
       book_title:
-        description: '📖 Book Title (e.g: "How to Build Wealth in 30 Days")'
+        description: '📖 Book Title + Full Description (e.g: "The Secret to Financial Freedom: A complete guide for people stuck in 9-5 jobs who want to build passive income streams, escape debt, and achieve true financial independence in 12 months")'
         required: true
         type: string
       author_name:
-        description: '✍️ Author Name (e.g: Maria, John Doe)'
+        description: '✍️ Author Name'
         required: false
-        default: 'Maria'
+        default: 'Professional Author'
         type: string
       language:
         description: '🌍 Language'
         required: true
-        default: 'fr'
+        default: 'en'
         type: choice
         options:
-          - fr
           - en
+          - fr
           - ar
           - es
           - de
@@ -33,6 +33,14 @@ on:
           - ko
           - hi
           - id
+      book_format:
+        description: '📦 Format — pdf = sell directly (TikTok/Gumroad) | kdp = Amazon KDP print+digital'
+        required: true
+        default: 'pdf'
+        type: choice
+        options:
+          - pdf
+          - kdp
       action:
         description: '⚡ Action'
         required: true
@@ -45,7 +53,7 @@ on:
 jobs:
   create-book:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
@@ -56,8 +64,7 @@ jobs:
           python-version: '3.11'
 
       - name: 📦 Install Dependencies
-        run: |
-          pip install requests
+        run: pip install requests
 
       - name: 📚 Generate Book
         env:
@@ -65,9 +72,9 @@ jobs:
           BOOK_TITLE: ${{ github.event.inputs.book_title }}
           BOOK_LANGUAGE: ${{ github.event.inputs.language }}
           BOOK_AUTHOR: ${{ github.event.inputs.author_name }}
+          BOOK_FORMAT: ${{ github.event.inputs.book_format }}
           ACTION: ${{ github.event.inputs.action }}
-        run: |
-          python generate_book.py
+        run: python generate_book.py
 
       - name: 🌐 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -78,20 +85,18 @@ jobs:
 
       - name: 📊 Show Results
         run: |
-          echo "=========================="
+          echo "=================================="
           echo "✅ BOOK GENERATED SUCCESSFULLY!"
-          echo "=========================="
-          if [ -f output/metadata.json ]; then
-            cat output/metadata.json
-          fi
+          echo "=================================="
+          if [ -f output/metadata.json ]; then cat output/metadata.json; fi
           echo ""
-          echo "📖 Files generated:"
+          echo "📖 Files:"
           ls -la output/
           echo ""
-          echo "🌐 Your book will be live at:"
-          echo "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo "🌐 Live at:"
+          echo "https://${{ github.repository_owner }}.github.io/${{ github.repository_name }}/"
 
-      - name: 📤 Upload Book as Artifact
+      - name: 📤 Upload as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ebook-${{ github.event.inputs.book_title }}
