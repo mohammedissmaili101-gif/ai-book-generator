@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 📚 Professional Book Generator - Powered by Groq
-Generates complete, sellable ebooks with professional design
+Generates complete, sellable ebooks — PDF direct sell or Amazon KDP
 """
 
 import os
@@ -17,6 +17,13 @@ from datetime import datetime
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL = "llama-3.3-70b-versatile"
+
+# ============================================================
+# BOOK FORMAT CONFIG
+# ============================================================
+# "pdf"  → mobile 120×213mm, dark design, html2pdf download button
+# "kdp"  → Amazon KDP 6×9 inch (152×228mm), white background, print-ready
+BOOK_FORMAT = os.environ.get("BOOK_FORMAT", "pdf")  # "pdf" or "kdp"
 
 # ============================================================
 # BOOK THEMES
@@ -179,16 +186,16 @@ def generate_book_structure(title: str, language: str = "en") -> dict:
     """Generate book structure optimized like bestselling books"""
 
     lang_prompts = {
-        "en": f"You are a professional bestselling author. Your books follow the structure of top sellers like Atomic Habits, The Psychology of Money, and Think and Grow Rich.",
-        "ar": f"أنت مؤلف محترف ومتخصص في الكتب الأكثر مبيعًا. كتبك تتبع هيكل أفضل الكتب مبيعًا مثل العادات الذرية وعلم النفس والمال.",
-        "fr": f"Vous êtes un auteur professionnel spécialisé dans les best-sellers. Vos livres suivent la structure des meilleures ventes comme Atomic Habits et Thinking Fast and Slow.",
-        "es": f"Eres un autor profesional especializado en bestsellers. Tus libros siguen la estructura de los más vendidos como Hábitos Atómicos.",
-        "de": f"Sie sind ein professioneller Autor, spezialisiert auf Bestseller. Ihre Bücher folgen der Struktur von Top-Sellern wie Atomic Habits.",
-        "pt": f"Você é um autor profissional especializado em bestsellers. Seus livros seguem a estrutura dos mais vendidos como Hábitos Atômicos.",
-        "it": f"Sei un autore professionista specializzato in bestseller. I tuoi libri seguono la struttura dei più venduti come Le Abitudini Atomiche.",
-        "zh": f"您是一位专业畅销书作者。您的书籍遵循《原子习惯》等顶级畅销书的结构。",
-        "ja": f"あなたはプロのベストセラー作家です。あなたの本は『習慣の力』などのトップセラーの構成に従っています。",
-        "ru": f"Вы профессиональный автор бестселлеров. Ваши книги следуют структуре таких бестселлеров, как «Атомные привычки»."
+        "en": "You are a professional bestselling author. Your books follow the structure of top sellers like Atomic Habits, The Psychology of Money, and Think and Grow Rich.",
+        "ar": "أنت مؤلف محترف ومتخصص في الكتب الأكثر مبيعًا. كتبك تتبع هيكل أفضل الكتب مبيعًا مثل العادات الذرية وعلم النفس والمال.",
+        "fr": "Vous êtes un auteur professionnel spécialisé dans les best-sellers. Vos livres suivent la structure des meilleures ventes comme Atomic Habits et Thinking Fast and Slow.",
+        "es": "Eres un autor profesional especializado en bestsellers. Tus libros siguen la estructura de los más vendidos como Hábitos Atómicos.",
+        "de": "Sie sind ein professioneller Autor, spezialisiert auf Bestseller. Ihre Bücher folgen der Struktur von Top-Sellern wie Atomic Habits.",
+        "pt": "Você é um autor profissional especializado em bestsellers. Seus livros seguem a estrutura dos mais vendidos como Hábitos Atômicos.",
+        "it": "Sei un autore professionista specializzato in bestseller. I tuoi libri seguono la struttura dei più venduti come Le Abitudini Atomiche.",
+        "zh": "您是一位专业畅销书作者。您的书籍遵循《原子习惯》等顶级畅销书的结构。",
+        "ja": "あなたはプロのベストセラー作家です。あなたの本は『習慣の力』などのトップセラーの構成に従っています。",
+        "ru": "Вы профессиональный автор бестселлеров. Ваши книги следуют структуре таких бестселлеров, как «Атомные привычки»."
     }
 
     system_msg = lang_prompts.get(language, lang_prompts["en"])
@@ -199,26 +206,30 @@ def generate_book_structure(title: str, language: str = "en") -> dict:
 Create a complete, professional, sellable ebook about: "{title}"
 
 CRITICAL RULES FOR BESTSELLING BOOKS:
-1. Hook the reader from the FIRST sentence - start with a shocking fact, story, or bold claim
+1. Hook the reader from the FIRST sentence — start with a shocking fact, story, or bold claim
 2. Every chapter must solve ONE specific problem with actionable steps
-3. Use real-world examples and mini-stories (like Malcolm Gladwell style)
+3. Use real-world examples and mini-stories (Malcolm Gladwell style)
 4. Each chapter: Problem → Science/Evidence → Solution → Action Steps
-5. Write like you're talking to a smart friend, not giving a lecture
-6. Use short paragraphs (2-4 sentences max) for mobile reading
+5. Write like talking to a smart friend, not giving a lecture
+6. Short paragraphs (2-4 sentences max) for easy reading
 7. Include specific numbers, stats, and named techniques
-8. Chapters should build on each other (progressive revelation)
+8. Chapters build on each other (progressive revelation)
+9. IMPORTANT: Write DETAILED content for each chapter — minimum 800 words of real substance
+10. NO filler, NO repetition — every sentence must earn its place
 
-Return ONLY valid JSON (no markdown, no backticks):
+Return ONLY valid JSON (no markdown, no backticks, no commentary):
 
 {{
   "title": "powerful book title",
   "subtitle": "specific, benefit-driven subtitle (what reader GETS)",
   "author": "Professional Author",
   "tagline": "one sentence that makes someone NEED this book",
-  "description": "200 words that create desire: start with the problem, agitate it, then promise the solution. Be specific about transformation.",
-  "target_audience": "exactly who this is for (be specific: e.g. 'people stuck in 9-5 jobs dreaming of financial freedom')",
+  "description": "200 words: start with the problem, agitate it, then promise the solution. Be specific about transformation.",
+  "target_audience": "exactly who this is for (be specific)",
+  "keywords": ["keyword1","keyword2","keyword3","keyword4","keyword5"],
+  "categories": ["Primary Category","Secondary Category"],
   "key_benefits": [
-    "Specific benefit 1 with number (e.g. 'Build 3 income streams in 90 days')",
+    "Specific benefit 1 with number (e.g. Build 3 income streams in 90 days)",
     "Specific benefit 2",
     "Specific benefit 3",
     "Specific benefit 4",
@@ -227,12 +238,12 @@ Return ONLY valid JSON (no markdown, no backticks):
   "chapters": [
     {{
       "number": 1,
-      "title": "Chapter Title (use power words)",
+      "title": "Chapter Title (power words)",
       "subtitle": "The specific promise of this chapter",
-      "hook": "One shocking opening sentence that grabs attention",
+      "hook": "One shocking opening sentence",
       "key_points": ["specific point 1", "specific point 2", "specific point 3"],
-      "content": "Write 700-900 words of PREMIUM content. Structure: 1) Open with a mini-story or shocking fact (100w). 2) Explain the core problem/concept with evidence (200w). 3) Reveal the solution/technique with a specific name (200w). 4) Give a real-world example of how it works (150w). 5) Break it into 3-5 numbered actionable steps (250w). Use short paragraphs. NO filler words. Every sentence must earn its place.",
-      "key_technique": "Name the main technique/framework taught in this chapter (e.g. 'The 2-Minute Rule', 'The PARA Method')",
+      "content": "Write 800-1000 words of PREMIUM content. Structure: 1) Open with a mini-story or shocking fact (100w). 2) Explain the core problem with evidence (200w). 3) Reveal the solution with a specific named technique (200w). 4) Real-world example of how it works (150w). 5) 3-5 numbered actionable steps (250w). Short paragraphs. NO filler.",
+      "key_technique": "Name the main technique taught (e.g. The 2-Minute Rule)",
       "exercises": [
         "Exercise 1: Specific, doable action with clear instructions",
         "Exercise 2: Follow-up action to reinforce the lesson"
@@ -240,19 +251,19 @@ Return ONLY valid JSON (no markdown, no backticks):
       "summary": "The one thing to remember from this chapter (one powerful sentence)"
     }}
   ],
-  "introduction": "250 words: Start with a relatable struggle. Promise transformation. Explain what makes this book different. Give a roadmap of chapters. End with a motivating call to action.",
-  "conclusion": "250 words: Celebrate the reader's journey. Recap the 3 biggest transformations. Paint a vivid picture of their new life. Give ONE final action step. End with an inspiring quote or challenge.",
-  "about_author": "120 words: Third-person bio. Mention real-sounding credentials, personal struggle they overcame, and why they wrote this book."
+  "introduction": "300 words: Start with a relatable struggle. Promise transformation. Explain what makes this book different. Give roadmap of chapters. End with motivating call to action.",
+  "conclusion": "300 words: Celebrate the reader. Recap the 3 biggest transformations. Paint a vivid picture of their new life. Give ONE final action step. End with inspiring challenge.",
+  "about_author": "150 words: Third-person bio. Real-sounding credentials, personal struggle overcome, why they wrote this book.",
+  "back_cover_description": "120 words of compelling back cover copy. Hook, 3 bullet promises, call to action."
 }}
 
-Write 8 chapters. Language: {language}. Make this worth $47-197 USD.
+Write 8 chapters. Language: {language}. Make this worth $19.99-$29.99 USD.
 """}
     ]
 
-    content = call_groq(messages, max_tokens=7000)
+    content = call_groq(messages, max_tokens=8000)
     content = content.strip()
 
-    # Clean JSON
     if "```json" in content:
         content = content.split("```json")[1].split("```")[0]
     elif "```" in content:
@@ -267,13 +278,15 @@ Write 8 chapters. Language: {language}. Make this worth $47-197 USD.
     return json.loads(content)
 
 
-def generate_html_book(book_data: dict, theme: dict, language: str = "en") -> str:
-    """Generate a stunning HTML ebook with zero text-cutting issues"""
+# ============================================================
+# FORMAT 1: PDF DIRECT SELL (dark, mobile-optimized)
+# ============================================================
+def generate_pdf_html(book_data: dict, theme: dict, language: str = "en") -> str:
+    """Dark mobile-optimized HTML for direct PDF selling"""
 
     is_rtl = language == "ar"
     dir_attr = 'dir="rtl"' if is_rtl else ''
 
-    # --- Chapters HTML ---
     chapters_html = ""
     for i, chapter in enumerate(book_data.get("chapters", []), 1):
 
@@ -290,7 +303,6 @@ def generate_html_book(book_data: dict, theme: dict, language: str = "en") -> st
             for j, ex in enumerate(chapter.get("exercises", []), 1)
         )
 
-        # Split content into paragraphs — each wrapped safely
         raw_content = chapter.get("content", "")
         paragraphs = [p.strip() for p in raw_content.split('\n') if p.strip()]
         content_html = "".join(f'<p class="body-text">{p}</p>' for p in paragraphs)
@@ -305,6 +317,7 @@ def generate_html_book(book_data: dict, theme: dict, language: str = "en") -> st
         </div>''' if key_technique else ""
 
         chapters_html += f'''
+<div class="chapter-wrapper">
 <section class="chapter" id="chapter-{i}">
     <div class="chapter-header">
         <div class="chapter-meta">
@@ -320,7 +333,6 @@ def generate_html_book(book_data: dict, theme: dict, language: str = "en") -> st
     {hook_html}
 
     <div class="chapter-body">
-
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
             <ul class="key-points-list">{key_points_html}</ul>
@@ -341,24 +353,15 @@ def generate_html_book(book_data: dict, theme: dict, language: str = "en") -> st
             <span class="summary-icon">💡</span>
             <p class="summary-text">{chapter.get("summary", "")}</p>
         </div>
-
-        <div class="notes-section">
-            <h4 class="notes-label">📝 MY NOTES</h4>
-            <div class="notes-lines">
-                {''.join('<div class="note-line"></div>' for _ in range(5))}
-            </div>
-        </div>
-
     </div>
-</section>'''
+</section>
+</div>'''
 
-    # --- Benefits HTML ---
     benefits_html = "".join(
         f'<div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">{b}</span></div>'
         for b in book_data.get("key_benefits", [])
     )
 
-    # --- TOC HTML ---
     toc_html = "".join(
         f'''<div class="toc-item" onclick="scrollToChapter({i})">
             <span class="toc-num">0{i}</span>
@@ -371,39 +374,29 @@ def generate_html_book(book_data: dict, theme: dict, language: str = "en") -> st
         for i, ch in enumerate(book_data.get("chapters", []), 1)
     )
 
-    # --- Introduction paragraphs ---
-    intro_raw = book_data.get("introduction", "")
     intro_html = "".join(
         f'<p class="body-text">{p.strip()}</p>'
-        for p in intro_raw.split('\n') if p.strip()
+        for p in book_data.get("introduction", "").split('\n') if p.strip()
     )
-
-    # --- Conclusion paragraphs ---
-    conc_raw = book_data.get("conclusion", "")
     conc_html = "".join(
         f'<p class="body-text">{p.strip()}</p>'
-        for p in conc_raw.split('\n') if p.strip()
+        for p in book_data.get("conclusion", "").split('\n') if p.strip()
     )
 
     title_short = book_data.get('title', '')
     title_display = title_short[:28] + "…" if len(title_short) > 28 else title_short
+    year = datetime.now().year
 
     html = f'''<!DOCTYPE html>
 <html lang="{language}" {dir_attr}>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{book_data.get("title","")}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family={theme["font_title"].replace(" ","+")},wght@400;700;900&family={theme["font_body"].replace(" ","+")},wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-/* ===================== RESET & BASE ===================== */
-*, *::before, *::after {{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}}
-
+*, *::before, *::after {{ margin:0; padding:0; box-sizing:border-box; }}
 :root {{
     --primary:   {theme["primary"]};
     --secondary: {theme["secondary"]};
@@ -415,33 +408,18 @@ def generate_html_book(book_data: dict, theme: dict, language: str = "en") -> st
     --cover-accent:   {theme["cover_accent"]};
     --font-title: '{theme["font_title"]}', Georgia, serif;
     --font-body:  '{theme["font_body"]}', Georgia, serif;
-
-    /* Typography scale — prevents cramped text */
-    --size-xs:   0.75rem;
-    --size-sm:   0.875rem;
-    --size-base: 1rem;
-    --size-lg:   1.125rem;
-    --size-xl:   1.375rem;
-    --size-2xl:  1.75rem;
-    --size-3xl:  2.25rem;
-
-    /* Spacing */
-    --gap-sm:  12px;
-    --gap-md:  24px;
-    --gap-lg:  40px;
-    --gap-xl:  56px;
-    --side:    22px;
-    --radius:  14px;
+    --size-xs: 0.75rem; --size-sm: 0.875rem; --size-base: 1rem;
+    --size-lg: 1.125rem; --size-xl: 1.375rem;
+    --size-2xl: 1.75rem; --size-3xl: 2.25rem;
+    --gap-sm: 12px; --gap-md: 24px; --gap-lg: 40px;
+    --gap-xl: 56px; --side: 22px; --radius: 14px;
 }}
-
 html {{ scroll-behavior: smooth; }}
-
 body {{
     background: var(--primary);
     color: var(--text);
     font-family: var(--font-body);
     font-size: var(--size-base);
-    /* KEY FIX: line-height prevents text overlap across pages */
     line-height: 1.85;
     max-width: 480px;
     margin: 0 auto;
@@ -450,7 +428,7 @@ body {{
     overflow-wrap: break-word;
 }}
 
-/* ===================== COVER ===================== */
+/* ====== COVER ====== */
 .cover-page {{
     min-height: 100vh;
     background: var(--cover-gradient);
@@ -462,15 +440,11 @@ body {{
     position: relative;
     overflow: hidden;
 }}
-
-/* Decorative circles on cover */
 .cover-page::before {{
     content: '';
     position: absolute;
-    top: -80px;
-    right: -80px;
-    width: 320px;
-    height: 320px;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
     border-radius: 50%;
     background: var(--cover-accent);
     opacity: 0.08;
@@ -478,25 +452,29 @@ body {{
 .cover-page::after {{
     content: '';
     position: absolute;
-    bottom: 120px;
-    right: -40px;
-    width: 180px;
-    height: 180px;
+    bottom: 120px; right: -40px;
+    width: 180px; height: 180px;
     border-radius: 50%;
     border: 2px solid var(--cover-accent);
     opacity: 0.15;
 }}
-
+/* ---- NEW: large decorative circle ---- */
+.cover-circle-big {{
+    position: absolute;
+    top: 30px; left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 40px solid var(--cover-accent);
+    opacity: 0.06;
+}}
 .cover-top-bar {{
     position: absolute;
-    top: var(--side);
-    left: var(--side);
-    right: var(--side);
+    top: var(--side); left: var(--side); right: var(--side);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }}
-
 .cover-genre-tag {{
     background: var(--cover-accent);
     color: var(--primary);
@@ -507,38 +485,29 @@ body {{
     padding: 5px 14px;
     border-radius: 20px;
 }}
-
-.cover-year {{
-    font-size: var(--size-xs);
-    color: rgba(255,255,255,0.35);
-    letter-spacing: 2px;
-}}
-
+.cover-year {{ font-size: var(--size-xs); color: rgba(255,255,255,0.35); letter-spacing: 2px; }}
 .cover-emoji {{
-    font-size: 56px;
+    font-size: 64px;
     margin-bottom: 28px;
     display: block;
     filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
 }}
-
 .cover-line {{
-    width: 48px;
-    height: 4px;
+    width: 60px; height: 4px;
     background: var(--cover-accent);
     border-radius: 2px;
     margin-bottom: 20px;
 }}
-
 .cover-title {{
     font-family: var(--font-title);
-    font-size: clamp(1.8rem, 6vw, 2.4rem);
+    font-size: clamp(1.9rem, 6vw, 2.6rem);
     font-weight: 900;
     color: #fff;
     line-height: 1.15;
     margin-bottom: 14px;
     letter-spacing: -0.5px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
 }}
-
 .cover-subtitle {{
     font-size: var(--size-sm);
     color: var(--cover-accent);
@@ -547,7 +516,6 @@ body {{
     line-height: 1.5;
     opacity: 0.9;
 }}
-
 .cover-author-row {{
     display: flex;
     align-items: center;
@@ -556,18 +524,15 @@ body {{
     border-top: 1px solid rgba(255,255,255,0.12);
     width: 100%;
 }}
-
 .cover-author-dot {{
-    width: 32px;
-    height: 32px;
+    width: 36px; height: 36px;
     background: var(--cover-accent);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--primary);
 }}
-
 .cover-author-name {{
     font-size: var(--size-xs);
     letter-spacing: 3px;
@@ -575,13 +540,11 @@ body {{
     color: rgba(255,255,255,0.6);
 }}
 
-/* ===================== NAV BAR ===================== */
+/* ====== NAV ====== */
 .nav-bar {{
-    position: sticky;
-    top: 0;
+    position: sticky; top: 0;
     background: rgba(0,0,0,0.92);
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255,255,255,0.08);
     padding: 13px var(--side);
     display: flex;
@@ -589,27 +552,20 @@ body {{
     align-items: center;
     z-index: 100;
 }}
-
 .nav-title {{
     font-family: var(--font-title);
     font-size: var(--size-xs);
     color: var(--accent);
     font-weight: 700;
-    letter-spacing: 0.5px;
 }}
+.nav-progress-text {{ font-size: var(--size-xs); color: rgba(255,255,255,0.35); }}
 
-.nav-progress-text {{
-    font-size: var(--size-xs);
-    color: rgba(255,255,255,0.35);
-}}
-
-/* ===================== DESCRIPTION PAGE ===================== */
+/* ====== DESCRIPTION ====== */
 .description-page {{
     padding: var(--gap-xl) var(--side);
     background: var(--secondary);
     border-bottom: 3px solid var(--accent);
 }}
-
 .section-label {{
     font-size: var(--size-xs);
     letter-spacing: 3px;
@@ -618,50 +574,25 @@ body {{
     margin-bottom: 14px;
     display: block;
 }}
-
 .description-text {{
     font-size: var(--size-base);
     line-height: 1.85;
     color: rgba(255,255,255,0.78);
     margin-bottom: var(--gap-lg);
 }}
-
-.benefits-list {{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}}
-
+.benefits-list {{ display: flex; flex-direction: column; gap: 10px; }}
 .benefit-item {{
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
+    display: flex; align-items: flex-start; gap: 12px;
     padding: 13px 15px;
     background: rgba(255,255,255,0.04);
     border-radius: var(--radius);
     border-left: 3px solid var(--accent);
 }}
+.benefit-check {{ color: var(--accent); font-weight: 900; font-size: var(--size-lg); flex-shrink: 0; line-height: 1.3; }}
+.benefit-text {{ font-size: var(--size-sm); line-height: 1.6; color: rgba(255,255,255,0.82); }}
 
-.benefit-check {{
-    color: var(--accent);
-    font-weight: 900;
-    font-size: var(--size-lg);
-    flex-shrink: 0;
-    line-height: 1.3;
-}}
-
-.benefit-text {{
-    font-size: var(--size-sm);
-    line-height: 1.6;
-    color: rgba(255,255,255,0.82);
-}}
-
-/* ===================== TABLE OF CONTENTS ===================== */
-.toc-page {{
-    padding: var(--gap-xl) var(--side);
-    background: var(--primary);
-}}
-
+/* ====== TOC ====== */
+.toc-page {{ padding: var(--gap-xl) var(--side); background: var(--primary); }}
 .page-title {{
     font-family: var(--font-title);
     font-size: var(--size-2xl);
@@ -670,11 +601,8 @@ body {{
     margin-bottom: var(--gap-md);
     line-height: 1.2;
 }}
-
 .toc-item {{
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    display: flex; align-items: center; gap: 14px;
     padding: 14px 0;
     border-bottom: 1px solid rgba(255,255,255,0.06);
     cursor: pointer;
@@ -682,7 +610,6 @@ body {{
 }}
 .toc-item:hover {{ padding-left: 8px; }}
 .toc-item:hover .toc-arrow {{ color: var(--accent); }}
-
 .toc-num {{
     font-family: var(--font-title);
     font-size: var(--size-lg);
@@ -690,41 +617,17 @@ body {{
     color: var(--accent);
     min-width: 34px;
 }}
+.toc-text {{ flex: 1; display: flex; flex-direction: column; gap: 3px; }}
+.toc-title {{ font-size: var(--size-sm); font-weight: 600; color: #fff; line-height: 1.3; }}
+.toc-sub {{ font-size: var(--size-xs); color: rgba(255,255,255,0.4); }}
+.toc-arrow {{ color: rgba(255,255,255,0.25); font-size: var(--size-base); transition: color 0.2s; flex-shrink: 0; }}
 
-.toc-text {{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}}
-
-.toc-title {{
-    font-size: var(--size-sm);
-    font-weight: 600;
-    color: #fff;
-    line-height: 1.3;
-}}
-
-.toc-sub {{
-    font-size: var(--size-xs);
-    color: rgba(255,255,255,0.4);
-    line-height: 1.4;
-}}
-
-.toc-arrow {{
-    color: rgba(255,255,255,0.25);
-    font-size: var(--size-base);
-    transition: color 0.2s;
-    flex-shrink: 0;
-}}
-
-/* ===================== INTRO PAGE ===================== */
+/* ====== INTRO ====== */
 .intro-page {{
     padding: var(--gap-xl) var(--side);
     background: var(--secondary);
     position: relative;
 }}
-
 .intro-page::before {{
     content: '\u201C';
     font-family: var(--font-title);
@@ -732,18 +635,19 @@ body {{
     color: var(--accent);
     opacity: 0.07;
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 10px; left: 10px;
     line-height: 1;
     pointer-events: none;
 }}
 
-/* ===================== CHAPTERS ===================== */
+/* ====== CHAPTERS ====== */
+/* FIX: wrapper prevents blank pages */
+.chapter-wrapper {{
+    display: block;
+}}
 .chapter {{
-    /* KEY FIX: no overflow hidden — lets content breathe */
     border-bottom: 3px solid var(--accent);
 }}
-
 .chapter-header {{
     background: var(--gradient);
     padding: var(--gap-xl) var(--side) var(--gap-lg);
@@ -751,46 +655,22 @@ body {{
     position: relative;
     overflow: hidden;
 }}
-
 .chapter-header::before {{
     content: '';
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.04) 0%, transparent 70%);
     pointer-events: none;
 }}
-
-.chapter-meta {{
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}}
-
+.chapter-meta {{ display: flex; justify-content: center; margin-bottom: 20px; }}
 .chapter-number-badge {{
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
+    display: inline-flex; flex-direction: column; align-items: center;
     background: rgba(255,255,255,0.08);
     border: 2px solid var(--accent);
     border-radius: var(--radius);
     padding: 8px 22px;
 }}
-
-.ch-label {{
-    font-size: 0.6rem;
-    letter-spacing: 4px;
-    color: var(--accent);
-    text-transform: uppercase;
-}}
-
-.ch-num {{
-    font-family: var(--font-title);
-    font-size: 2rem;
-    font-weight: 900;
-    color: #fff;
-    line-height: 1;
-}}
-
+.ch-label {{ font-size: 0.6rem; letter-spacing: 4px; color: var(--accent); text-transform: uppercase; }}
+.ch-num {{ font-family: var(--font-title); font-size: 2rem; font-weight: 900; color: #fff; line-height: 1; }}
 .chapter-title {{
     font-family: var(--font-title);
     font-size: var(--size-2xl);
@@ -799,16 +679,7 @@ body {{
     line-height: 1.25;
     margin-bottom: 10px;
 }}
-
-.chapter-subtitle {{
-    color: var(--accent);
-    font-size: var(--size-sm);
-    font-style: italic;
-    opacity: 0.88;
-    line-height: 1.5;
-}}
-
-/* Hook quote */
+.chapter-subtitle {{ color: var(--accent); font-size: var(--size-sm); font-style: italic; opacity: 0.88; line-height: 1.5; }}
 .chapter-hook {{
     margin: var(--gap-md) var(--side) 0;
     padding: 18px 20px;
@@ -820,27 +691,18 @@ body {{
     color: rgba(255,255,255,0.75);
     line-height: 1.75;
 }}
-
-/* Chapter body wrapper — critical for no-cut layout */
-.chapter-body {{
-    padding: var(--gap-md) var(--side) var(--gap-lg);
-}}
-
-/* KEY FIX: body-text uses display:block + avoids page-break inside */
+.chapter-body {{ padding: var(--gap-md) var(--side) var(--gap-lg); }}
+/* KEY FIX for blank pages: no page-break-before on body-text */
 .body-text {{
     display: block;
     font-size: var(--size-base);
     line-height: 1.9;
     color: rgba(255,255,255,0.82);
     margin-bottom: 18px;
-    page-break-inside: avoid;
-    /* Forces text to wrap, never overflow */
     word-break: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
 }}
-
-/* ===== BOXES ===== */
 .box-label {{
     font-size: var(--size-xs);
     letter-spacing: 2px;
@@ -848,7 +710,6 @@ body {{
     margin-bottom: 14px;
     display: block;
 }}
-
 .key-points-box {{
     padding: 20px;
     background: rgba(255,255,255,0.03);
@@ -856,20 +717,10 @@ body {{
     border: 1px solid rgba(255,255,255,0.08);
     margin-bottom: var(--gap-md);
 }}
-
 .key-points-box .box-label {{ color: var(--accent); }}
-
-.key-points-list {{
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}}
-
+.key-points-list {{ list-style: none; display: flex; flex-direction: column; gap: 8px; }}
 .key-point {{
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
+    display: flex; align-items: flex-start; gap: 10px;
     padding: 9px 12px;
     background: rgba(255,255,255,0.04);
     border-radius: 8px;
@@ -877,42 +728,17 @@ body {{
     line-height: 1.55;
     color: rgba(255,255,255,0.85);
 }}
-
-.kp-arrow {{
-    color: var(--accent);
-    flex-shrink: 0;
-    font-style: normal;
-    line-height: 1.55;
-}}
-
-/* Technique badge */
+.kp-arrow {{ color: var(--accent); flex-shrink: 0; font-style: normal; line-height: 1.55; }}
 .technique-badge {{
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+    display: flex; flex-direction: column; gap: 6px;
     padding: 16px 18px;
     background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
     border-radius: var(--radius);
     border: 1px solid var(--accent);
     margin-bottom: var(--gap-md);
 }}
-
-.technique-label {{
-    font-size: var(--size-xs);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--accent);
-}}
-
-.technique-name {{
-    font-family: var(--font-title);
-    font-size: var(--size-lg);
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.3;
-}}
-
-/* Exercises */
+.technique-label {{ font-size: var(--size-xs); letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }}
+.technique-name {{ font-family: var(--font-title); font-size: var(--size-lg); font-weight: 700; color: #fff; line-height: 1.3; }}
 .exercises-section {{
     padding: 20px;
     background: rgba(255,255,255,0.03);
@@ -920,253 +746,100 @@ body {{
     border-left: 4px solid var(--highlight);
     margin-bottom: var(--gap-md);
 }}
-
 .exercises-section .box-label {{ color: var(--highlight); }}
-
-.exercises-list {{
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}}
-
-.exercise-item {{
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-}}
-
+.exercises-list {{ display: flex; flex-direction: column; gap: 12px; }}
+.exercise-item {{ display: flex; gap: 12px; align-items: flex-start; }}
 .exercise-num {{
     background: var(--highlight);
     color: var(--primary);
-    width: 26px;
-    height: 26px;
+    width: 26px; height: 26px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--size-xs);
-    font-weight: 900;
-    flex-shrink: 0;
-    margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--size-xs); font-weight: 900;
+    flex-shrink: 0; margin-top: 2px;
 }}
-
-.exercise-item p {{
-    font-size: var(--size-sm);
-    line-height: 1.65;
-    color: rgba(255,255,255,0.8);
-    word-break: break-word;
-}}
-
-/* Summary */
+.exercise-item p {{ font-size: var(--size-sm); line-height: 1.65; color: rgba(255,255,255,0.8); word-break: break-word; }}
 .chapter-summary {{
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
+    display: flex; gap: 14px; align-items: flex-start;
     padding: 18px 20px;
     background: rgba(255,255,255,0.04);
     border-radius: var(--radius);
     margin-bottom: var(--gap-md);
     font-style: italic;
 }}
+.summary-icon {{ font-size: 1.4rem; flex-shrink: 0; line-height: 1.4; }}
+.summary-text {{ font-size: var(--size-sm); line-height: 1.75; color: rgba(255,255,255,0.88); word-break: break-word; }}
 
-.summary-icon {{
-    font-size: 1.4rem;
-    flex-shrink: 0;
-    line-height: 1.4;
-}}
-
-.summary-text {{
-    font-size: var(--size-sm);
-    line-height: 1.75;
-    color: rgba(255,255,255,0.88);
-    word-break: break-word;
-}}
-
-/* Notes */
-.notes-section {{
-    padding: 18px 20px;
-    background: rgba(255,255,255,0.02);
-    border-radius: var(--radius);
-    border: 1px dashed rgba(255,255,255,0.12);
-}}
-
-.notes-label {{
-    font-size: var(--size-xs);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
-    margin-bottom: 14px;
-    display: block;
-}}
-
-.notes-lines {{
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}}
-
-.note-line {{
-    height: 1px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 1px;
-}}
-
-/* ===================== CONCLUSION ===================== */
-.conclusion-page {{
-    padding: var(--gap-xl) var(--side);
-    background: var(--gradient);
-    text-align: center;
-}}
-
-.conclusion-page .page-title {{ text-align: center; }}
-
-/* ===================== AUTHOR PAGE ===================== */
-.author-page {{
-    padding: var(--gap-xl) var(--side);
-    background: var(--secondary);
-}}
-
+/* ====== CONCLUSION / AUTHOR / BACK ====== */
+.conclusion-page {{ padding: var(--gap-xl) var(--side); background: var(--gradient); }}
+.author-page {{ padding: var(--gap-xl) var(--side); background: var(--secondary); }}
 .author-card {{
     background: rgba(255,255,255,0.04);
-    border-radius: 20px;
-    padding: 30px 24px;
+    border-radius: 20px; padding: 30px 24px;
     text-align: center;
     border: 1px solid rgba(255,255,255,0.08);
 }}
-
 .author-avatar {{
-    width: 72px;
-    height: 72px;
+    width: 72px; height: 72px;
     background: var(--gradient);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     font-size: 1.8rem;
     margin: 0 auto 18px;
     border: 3px solid var(--accent);
 }}
-
-.author-name {{
-    font-family: var(--font-title);
-    font-size: var(--size-xl);
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 6px;
-}}
-
-.author-bio {{
-    font-size: var(--size-sm);
-    line-height: 1.8;
-    color: rgba(255,255,255,0.65);
-    margin-top: 12px;
-    word-break: break-word;
-}}
-
-/* ===================== BACK COVER ===================== */
+.author-name {{ font-family: var(--font-title); font-size: var(--size-xl); font-weight: 700; color: #fff; margin-bottom: 6px; }}
+.author-bio {{ font-size: var(--size-sm); line-height: 1.8; color: rgba(255,255,255,0.65); margin-top: 12px; word-break: break-word; }}
 .back-cover {{
     min-height: 55vh;
     background: var(--cover-gradient);
     padding: var(--gap-xl) var(--side);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    gap: 20px;
-    position: relative;
-    overflow: hidden;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; gap: 20px;
+    position: relative; overflow: hidden;
 }}
-
-.back-cover::before {{
-    content: '';
-    position: absolute;
-    bottom: -60px;
-    left: -60px;
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    background: var(--cover-accent);
-    opacity: 0.06;
-}}
-
-.back-cover-title {{
-    font-family: var(--font-title);
-    font-size: var(--size-2xl);
-    font-weight: 900;
-    color: #fff;
-    line-height: 1.2;
-}}
-
-.back-cover-text {{
-    font-size: var(--size-sm);
-    color: rgba(255,255,255,0.75);
-    line-height: 1.75;
-    max-width: 340px;
-}}
-
+.back-cover-title {{ font-family: var(--font-title); font-size: var(--size-2xl); font-weight: 900; color: #fff; line-height: 1.2; }}
+.back-cover-text {{ font-size: var(--size-sm); color: rgba(255,255,255,0.75); line-height: 1.75; max-width: 340px; }}
 .edition-badge {{
-    background: var(--cover-accent);
-    color: var(--primary);
-    font-size: var(--size-sm);
-    font-weight: 900;
+    background: var(--cover-accent); color: var(--primary);
+    font-size: var(--size-sm); font-weight: 900;
     font-family: var(--font-title);
-    padding: 12px 28px;
-    border-radius: 50px;
-    letter-spacing: 1px;
+    padding: 12px 28px; border-radius: 50px;
 }}
 
-/* ===================== READING PROGRESS ===================== */
+/* ====== PROGRESS ====== */
 #reading-progress {{
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 3px;
-    background: var(--accent);
-    z-index: 999;
-    transition: width 0.15s linear;
-    width: 0%;
+    position: fixed; top: 0; left: 0;
+    height: 3px; background: var(--accent);
+    z-index: 999; transition: width 0.15s linear; width: 0%;
 }}
 
-/* ===================== PDF BUTTON ===================== */
+/* ====== PDF BUTTON ====== */
 .pdf-btn {{
-    position: fixed;
-    bottom: 22px;
-    right: 18px;
-    background: var(--accent);
-    color: var(--primary);
-    border: none;
-    border-radius: 50px;
-    padding: 13px 20px;
-    font-size: var(--size-sm);
-    font-weight: 900;
-    cursor: pointer;
-    z-index: 998;
-    display: flex;
-    align-items: center;
-    gap: 7px;
+    position: fixed; bottom: 22px; right: 18px;
+    background: var(--accent); color: var(--primary);
+    border: none; border-radius: 50px;
+    padding: 13px 20px; font-size: var(--size-sm);
+    font-weight: 900; cursor: pointer; z-index: 998;
+    display: flex; align-items: center; gap: 7px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition: transform 0.15s;
     font-family: var(--font-body);
 }}
-
 .pdf-btn:active {{ transform: scale(0.95); }}
 
-/* ===================== PRINT STYLES ===================== */
+/* ====== PRINT ====== */
 @media print {{
     .nav-bar, .pdf-btn, #reading-progress {{ display: none !important; }}
     body {{ max-width: 100%; font-size: 11pt; }}
     .cover-page {{ min-height: 100vh; page-break-after: always; }}
-    /* KEY FIX: avoid orphaned lines on print */
     .body-text {{ orphans: 3; widows: 3; }}
-    .chapter {{ page-break-before: always; }}
+    /* FIX: only chapters break, not every element */
+    .chapter-wrapper {{ page-break-before: always; }}
     .chapter-header, .key-points-box, .exercises-section,
-    .chapter-summary, .technique-badge {{
-        page-break-inside: avoid;
-    }}
+    .chapter-summary, .technique-badge {{ page-break-inside: avoid; }}
 }}
-
-/* ===================== SCROLLBAR ===================== */
 ::-webkit-scrollbar {{ width: 3px; }}
 ::-webkit-scrollbar-track {{ background: transparent; }}
 ::-webkit-scrollbar-thumb {{ background: var(--accent); border-radius: 2px; }}
@@ -1177,61 +850,51 @@ body {{
 
 <div id="reading-progress"></div>
 
-<!-- ==================== COVER ==================== -->
 <section class="cover-page">
+    <div class="cover-circle-big"></div>
     <div class="cover-top-bar">
         <span class="cover-genre-tag">{theme["emoji"]} Book</span>
-        <span class="cover-year">{datetime.now().year}</span>
+        <span class="cover-year">{year}</span>
     </div>
     <span class="cover-emoji">{theme["emoji"]}</span>
     <div class="cover-line"></div>
     <h1 class="cover-title">{book_data.get("title","")}</h1>
     <p class="cover-subtitle">{book_data.get("subtitle","")}</p>
     <div class="cover-author-row">
-        <div class="cover-author-dot">{theme["emoji"]}</div>
+        <div class="cover-author-dot">{book_data.get("author","?")[0].upper()}</div>
         <span class="cover-author-name">by {book_data.get("author","Professional Author")}</span>
     </div>
 </section>
 
-<!-- ==================== NAV ==================== -->
 <nav class="nav-bar">
     <span class="nav-title">{title_display}</span>
     <span class="nav-progress-text" id="progress-text">0% read</span>
 </nav>
 
-<!-- ==================== DESCRIPTION ==================== -->
 <section class="description-page">
     <span class="section-label">About This Book</span>
     <p class="description-text">{book_data.get("description","")}</p>
-
     <span class="section-label">What You Will Learn</span>
-    <div class="benefits-list">
-        {benefits_html}
-    </div>
+    <div class="benefits-list">{benefits_html}</div>
 </section>
 
-<!-- ==================== TOC ==================== -->
 <section class="toc-page">
     <h2 class="page-title">Table of Contents</h2>
     {toc_html}
 </section>
 
-<!-- ==================== INTRODUCTION ==================== -->
 <section class="intro-page">
     <h2 class="page-title">Introduction</h2>
     {intro_html}
 </section>
 
-<!-- ==================== CHAPTERS ==================== -->
 {chapters_html}
 
-<!-- ==================== CONCLUSION ==================== -->
 <section class="conclusion-page">
     <h2 class="page-title">Conclusion</h2>
     {conc_html}
 </section>
 
-<!-- ==================== AUTHOR ==================== -->
 <section class="author-page">
     <h2 class="page-title">About the Author</h2>
     <div class="author-card">
@@ -1241,71 +904,63 @@ body {{
     </div>
 </section>
 
-<!-- ==================== BACK COVER ==================== -->
 <section class="back-cover">
     <h2 class="back-cover-title">{book_data.get("title","")}</h2>
     <p class="back-cover-text">{book_data.get("tagline","")}</p>
-    <div class="edition-badge">✦ Professional Edition</div>
+    <div class="edition-badge">✦ Professional Edition {year}</div>
 </section>
 
-<!-- ==================== PDF BUTTON ==================== -->
 <button class="pdf-btn" id="pdf-btn" onclick="downloadPDF()">📥 Download PDF</button>
 
 <script>
-// Reading progress bar
 window.addEventListener('scroll', () => {{
-    const scrolled = window.scrollY;
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = total > 0 ? (scrolled / total) * 100 : 0;
+    const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
     document.getElementById('reading-progress').style.width = pct.toFixed(1) + '%';
     document.getElementById('progress-text').textContent = Math.round(pct) + '% read';
 }});
-
-// Smooth scroll to chapter
 function scrollToChapter(num) {{
     const el = document.getElementById('chapter-' + num);
     if (el) el.scrollIntoView({{ behavior: 'smooth' }});
 }}
-
-// PDF Download
 async function downloadPDF() {{
     const btn = document.getElementById('pdf-btn');
     btn.style.opacity = '0.6';
     btn.textContent = '⏳ Preparing...';
-
-    const hide = ['pdf-btn','reading-progress'];
-    hide.forEach(id => {{ const el = document.getElementById(id); if(el) el.style.display='none'; }});
+    ['pdf-btn','reading-progress'].forEach(id => {{
+        const el = document.getElementById(id);
+        if(el) el.style.display='none';
+    }});
     document.querySelector('.nav-bar').style.display = 'none';
-
     const title = document.querySelector('.cover-title')?.textContent || 'book';
     const safeName = title.replace(/[^\\w\\s-]/g,'').trim().replace(/\\s+/g,'_').substring(0,50);
-
     const opt = {{
         margin: 0,
         filename: safeName + '.pdf',
         image: {{ type: 'jpeg', quality: 0.92 }},
         html2canvas: {{
-            scale: 2,
-            useCORS: true,
+            scale: 2, useCORS: true,
             backgroundColor: '{theme["primary"]}',
-            logging: false,
-            letterRendering: true
+            logging: false, letterRendering: true,
+            /* FIX blank pages: windowWidth matches body max-width */
+            windowWidth: 480
         }},
         jsPDF: {{
             unit: 'mm',
             format: [120, 213],
             orientation: 'portrait'
         }},
-        pagebreak: {{ mode: ['css','avoid-all'] }}
+        /* FIX: use 'legacy' mode — avoids phantom blank pages from css/avoid-all */
+        pagebreak: {{ mode: 'legacy' }}
     }};
-
     try {{
         await html2pdf().set(opt).from(document.body).save();
     }} catch(e) {{
-        alert('Use browser Print → Save as PDF for best results.');
         window.print();
     }} finally {{
-        hide.forEach(id => {{ const el = document.getElementById(id); if(el) el.style.display=''; }});
+        ['pdf-btn','reading-progress'].forEach(id => {{
+            const el = document.getElementById(id);
+            if(el) el.style.display='';
+        }});
         document.querySelector('.nav-bar').style.display = 'flex';
         btn.style.opacity = '1';
         btn.innerHTML = '📥 Download PDF';
@@ -1314,14 +969,610 @@ async function downloadPDF() {{
 </script>
 </body>
 </html>'''
+    return html
 
+
+# ============================================================
+# FORMAT 2: AMAZON KDP (white background, 6×9 inch, print-ready)
+# ============================================================
+def generate_kdp_html(book_data: dict, theme: dict, language: str = "en") -> str:
+    """Amazon KDP-ready HTML: white bg, 6x9 inch, print typography"""
+
+    is_rtl = language == "ar"
+    dir_attr = 'dir="rtl"' if is_rtl else ''
+    year = datetime.now().year
+
+    accent = theme["cover_accent"]
+
+    # Cover page
+    cover_emoji = theme["emoji"]
+
+    chapters_html = ""
+    for i, chapter in enumerate(book_data.get("chapters", []), 1):
+        raw_content = chapter.get("content", "")
+        paragraphs = [p.strip() for p in raw_content.split('\n') if p.strip()]
+        content_html = "".join(f'<p class="body">{p}</p>' for p in paragraphs)
+
+        exercises_html = "".join(
+            f'<div class="exercise"><span class="ex-num">{j}.</span><span>{ex}</span></div>'
+            for j, ex in enumerate(chapter.get("exercises", []), 1)
+        )
+
+        key_points_html = "".join(
+            f'<li>{pt}</li>'
+            for pt in chapter.get("key_points", [])
+        )
+
+        chapters_html += f'''
+<div class="chapter-break">
+<section class="chapter">
+    <div class="ch-header">
+        <p class="ch-label">CHAPTER {chapter.get("number", i)}</p>
+        <h2 class="ch-title">{chapter.get("title","")}</h2>
+        <p class="ch-subtitle">{chapter.get("subtitle","")}</p>
+        <div class="ch-rule"></div>
+    </div>
+
+    <blockquote class="ch-hook">{chapter.get("hook","")}</blockquote>
+
+    <div class="sidebar">
+        <p class="sidebar-label">IN THIS CHAPTER</p>
+        <ul class="kp-list">{key_points_html}</ul>
+    </div>
+
+    {content_html}
+
+    <div class="technique-box">
+        <p class="box-title">🔑 KEY TECHNIQUE: {chapter.get("key_technique","")}</p>
+    </div>
+
+    <div class="exercises-box">
+        <p class="box-title">✍️ ACTION STEPS</p>
+        {exercises_html}
+    </div>
+
+    <div class="summary-box">
+        <p>💡 <strong>Chapter Takeaway:</strong> {chapter.get("summary","")}</p>
+    </div>
+</section>
+</div>'''
+
+    toc_html = "".join(
+        f'<div class="toc-row"><span class="toc-ch">Chapter {i}: {ch.get("title","")}</span><span class="toc-dots"></span></div>'
+        for i, ch in enumerate(book_data.get("chapters", []), 1)
+    )
+
+    intro_html = "".join(
+        f'<p class="body">{p.strip()}</p>'
+        for p in book_data.get("introduction", "").split('\n') if p.strip()
+    )
+    conc_html = "".join(
+        f'<p class="body">{p.strip()}</p>'
+        for p in book_data.get("conclusion", "").split('\n') if p.strip()
+    )
+
+    benefits_html = "".join(
+        f'<li>{b}</li>'
+        for b in book_data.get("key_benefits", [])
+    )
+
+    html = f'''<!DOCTYPE html>
+<html lang="{language}" {dir_attr}>
+<head>
+<meta charset="UTF-8">
+<title>{book_data.get("title","")}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Garamond:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {{ margin:0; padding:0; box-sizing:border-box; }}
+:root {{
+    --accent: {accent};
+    --font-title: 'Montserrat', 'EB Garamond', serif;
+    --font-body: 'EB Garamond', Georgia, serif;
+}}
+html {{ scroll-behavior: smooth; }}
+body {{
+    background: #fff;
+    color: #111;
+    font-family: var(--font-body);
+    font-size: 12pt;
+    line-height: 1.8;
+    max-width: 152mm;   /* 6 inches = KDP trim width */
+    margin: 0 auto;
+    -webkit-font-smoothing: antialiased;
+    word-wrap: break-word;
+}}
+
+/* ====== COVER (KDP) ====== */
+.cover-page {{
+    width: 152mm;
+    height: 228mm;
+    background: linear-gradient(170deg, #111 0%, #222 60%, #333 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20mm 15mm;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+}}
+.cover-page::before {{
+    content: '';
+    position: absolute;
+    top: -50px; left: -50px;
+    width: 250px; height: 250px;
+    border-radius: 50%;
+    border: 40px solid {accent};
+    opacity: 0.15;
+}}
+.cover-page::after {{
+    content: '';
+    position: absolute;
+    bottom: -30px; right: -30px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: {accent};
+    opacity: 0.08;
+}}
+.cover-accent-line {{
+    width: 60px; height: 5px;
+    background: {accent};
+    border-radius: 3px;
+    margin: 20px auto;
+}}
+.cover-emoji-kdp {{
+    font-size: 64px;
+    display: block;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 20px rgba(0,0,0,0.6));
+}}
+.cover-title-kdp {{
+    font-family: var(--font-title);
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    margin-bottom: 12px;
+}}
+.cover-subtitle-kdp {{
+    font-size: 1rem;
+    color: {accent};
+    font-style: italic;
+    line-height: 1.5;
+    opacity: 0.9;
+    margin-bottom: 30px;
+}}
+.cover-author-kdp {{
+    font-family: var(--font-title);
+    font-size: 0.85rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-top: 10px;
+}}
+.cover-year-kdp {{
+    position: absolute;
+    bottom: 20px;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 2px;
+}}
+
+/* ====== FRONT MATTER ====== */
+.title-page {{
+    height: 228mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20mm;
+    page-break-after: always;
+}}
+.tp-title {{
+    font-family: var(--font-title);
+    font-size: 2rem;
+    font-weight: 900;
+    color: #111;
+    margin-bottom: 12px;
+    line-height: 1.2;
+}}
+.tp-subtitle {{
+    font-size: 1.1rem;
+    color: #555;
+    font-style: italic;
+    margin-bottom: 40px;
+}}
+.tp-rule {{
+    width: 80px; height: 3px;
+    background: {accent};
+    margin: 0 auto 40px;
+    border-radius: 2px;
+}}
+.tp-author {{
+    font-family: var(--font-title);
+    font-size: 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #333;
+}}
+.tp-year {{
+    margin-top: 60px;
+    font-size: 0.8rem;
+    color: #999;
+}}
+
+.copyright-page {{
+    padding: 20mm;
+    page-break-after: always;
+    font-size: 9pt;
+    color: #666;
+    line-height: 1.7;
+}}
+.copyright-page p {{ margin-bottom: 10px; }}
+
+/* ====== TOC ====== */
+.toc-page {{
+    padding: 20mm;
+    page-break-after: always;
+}}
+.section-heading {{
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #111;
+    border-bottom: 2px solid {accent};
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+}}
+.toc-row {{
+    display: flex;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px dotted #ddd;
+    font-size: 10.5pt;
+}}
+.toc-ch {{ flex: 1; }}
+.toc-dots {{ flex: 1; }}
+
+/* ====== INTRO / CONCLUSION ====== */
+.intro-page, .conclusion-page {{
+    padding: 20mm;
+    page-break-after: always;
+}}
+
+/* ====== CHAPTERS ====== */
+.chapter-break {{ page-break-before: always; }}
+.chapter {{ padding: 18mm 20mm 20mm; }}
+.ch-header {{ margin-bottom: 24px; text-align: center; }}
+.ch-label {{
+    font-family: var(--font-title);
+    font-size: 0.65rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: {accent};
+    margin-bottom: 8px;
+}}
+.ch-title {{
+    font-family: var(--font-title);
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #111;
+    line-height: 1.2;
+    margin-bottom: 8px;
+}}
+.ch-subtitle {{
+    font-size: 1rem;
+    color: #555;
+    font-style: italic;
+    margin-bottom: 14px;
+}}
+.ch-rule {{
+    width: 60px; height: 3px;
+    background: {accent};
+    margin: 0 auto;
+    border-radius: 2px;
+}}
+blockquote.ch-hook {{
+    margin: 20px 0;
+    padding: 14px 20px;
+    border-left: 4px solid {accent};
+    background: #fafafa;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    font-size: 10.5pt;
+    color: #444;
+    line-height: 1.7;
+}}
+.sidebar {{
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    border: 1px solid #e5e5e5;
+}}
+.sidebar-label {{
+    font-family: var(--font-title);
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: {accent};
+    margin-bottom: 10px;
+}}
+.kp-list {{
+    padding-left: 18px;
+    font-size: 10pt;
+    line-height: 1.7;
+    color: #333;
+}}
+.kp-list li {{ margin-bottom: 4px; }}
+.body {{
+    font-size: 11.5pt;
+    line-height: 1.85;
+    color: #1a1a1a;
+    margin-bottom: 14px;
+    text-align: justify;
+    hyphens: auto;
+}}
+.technique-box {{
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 20px 0;
+    border-left: 4px solid {accent};
+}}
+.exercises-box {{
+    background: #fefefe;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 20px 0;
+}}
+.box-title {{
+    font-family: var(--font-title);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #333;
+    margin-bottom: 12px;
+}}
+.exercise {{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 10.5pt;
+    line-height: 1.65;
+    color: #333;
+}}
+.ex-num {{ font-weight: 700; color: {accent}; flex-shrink: 0; }}
+.summary-box {{
+    background: #fff9f0;
+    border-radius: 8px;
+    padding: 14px 18px;
+    border: 1px solid #f0d080;
+    font-size: 10.5pt;
+    color: #333;
+    line-height: 1.7;
+    margin-top: 20px;
+}}
+
+/* ====== AUTHOR ====== */
+.author-page {{ padding: 20mm; page-break-before: always; }}
+.author-name-kdp {{
+    font-family: var(--font-title);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}}
+.author-bio {{ font-size: 10.5pt; line-height: 1.8; color: #333; }}
+
+/* ====== BACK COVER ====== */
+.back-cover-kdp {{
+    width: 152mm;
+    min-height: 120mm;
+    background: linear-gradient(170deg, #111 0%, #222 60%, #333 100%);
+    padding: 20mm;
+    page-break-before: always;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}}
+.back-cover-kdp::before {{
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: {accent};
+    opacity: 0.07;
+}}
+.bc-title {{
+    font-family: var(--font-title);
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 16px;
+}}
+.bc-description {{
+    font-size: 10pt;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 20px;
+}}
+.bc-benefits {{ list-style: none; margin-bottom: 24px; }}
+.bc-benefits li {{
+    font-size: 9.5pt;
+    color: rgba(255,255,255,0.85);
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding-left: 18px;
+    position: relative;
+}}
+.bc-benefits li::before {{
+    content: '✓';
+    position: absolute; left: 0;
+    color: {accent};
+    font-weight: 900;
+}}
+.bc-author {{
+    font-size: 9pt;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}}
+
+/* ====== KDP DOWNLOAD BUTTON ====== */
+.kdp-btn {{
+    position: fixed; bottom: 22px; right: 18px;
+    background: {accent}; color: #111;
+    border: none; border-radius: 50px;
+    padding: 13px 20px; font-size: 0.9rem;
+    font-weight: 900; cursor: pointer; z-index: 998;
+    display: flex; align-items: center; gap: 7px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    transition: transform 0.15s;
+    font-family: var(--font-title);
+}}
+.kdp-btn:active {{ transform: scale(0.95); }}
+
+/* ====== PRINT ====== */
+@media print {{
+    .kdp-btn {{ display: none !important; }}
+    body {{ max-width: 152mm; font-size: 11.5pt; }}
+    .chapter-break {{ page-break-before: always; }}
+    .cover-page, .title-page, .copyright-page,
+    .toc-page, .intro-page, .conclusion-page,
+    .author-page {{ page-break-after: always; }}
+    .body {{ orphans: 3; widows: 3; }}
+    .sidebar, .technique-box, .exercises-box, .summary-box {{ page-break-inside: avoid; }}
+}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<!-- ===== COVER ===== -->
+<section class="cover-page">
+    <span class="cover-emoji-kdp">{cover_emoji}</span>
+    <div class="cover-accent-line"></div>
+    <h1 class="cover-title-kdp">{book_data.get("title","")}</h1>
+    <p class="cover-subtitle-kdp">{book_data.get("subtitle","")}</p>
+    <p class="cover-author-kdp">by {book_data.get("author","Professional Author")}</p>
+    <span class="cover-year-kdp">{year}</span>
+</section>
+
+<!-- ===== TITLE PAGE ===== -->
+<section class="title-page">
+    <h1 class="tp-title">{book_data.get("title","")}</h1>
+    <p class="tp-subtitle">{book_data.get("subtitle","")}</p>
+    <div class="tp-rule"></div>
+    <p class="tp-author">{book_data.get("author","Professional Author")}</p>
+    <p class="tp-year">{year}</p>
+</section>
+
+<!-- ===== COPYRIGHT ===== -->
+<section class="copyright-page">
+    <p><strong>{book_data.get("title","")}</strong></p>
+    <p>Copyright © {year} {book_data.get("author","Professional Author")}. All rights reserved.</p>
+    <p>No part of this publication may be reproduced, distributed, or transmitted in any form without the prior written permission of the publisher.</p>
+    <p>Published independently via KDP Publishing.</p>
+    <p>First Edition, {year}.</p>
+</section>
+
+<!-- ===== TOC ===== -->
+<section class="toc-page">
+    <h2 class="section-heading">Table of Contents</h2>
+    <div class="toc-row"><span class="toc-ch">Introduction</span></div>
+    {toc_html}
+    <div class="toc-row"><span class="toc-ch">Conclusion</span></div>
+    <div class="toc-row"><span class="toc-ch">About the Author</span></div>
+</section>
+
+<!-- ===== INTRO ===== -->
+<section class="intro-page">
+    <h2 class="section-heading">Introduction</h2>
+    {intro_html}
+</section>
+
+<!-- ===== CHAPTERS ===== -->
+{chapters_html}
+
+<!-- ===== CONCLUSION ===== -->
+<section class="conclusion-page">
+    <h2 class="section-heading">Conclusion</h2>
+    {conc_html}
+</section>
+
+<!-- ===== AUTHOR ===== -->
+<section class="author-page">
+    <h2 class="section-heading">About the Author</h2>
+    <p class="author-name-kdp">{book_data.get("author","Professional Author")}</p>
+    <p class="author-bio">{book_data.get("about_author","")}</p>
+</section>
+
+<!-- ===== BACK COVER ===== -->
+<section class="back-cover-kdp">
+    <p class="bc-title">{book_data.get("title","")}</p>
+    <p class="bc-description">{book_data.get("back_cover_description", book_data.get("description",""))}</p>
+    <ul class="bc-benefits">
+        {"".join(f"<li>{b}</li>" for b in book_data.get("key_benefits",[]))}
+    </ul>
+    <p class="bc-author">by {book_data.get("author","Professional Author")}</p>
+</section>
+
+<!-- ===== DOWNLOAD ===== -->
+<button class="kdp-btn" id="kdp-btn" onclick="downloadKDP()">📥 Download for KDP</button>
+
+<script>
+async function downloadKDP() {{
+    const btn = document.getElementById('kdp-btn');
+    btn.style.opacity = '0.6';
+    btn.textContent = '⏳ Preparing...';
+    btn.style.display = 'none';
+    const title = '{book_data.get("title","book")}'.replace(/[^\\w\\s-]/g,'').trim().replace(/\\s+/g,'_').substring(0,50);
+    const opt = {{
+        margin: 0,
+        filename: title + '_KDP.pdf',
+        image: {{ type: 'jpeg', quality: 0.95 }},
+        html2canvas: {{
+            scale: 2, useCORS: true,
+            backgroundColor: '#ffffff',
+            logging: false, letterRendering: true,
+            /* KDP 6-inch page width in px at 96dpi ≈ 576px */
+            windowWidth: 576
+        }},
+        jsPDF: {{
+            unit: 'mm',
+            format: [152, 228],
+            orientation: 'portrait'
+        }},
+        pagebreak: {{ mode: 'legacy' }}
+    }};
+    try {{
+        await html2pdf().set(opt).from(document.body).save();
+    }} catch(e) {{
+        window.print();
+    }} finally {{
+        btn.style.display = 'flex';
+        btn.style.opacity = '1';
+        btn.textContent = '📥 Download for KDP';
+    }}
+}}
+</script>
+</body>
+</html>'''
     return html
 
 
 def get_niche_suggestions(language: str = "en") -> list:
     messages = [
-        {"role": "system", "content": "You are a digital marketing expert specializing in ebook sales on social media."},
-        {"role": "user", "content": f"""List 15 highly profitable ebook niches for TikTok/social media sales.
+        {"role": "system", "content": "You are a digital marketing expert specializing in ebook sales."},
+        {"role": "user", "content": f"""List 15 highly profitable ebook niches for 2025.
 Return ONLY a JSON array, no other text:
 [
   {{
@@ -1344,71 +1595,6 @@ Language: {language}"""}
     if start >= 0 and end > start:
         content = content[start:end]
     return json.loads(content)
-
-
-def main():
-    book_title   = os.environ.get("BOOK_TITLE", "")
-    language     = os.environ.get("BOOK_LANGUAGE", "en")
-    action       = os.environ.get("ACTION", "generate")
-    author_name  = os.environ.get("BOOK_AUTHOR", "").strip()
-
-    if not GROQ_API_KEY:
-        print("ERROR: GROQ_API_KEY not set!")
-        sys.exit(1)
-
-    os.makedirs("output", exist_ok=True)
-
-    if action == "suggest":
-        print(f"🎯 Getting niche suggestions in {language}...")
-        suggestions = get_niche_suggestions(language)
-        suggestions_html = generate_suggestions_page(suggestions, language)
-        with open("output/niche_suggestions.html", "w", encoding="utf-8") as f:
-            f.write(suggestions_html)
-        print("✅ Saved to output/niche_suggestions.html")
-
-    elif action == "generate":
-        if not book_title:
-            print("ERROR: BOOK_TITLE not set!")
-            sys.exit(1)
-
-        print(f"📚 Generating: '{book_title}' [{language}]")
-        theme_key = detect_theme(book_title, language)
-        theme = BOOK_THEMES[theme_key]
-        print(f"🎨 Theme: {theme_key} {theme['emoji']}")
-
-        print("✍️  Writing book content with Groq AI...")
-        book_data = generate_book_structure(book_title, language)
-
-        if author_name:
-            book_data["author"] = author_name
-
-        with open("output/book_data.json", "w", encoding="utf-8") as f:
-            json.dump(book_data, f, ensure_ascii=False, indent=2)
-
-        print("🎨 Designing professional layout...")
-        html = generate_html_book(book_data, theme, language)
-
-        safe_title = re.sub(r'[^\w\s-]', '', book_title).strip().replace(' ', '_')[:50]
-        filename = f"output/{safe_title}_{language}.html"
-
-        with open(filename, "w", encoding="utf-8") as f:
-            f.write(html)
-
-        print(f"✅ Book generated: {filename}")
-        print(f"📖 Title: {book_data.get('title', book_title)}")
-        print(f"📝 Chapters: {len(book_data.get('chapters', []))}")
-
-        metadata = {
-            "generated_at": datetime.now().isoformat(),
-            "title": book_data.get("title", book_title),
-            "subtitle": book_data.get("subtitle", ""),
-            "language": language,
-            "theme": theme_key,
-            "chapters": len(book_data.get("chapters", [])),
-            "file": filename
-        }
-        with open("output/metadata.json", "w", encoding="utf-8") as f:
-            json.dump(metadata, f, ensure_ascii=False, indent=2)
 
 
 def generate_suggestions_page(suggestions: list, language: str) -> str:
@@ -1445,10 +1631,85 @@ h3{{font-size:1rem;margin-bottom:7px}}
 </head>
 <body>
 <h1>🔥 Top Profitable Niches 2025</h1>
-<p class="subtitle">Best ebook niches for TikTok sales</p>
+<p class="subtitle">Best ebook niches for TikTok & Amazon KDP</p>
 {items_html}
 </body>
 </html>'''
+
+
+def main():
+    book_title  = os.environ.get("BOOK_TITLE", "")
+    language    = os.environ.get("BOOK_LANGUAGE", "en")
+    action      = os.environ.get("ACTION", "generate")
+    author_name = os.environ.get("BOOK_AUTHOR", "").strip()
+    book_format = os.environ.get("BOOK_FORMAT", "pdf")  # "pdf" or "kdp"
+
+    if not GROQ_API_KEY:
+        print("ERROR: GROQ_API_KEY not set!")
+        sys.exit(1)
+
+    os.makedirs("output", exist_ok=True)
+
+    if action == "suggest":
+        print(f"🎯 Getting niche suggestions [{language}]...")
+        suggestions = get_niche_suggestions(language)
+        suggestions_html = generate_suggestions_page(suggestions, language)
+        with open("output/niche_suggestions.html", "w", encoding="utf-8") as f:
+            f.write(suggestions_html)
+        print("✅ output/niche_suggestions.html")
+
+    elif action == "generate":
+        if not book_title:
+            print("ERROR: BOOK_TITLE not set!")
+            sys.exit(1)
+
+        fmt_label = "Amazon KDP (6×9 print)" if book_format == "kdp" else "PDF Direct Sell"
+        print(f"📚 Generating: '{book_title}' [{language}] — Format: {fmt_label}")
+
+        theme_key = detect_theme(book_title, language)
+        theme = BOOK_THEMES[theme_key]
+        print(f"🎨 Theme: {theme_key} {theme['emoji']}")
+
+        print("✍️  Writing content with Groq AI...")
+        book_data = generate_book_structure(book_title, language)
+
+        if author_name:
+            book_data["author"] = author_name
+
+        with open("output/book_data.json", "w", encoding="utf-8") as f:
+            json.dump(book_data, f, ensure_ascii=False, indent=2)
+
+        print("🎨 Designing layout...")
+        if book_format == "kdp":
+            html = generate_kdp_html(book_data, theme, language)
+            format_suffix = "_KDP"
+        else:
+            html = generate_pdf_html(book_data, theme, language)
+            format_suffix = "_PDF"
+
+        safe_title = re.sub(r'[^\w\s-]', '', book_title).strip().replace(' ', '_')[:50]
+        filename = f"output/{safe_title}_{language}{format_suffix}.html"
+
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(html)
+
+        print(f"✅ Book generated: {filename}")
+        print(f"📖 Title:    {book_data.get('title', book_title)}")
+        print(f"📝 Chapters: {len(book_data.get('chapters', []))}")
+        print(f"📦 Format:   {fmt_label}")
+
+        metadata = {
+            "generated_at": datetime.now().isoformat(),
+            "title": book_data.get("title", book_title),
+            "subtitle": book_data.get("subtitle", ""),
+            "language": language,
+            "theme": theme_key,
+            "format": book_format,
+            "chapters": len(book_data.get("chapters", [])),
+            "file": filename
+        }
+        with open("output/metadata.json", "w", encoding="utf-8") as f:
+            json.dump(metadata, f, ensure_ascii=False, indent=2)
 
 
 if __name__ == "__main__":
