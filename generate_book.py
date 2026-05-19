@@ -346,4 +346,40 @@ function scrollToChapter(n){{document.getElementById('chapter-'+n)?.scrollIntoVi
 async function downloadPDF(){{const btn=document.getElementById('pdf-btn');btn.style.opacity='0.6';btn.textContent='⏳ Preparing...';['pdf-btn','reading-progress'].forEach(id=>{{const el=document.getElementById(id);if(el)el.style.display='none';}});const navbar=document.querySelector('.nav-bar');if(navbar)navbar.style.display='none';const title=document.querySelector('.cover-title')?.textContent||'book';const safeName=title.replace(/[^\\w\\s-]/g,'').trim().replace(/\\s+/g,'_').substring(0,50);const opt={{margin:0,filename:safeName+'.pdf',image:{{type:'jpeg',quality:0.98}},html2canvas:{{scale:2,useCORS:true,backgroundColor:'{theme["primary"]}',logging:false,letterRendering:true,scrollY:0,scrollX:0}},jsPDF:{{unit:'mm',format:[120,213],orientation:'portrait'}},pagebreak:{{mode:['avoid-all','css']}}}};try{{await html2pdf().set(opt).from(document.body).save();}}catch(e){{window.print();}}finally{{['pdf-btn','reading-progress'].forEach(id=>{{const el=document.getElementById(id);if(el)el.style.display='';}});if(navbar)navbar.style.display='flex';btn.style.opacity='1';btn.innerHTML='📥 Download PDF';}}}}
 </script>
 </body>
-</html>
+</html>'''
+
+    return html
+
+# ============================================================
+# MAIN EXECUTION (التنفيذ الرئيسي)
+# ============================================================
+if __name__ == "__main__":
+    print("🚀 Starting Professional Book Generator...")
+    
+    # حدد عنوان الكتاب واللغة ديالو هنا
+    book_title = "LE PROTOCOLE DE L'OMBRE premium 30 days ghost mode mental conditioning"
+    language = "fr"  # تقدر تبدلها لـ "ar" أو "en"
+    
+    try:
+        # 1. تحديد الـ Theme
+        theme_name = detect_theme(book_title, language)
+        theme = BOOK_THEMES.get(theme_name, BOOK_THEMES["default"])
+        
+        # 2. توليد محتوى الكتاب كامل
+        book_data = generate_full_book(book_title, language)
+        
+        # 3. تحويل المحتوى لملف HTML مع التصميم
+        print("🎨 Generating HTML format...")
+        final_html = generate_pdf_html(book_data, theme, language)
+        
+        # 4. حفظ الملف
+        output_file = "book_output.html"
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write(final_html)
+            
+        print(f"✅ Book generated successfully! Saved to {output_file}")
+        print("يمكنك الآن فتح الملف book_output.html في المتصفح ديالك.")
+        
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        sys.exit(1)
