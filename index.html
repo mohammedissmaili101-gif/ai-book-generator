@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 AI Book Generator - Your Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            padding: 60px 30px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+        }
+        
+        .hero-emoji {
+            font-size: 60px;
+            display: block;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+        
+        .hero-sub {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: rgba(253, 126, 20, 0.15);
+            border: 1px solid #fd7e14;
+            color: #fd7e14;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+        }
+        
+        .section {
+            padding: 40px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .step-card {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            padding: 15px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 3px solid #fd7e14;
+        }
+        
+        .step-num {
+            background: #fd7e14;
+            color: #000;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+        
+        .step-text h3 {
+            font-size: 0.92rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .step-text p {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.5;
+        }
+        
+        .code-block {
+            background: #111;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #00ff88;
+            border: 1px solid rgba(0,255,136,0.2);
+            overflow-x: auto;
+        }
+        
+        .books-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .book-card {
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.2s;
+        }
+        
+        .book-card:hover {
+            border-color: #fd7e14;
+            background: rgba(253, 126, 20, 0.08);
+        }
+        
+        .book-icon {
+            font-size: 2rem;
+            width: 50px;
+            text-align: center;
+        }
+        
+        .book-info h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .book-info p {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.4);
+        }
+        
+        .arrow {
+            margin-left: auto;
+            color: rgba(255,255,255,0.2);
+        }
+        
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.88rem;
+            color: rgba(255,255,255,0.75);
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        
+        .feature-icon {
+            font-size: 1.2rem;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .cta {
+            background: linear-gradient(135deg, #fd7e14, #ffc107);
+            color: #000;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-top: 20px;
+            transition: opacity 0.2s;
+        }
+        
+        .cta:hover { opacity: 0.9; }
+        
+        .footer {
+            padding: 40px 25px;
+            text-align: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.8rem;
+        }
+        
+        .lang-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        
+        .lang-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 8px 5px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .lang-flag {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<section class="hero">
+    <span class="hero-emoji">📚</span>
+    <h1>AI Book Generator</h1>
+    <p class="hero-sub">Create professional, sellable ebooks in minutes using Groq AI — free, beautiful, and ready to sell</p>
+    <span class="badge">✨ 100% FREE with Groq API</span>
+</section>
+
+<section class="section">
+    <h2 class="section-title">🚀 How to Use</h2>
+    
+    <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-text">
+            <h3>Get Free Groq API Key</h3>
+            <p>Go to console.groq.com → Create API Key → Copy it (starts with gsk_)</p>
+        </div>
+    </div>
+    
+    <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-text">
+            <h3>Add API Key to GitHub Secrets</h3>
+            <p>Repository → Settings → Secrets → New Secret → Name: <strong>GROQ_API_KEY</strong></p>
+        </div>
+    </div>
+    
+    <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-text">
+            <h3>Enable GitHub Pages</h3>
+            <p>Settings → Pages → Source: Deploy from branch → gh-pages</p>
+        </div>
+    </div>
+    
+    <div class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-text">
+            <h3>Run the Workflow</h3>
+            <p>Actions → "Generate Professional Ebook" → Run workflow → Enter book title → Choose language</p>
+        </div>
+    </div>
+    
+    <div class="step-card">
+        <div class="step-num">5</div>
+        <div class="step-text">
+            <h3>Get Your Book!</h3>
+            <p>Wait ~2 minutes → Your book appears here on GitHub Pages → Share on TikTok! 🎉</p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">✨ Features</h2>
+    <div class="features-list">
+        <div class="feature-item">
+            <span class="feature-icon">🎨</span>
+            <span>Professional design with unique colors per niche</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-icon">📱</span>
+            <span>Mobile-optimized for TikTok reading</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-icon">✍️</span>
+            <span>8-10 chapters with exercises & notes sections</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-icon">🌍</span>
+            <span>10+ languages supported</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-icon">💰</span>
+            <span>Content quality worth $50-200</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-icon">🔥</span>
+            <span>Niche suggestions for profitable topics</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-icon">⚡</span>
+            <span>Generated in under 2 minutes</span>
+        </div>
+        <div class="feature-item">
+            <span class="feature-icon">🆓</span>
+            <span>100% free — $0 cost</span>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">🌍 Supported Languages</h2>
+    <div class="lang-grid">
+        <div class="lang-item"><span class="lang-flag">🇺🇸</span>English</div>
+        <div class="lang-item"><span class="lang-flag">🇸🇦</span>Arabic</div>
+        <div class="lang-item"><span class="lang-flag">🇫🇷</span>French</div>
+        <div class="lang-item"><span class="lang-flag">🇪🇸</span>Spanish</div>
+        <div class="lang-item"><span class="lang-flag">🇩🇪</span>German</div>
+        <div class="lang-item"><span class="lang-flag">🇵🇹</span>Portuguese</div>
+        <div class="lang-item"><span class="lang-flag">🇮🇹</span>Italian</div>
+        <div class="lang-item"><span class="lang-flag">🇨🇳</span>Chinese</div>
+        <div class="lang-item"><span class="lang-flag">🇯🇵</span>Japanese</div>
+        <div class="lang-item"><span class="lang-flag">🇷🇺</span>Russian</div>
+        <div class="lang-item"><span class="lang-flag">🇹🇷</span>Turkish</div>
+        <div class="lang-item"><span class="lang-flag">🇰🇷</span>Korean</div>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">📚 Your Generated Books</h2>
+    <p style="color:rgba(255,255,255,0.4);font-size:0.85rem;margin-bottom:20px;">Books will appear here after generation</p>
+    
+    <div class="books-grid" id="books-list">
+        <!-- Books will be listed here after generation -->
+        <div style="text-align:center;padding:30px;color:rgba(255,255,255,0.2);font-size:0.85rem;">
+            No books yet. Run the workflow to generate your first book! 🚀
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">💡 Profitable Niches</h2>
+    <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;margin-bottom:15px;">Run the workflow with <strong>Action: suggest</strong> to get AI-powered niche ideas!</p>
+    
+    <div style="background:rgba(253,126,20,0.1);border:1px solid #fd7e14;border-radius:12px;padding:15px;font-size:0.85rem;color:rgba(255,255,255,0.8);">
+        <strong style="color:#fd7e14;">Top Selling TikTok Niches:</strong><br><br>
+        💼 Business & Side Hustles<br>
+        💰 Personal Finance & Investing<br>
+        🧠 Mindset & Self Development<br>
+        🏋️ Health & Fitness<br>
+        💻 AI & Digital Skills<br>
+        ❤️ Relationships & Dating<br>
+        🌿 Mental Health & Anxiety<br>
+        🍽️ Nutrition & Meal Planning
+    </div>
+</section>
+
+<div class="footer">
+    <p>Powered by Groq AI • Built on GitHub Actions</p>
+    <p style="margin-top:8px;">100% Free • Open Source</p>
+</div>
+
+</body>
+</html>
