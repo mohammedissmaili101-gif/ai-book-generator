@@ -101,14 +101,13 @@ def call_groq(messages, max_tokens=3000, temperature=0.7):
 def clean_json(text):
     text = text.strip()
     if "```json" in text:
-        text = text.split("
-```json")[1].split("```")[0]
+        text = text.split("```json")[1].split("```")[0]
     elif "```" in text:
-        text = text.split("
-```")[1].split("```")[0]
+        text = text.split("```")[1].split("```")[0]
     start = text.find('{')
     end = text.rfind('}') + 1
     return text[start:end] if start != -1 and end else text
+
 
 # ============================================================
 # STEP 1: BOOK OUTLINE
