@@ -20,8 +20,8 @@ GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 # تم تغيير الموديل لنسخة مدعومة وجديدة
 MODEL = "llama-3.1-8b-instant"               
 MIN_WORDS_PER_CHAPTER = int(os.environ.get("MIN_WORDS_PER_CHAPTER", "1500"))
-MAX_RETRIES = 3
-INITIAL_DELAY = 5                           # ثوانٍ عند أول rate limit
+MAX_RETRIES = 7                             # طلعنا عدد المحاولات لـ 7
+INITIAL_DELAY = 15                          # ثوانٍ عند أول rate limit
 BOOK_FORMAT = os.environ.get("BOOK_FORMAT", "pdf")
 
 # ============================================================
@@ -92,12 +92,12 @@ def call_groq(messages, max_tokens=3000, temperature=0.7):
         if resp.status_code == 200:
             return resp.json()["choices"][0]["message"]["content"]
         elif resp.status_code == 429:
-            print(f"⚠️ Rate limit hit. Retrying in {delay}s...")
+            print(f"⚠️ Rate limit hit (Attempt {attempt + 1}/{MAX_RETRIES}). Retrying in {delay}s...")
             time.sleep(delay)
-            delay *= 2
+            delay += 15  # زيادة الوقت بـ 15 ثانية لتجنب المضاعفة المفرطة
         else:
             raise Exception(f"Groq API error {resp.status_code}: {resp.text}")
-    raise Exception("Max retries exceeded for rate limit")
+    raise Exception("Max retries exceeded for rate limit. حاول تنقص من طول الفصول أو تأكد من حساب Groq ديالك.")
 
 def clean_json(text):
     text = text.strip()
@@ -211,7 +211,12 @@ def generate_full_book(title, language):
             "content": detailed,
             "summary": f"Remember: {ch['key_technique']} – {ch['subtitle']}"
         })
-        time.sleep(1)   # Avoid hitting rate limit
+        
+        # إضافة استراحة 25 ثانية بين كل فصل لتجنب حظر Rate Limit
+        if idx < total: 
+            print("⏳ Cooling down for 25 seconds to respect Groq API limits...")
+            time.sleep(25)   
+            
     outline["chapters"] = final_chapters
     return outline
 
@@ -341,56 +346,4 @@ function scrollToChapter(n){{document.getElementById('chapter-'+n)?.scrollIntoVi
 async function downloadPDF(){{const btn=document.getElementById('pdf-btn');btn.style.opacity='0.6';btn.textContent='⏳ Preparing...';['pdf-btn','reading-progress'].forEach(id=>{{const el=document.getElementById(id);if(el)el.style.display='none';}});const navbar=document.querySelector('.nav-bar');if(navbar)navbar.style.display='none';const title=document.querySelector('.cover-title')?.textContent||'book';const safeName=title.replace(/[^\\w\\s-]/g,'').trim().replace(/\\s+/g,'_').substring(0,50);const opt={{margin:0,filename:safeName+'.pdf',image:{{type:'jpeg',quality:0.98}},html2canvas:{{scale:2,useCORS:true,backgroundColor:'{theme["primary"]}',logging:false,letterRendering:true,scrollY:0,scrollX:0}},jsPDF:{{unit:'mm',format:[120,213],orientation:'portrait'}},pagebreak:{{mode:['avoid-all','css']}}}};try{{await html2pdf().set(opt).from(document.body).save();}}catch(e){{window.print();}}finally{{['pdf-btn','reading-progress'].forEach(id=>{{const el=document.getElementById(id);if(el)el.style.display='';}});if(navbar)navbar.style.display='flex';btn.style.opacity='1';btn.innerHTML='📥 Download PDF';}}}}
 </script>
 </body>
-</html>'''
-    return html
-
-def generate_kdp_html(book_data, theme, language):
-    return generate_pdf_html(book_data, theme, language)
-
-# ============================================================
-# MAIN
-# ============================================================
-def main():
-    if not GROQ_API_KEY:
-        print("ERROR: GROQ_API_KEY not set")
-        sys.exit(1)
-    book_title = os.environ.get("BOOK_TITLE", "")
-    language = os.environ.get("BOOK_LANGUAGE", "en")
-    author_name = os.environ.get("BOOK_AUTHOR", "").strip()
-    book_format = os.environ.get("BOOK_FORMAT", "pdf")
-
-    if not book_title:
-        print("ERROR: BOOK_TITLE not set")
-        sys.exit(1)
-
-    print(f"📚 Generating: {book_title} [{language}] — Format: {book_format.upper()}")
-    theme_key = detect_theme(book_title, language)
-    theme = BOOK_THEMES.get(theme_key, BOOK_THEMES["default"])
-    print(f"🎨 Theme: {theme_key} {theme['emoji']}")
-
-    book_data = generate_full_book(book_title, language)
-    if author_name:
-        book_data["author"] = author_name
-
-    os.makedirs("output", exist_ok=True)
-    with open("output/book_data.json", "w", encoding="utf-8") as f:
-        json.dump(book_data, f, ensure_ascii=False, indent=2)
-
-    if book_format == "kdp":
-        html = generate_kdp_html(book_data, theme, language)
-        suffix = "_KDP"
-    else:
-        html = generate_pdf_html(book_data, theme, language)
-        suffix = "_PDF"
-
-    safe_title = re.sub(r'[^\w\s-]', '', book_title).strip().replace(' ', '_')[:50]
-    filename = f"output/{safe_title}_{language}{suffix}.html"
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(html)
-
-    total_words = sum(len(ch.get("content", "").split()) for ch in book_data.get("chapters", []))
-    print(f"✅ Done: {filename}")
-    print(f"📖 {len(book_data['chapters'])} chapters, {total_words} words total")
-
-if __name__ == "__main__":
-    main()
+</html>
