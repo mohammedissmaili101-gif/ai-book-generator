@@ -189,7 +189,7 @@ def generate_book_structure(title: str, language: str = "en") -> dict:
         "en": "You are a professional bestselling author. Your books follow the structure of top sellers like Atomic Habits, The Psychology of Money, and Think and Grow Rich.",
         "ar": "أنت مؤلف محترف ومتخصص في الكتب الأكثر مبيعًا. كتبك تتبع هيكل أفضل الكتب مبيعًا مثل العادات الذرية وعلم النفس والمال.",
         "fr": "Vous êtes un auteur professionnel spécialisé dans les best-sellers. Vos livres suivent la structure des meilleures ventes comme Atomic Habits et Thinking Fast and Slow.",
-        "es": "Eres un autor profesional especializado en bestsellers. Tus libros siguen la estructura de los más vendidos como Hábitos Atómicos.",
+        "es": "Eres un autor profesional de bestsellers. Tus libros siguen la estructura de los más vendidos como Hábitos Atómicos.",
         "de": "Sie sind ein professioneller Autor, spezialisiert auf Bestseller. Ihre Bücher folgen der Struktur von Top-Sellern wie Atomic Habits.",
         "pt": "Você é um autor profissional especializado em bestsellers. Seus livros seguem a estrutura dos mais vendidos como Hábitos Atômicos.",
         "it": "Sei un autore professionista specializzato in bestseller. I tuoi libri seguono la struttura dei più venduti come Le Abitudini Atomiche.",
@@ -286,6 +286,7 @@ def generate_pdf_html(book_data: dict, theme: dict, language: str = "en") -> str
 
     is_rtl = language == "ar"
     dir_attr = 'dir="rtl"' if is_rtl else ''
+    border_side = 'right' if is_rtl else 'left'
 
     chapters_html = ""
     for i, chapter in enumerate(book_data.get("chapters", []), 1):
@@ -317,7 +318,7 @@ def generate_pdf_html(book_data: dict, theme: dict, language: str = "en") -> str
         </div>''' if key_technique else ""
 
         chapters_html += f'''
-<div class="chapter-wrapper">
+<div class="chapter-wrapper page-break">
 <section class="chapter" id="chapter-{i}">
     <div class="chapter-header">
         <div class="chapter-meta">
@@ -458,7 +459,6 @@ body {{
     border: 2px solid var(--cover-accent);
     opacity: 0.15;
 }}
-/* ---- NEW: large decorative circle ---- */
 .cover-circle-big {{
     position: absolute;
     top: 30px; left: 50%;
@@ -586,7 +586,7 @@ body {{
     padding: 13px 15px;
     background: rgba(255,255,255,0.04);
     border-radius: var(--radius);
-    border-left: 3px solid var(--accent);
+    border-{border_side}: 3px solid var(--accent);
 }}
 .benefit-check {{ color: var(--accent); font-weight: 900; font-size: var(--size-lg); flex-shrink: 0; line-height: 1.3; }}
 .benefit-text {{ font-size: var(--size-sm); line-height: 1.6; color: rgba(255,255,255,0.82); }}
@@ -606,10 +606,7 @@ body {{
     padding: 14px 0;
     border-bottom: 1px solid rgba(255,255,255,0.06);
     cursor: pointer;
-    transition: padding-left 0.2s;
 }}
-.toc-item:hover {{ padding-left: 8px; }}
-.toc-item:hover .toc-arrow {{ color: var(--accent); }}
 .toc-num {{
     font-family: var(--font-title);
     font-size: var(--size-lg);
@@ -620,7 +617,7 @@ body {{
 .toc-text {{ flex: 1; display: flex; flex-direction: column; gap: 3px; }}
 .toc-title {{ font-size: var(--size-sm); font-weight: 600; color: #fff; line-height: 1.3; }}
 .toc-sub {{ font-size: var(--size-xs); color: rgba(255,255,255,0.4); }}
-.toc-arrow {{ color: rgba(255,255,255,0.25); font-size: var(--size-base); transition: color 0.2s; flex-shrink: 0; }}
+.toc-arrow {{ color: rgba(255,255,255,0.25); font-size: var(--size-base); flex-shrink: 0; }}
 
 /* ====== INTRO ====== */
 .intro-page {{
@@ -628,22 +625,11 @@ body {{
     background: var(--secondary);
     position: relative;
 }}
-.intro-page::before {{
-    content: '\u201C';
-    font-family: var(--font-title);
-    font-size: 140px;
-    color: var(--accent);
-    opacity: 0.07;
-    position: absolute;
-    top: 10px; left: 10px;
-    line-height: 1;
-    pointer-events: none;
-}}
 
 /* ====== CHAPTERS ====== */
-/* FIX: wrapper prevents blank pages */
 .chapter-wrapper {{
     display: block;
+    position: relative;
 }}
 .chapter {{
     border-bottom: 3px solid var(--accent);
@@ -654,12 +640,6 @@ body {{
     text-align: center;
     position: relative;
     overflow: hidden;
-}}
-.chapter-header::before {{
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.04) 0%, transparent 70%);
-    pointer-events: none;
 }}
 .chapter-meta {{ display: flex; justify-content: center; margin-bottom: 20px; }}
 .chapter-number-badge {{
@@ -683,16 +663,14 @@ body {{
 .chapter-hook {{
     margin: var(--gap-md) var(--side) 0;
     padding: 18px 20px;
-    border-left: 4px solid var(--accent);
+    border-{border_side}: 4px solid var(--accent);
     background: rgba(255,255,255,0.03);
-    border-radius: 0 var(--radius) var(--radius) 0;
     font-style: italic;
     font-size: var(--size-base);
     color: rgba(255,255,255,0.75);
     line-height: 1.75;
 }}
 .chapter-body {{ padding: var(--gap-md) var(--side) var(--gap-lg); }}
-/* KEY FIX for blank pages: no page-break-before on body-text */
 .body-text {{
     display: block;
     font-size: var(--size-base);
@@ -701,7 +679,6 @@ body {{
     margin-bottom: 18px;
     word-break: break-word;
     overflow-wrap: break-word;
-    hyphens: auto;
 }}
 .box-label {{
     font-size: var(--size-xs);
@@ -728,7 +705,7 @@ body {{
     line-height: 1.55;
     color: rgba(255,255,255,0.85);
 }}
-.kp-arrow {{ color: var(--accent); flex-shrink: 0; font-style: normal; line-height: 1.55; }}
+.kp-arrow {{ color: var(--accent); flex-shrink: 0; }}
 .technique-badge {{
     display: flex; flex-direction: column; gap: 6px;
     padding: 16px 18px;
@@ -743,7 +720,7 @@ body {{
     padding: 20px;
     background: rgba(255,255,255,0.03);
     border-radius: var(--radius);
-    border-left: 4px solid var(--highlight);
+    border-{border_side}: 4px solid var(--highlight);
     margin-bottom: var(--gap-md);
 }}
 .exercises-section .box-label {{ color: var(--highlight); }}
@@ -758,7 +735,7 @@ body {{
     font-size: var(--size-xs); font-weight: 900;
     flex-shrink: 0; margin-top: 2px;
 }}
-.exercise-item p {{ font-size: var(--size-sm); line-height: 1.65; color: rgba(255,255,255,0.8); word-break: break-word; }}
+.exercise-item p {{ font-size: var(--size-sm); line-height: 1.65; color: rgba(255,255,255,0.8); }}
 .chapter-summary {{
     display: flex; gap: 14px; align-items: flex-start;
     padding: 18px 20px;
@@ -767,8 +744,8 @@ body {{
     margin-bottom: var(--gap-md);
     font-style: italic;
 }}
-.summary-icon {{ font-size: 1.4rem; flex-shrink: 0; line-height: 1.4; }}
-.summary-text {{ font-size: var(--size-sm); line-height: 1.75; color: rgba(255,255,255,0.88); word-break: break-word; }}
+.summary-icon {{ font-size: 1.4rem; flex-shrink: 0; }}
+.summary-text {{ font-size: var(--size-sm); line-height: 1.75; color: rgba(255,255,255,0.88); }}
 
 /* ====== CONCLUSION / AUTHOR / BACK ====== */
 .conclusion-page {{ padding: var(--gap-xl) var(--side); background: var(--gradient); }}
@@ -789,7 +766,7 @@ body {{
     border: 3px solid var(--accent);
 }}
 .author-name {{ font-family: var(--font-title); font-size: var(--size-xl); font-weight: 700; color: #fff; margin-bottom: 6px; }}
-.author-bio {{ font-size: var(--size-sm); line-height: 1.8; color: rgba(255,255,255,0.65); margin-top: 12px; word-break: break-word; }}
+.author-bio {{ font-size: var(--size-sm); line-height: 1.8; color: rgba(255,255,255,0.65); margin-top: 12px; }}
 .back-cover {{
     min-height: 55vh;
     background: var(--cover-gradient);
@@ -829,16 +806,23 @@ body {{
 }}
 .pdf-btn:active {{ transform: scale(0.95); }}
 
-/* ====== PRINT ====== */
+/* ====== CRITICAL RESOLUTION FOR BLANK PAGES & CLIPPING ====== */
+.page-break {{
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 10px !important;
+}}
+
 @media print {{
     .nav-bar, .pdf-btn, #reading-progress {{ display: none !important; }}
-    body {{ max-width: 100%; font-size: 11pt; }}
-    .cover-page {{ min-height: 100vh; page-break-after: always; }}
-    .body-text {{ orphans: 3; widows: 3; }}
-    /* FIX: only chapters break, not every element */
-    .chapter-wrapper {{ page-break-before: always; }}
-    .chapter-header, .key-points-box, .exercises-section,
-    .chapter-summary, .technique-badge {{ page-break-inside: avoid; }}
+    body {{ max-width: 100% !important; width: 100% !important; font-size: 11pt; background: var(--primary) !important; }}
+    .cover-page, .description-page, .toc-page, .intro-page, .chapter-wrapper, .conclusion-page, .author-page, .back-cover {{
+        page-break-after: always !important;
+        break-after: always !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }}
 }}
 ::-webkit-scrollbar {{ width: 3px; }}
 ::-webkit-scrollbar-track {{ background: transparent; }}
@@ -871,31 +855,31 @@ body {{
     <span class="nav-progress-text" id="progress-text">0% read</span>
 </nav>
 
-<section class="description-page">
+<section class="description-page page-break">
     <span class="section-label">About This Book</span>
     <p class="description-text">{book_data.get("description","")}</p>
     <span class="section-label">What You Will Learn</span>
     <div class="benefits-list">{benefits_html}</div>
 </section>
 
-<section class="toc-page">
+<section class="toc-page page-break">
     <h2 class="page-title">Table of Contents</h2>
     {toc_html}
 </section>
 
-<section class="intro-page">
+<section class="intro-page page-break">
     <h2 class="page-title">Introduction</h2>
     {intro_html}
 </section>
 
 {chapters_html}
 
-<section class="conclusion-page">
+<section class="conclusion-page page-break">
     <h2 class="page-title">Conclusion</h2>
     {conc_html}
 </section>
 
-<section class="author-page">
+<section class="author-page page-break">
     <h2 class="page-title">About the Author</h2>
     <div class="author-card">
         <div class="author-avatar">{theme["emoji"]}</div>
@@ -904,7 +888,7 @@ body {{
     </div>
 </section>
 
-<section class="back-cover">
+<section class="back-cover page-break">
     <h2 class="back-cover-title">{book_data.get("title","")}</h2>
     <p class="back-cover-text">{book_data.get("tagline","")}</p>
     <div class="edition-badge">✦ Professional Edition {year}</div>
@@ -915,8 +899,10 @@ body {{
 <script>
 window.addEventListener('scroll', () => {{
     const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-    document.getElementById('reading-progress').style.width = pct.toFixed(1) + '%';
-    document.getElementById('progress-text').textContent = Math.round(pct) + '% read';
+    const progressEl = document.getElementById('reading-progress');
+    const textEl = document.getElementById('progress-text');
+    if(progressEl) progressEl.style.width = pct.toFixed(1) + '%';
+    if(textEl) textEl.textContent = Math.round(pct) + '% read';
 }});
 function scrollToChapter(num) {{
     const el = document.getElementById('chapter-' + num);
@@ -926,42 +912,51 @@ async function downloadPDF() {{
     const btn = document.getElementById('pdf-btn');
     btn.style.opacity = '0.6';
     btn.textContent = '⏳ Preparing...';
+    
+    // Hide UI elements completely before capture
     ['pdf-btn','reading-progress'].forEach(id => {{
         const el = document.getElementById(id);
-        if(el) el.style.display='none';
+        if(el) el.style.setProperty('display', 'none', 'important');
     }});
-    document.querySelector('.nav-bar').style.display = 'none';
+    const navbar = document.querySelector('.nav-bar');
+    if(navbar) navbar.style.setProperty('display', 'none', 'important');
+    
     const title = document.querySelector('.cover-title')?.textContent || 'book';
     const safeName = title.replace(/[^\\w\\s-]/g,'').trim().replace(/\\s+/g,'_').substring(0,50);
+    
     const opt = {{
         margin: 0,
         filename: safeName + '.pdf',
-        image: {{ type: 'jpeg', quality: 0.92 }},
+        image: {{ type: 'jpeg', quality: 0.98 }},
         html2canvas: {{
-            scale: 2, useCORS: true,
+            scale: 2, 
+            useCORS: true,
             backgroundColor: '{theme["primary"]}',
-            logging: false, letterRendering: true,
-            /* FIX blank pages: windowWidth matches body max-width */
-            windowWidth: 480
+            logging: false, 
+            letterRendering: true,
+            scrollY: 0,
+            scrollX: 0
         }},
         jsPDF: {{
             unit: 'mm',
             format: [120, 213],
             orientation: 'portrait'
         }},
-        /* FIX: use 'legacy' mode — avoids phantom blank pages from css/avoid-all */
-        pagebreak: {{ mode: 'legacy' }}
+        // FIXED: smart rendering mode instead of legacy to eliminate layout shifting
+        pagebreak: {{ mode: ['avoid-all', 'css'] }}
     }};
     try {{
         await html2pdf().set(opt).from(document.body).save();
     }} catch(e) {{
+        console.error(e);
         window.print();
     }} finally {{
+        // Restore UI elements safely
         ['pdf-btn','reading-progress'].forEach(id => {{
             const el = document.getElementById(id);
-            if(el) el.style.display='';
+            if(el) el.style.display = '';
         }});
-        document.querySelector('.nav-bar').style.display = 'flex';
+        if(navbar) navbar.style.display = 'flex';
         btn.style.opacity = '1';
         btn.innerHTML = '📥 Download PDF';
     }}
@@ -981,10 +976,9 @@ def generate_kdp_html(book_data: dict, theme: dict, language: str = "en") -> str
     is_rtl = language == "ar"
     dir_attr = 'dir="rtl"' if is_rtl else ''
     year = datetime.now().year
+    border_side = 'right' if is_rtl else 'left'
 
     accent = theme["cover_accent"]
-
-    # Cover page
     cover_emoji = theme["emoji"]
 
     chapters_html = ""
@@ -1004,7 +998,7 @@ def generate_kdp_html(book_data: dict, theme: dict, language: str = "en") -> str
         )
 
         chapters_html += f'''
-<div class="chapter-break">
+<div class="chapter-break page-break">
 <section class="chapter">
     <div class="ch-header">
         <p class="ch-label">CHAPTER {chapter.get("number", i)}</p>
@@ -1051,11 +1045,6 @@ def generate_kdp_html(book_data: dict, theme: dict, language: str = "en") -> str
         for p in book_data.get("conclusion", "").split('\n') if p.strip()
     )
 
-    benefits_html = "".join(
-        f'<li>{b}</li>'
-        for b in book_data.get("key_benefits", [])
-    )
-
     html = f'''<!DOCTYPE html>
 <html lang="{language}" {dir_attr}>
 <head>
@@ -1077,7 +1066,7 @@ body {{
     font-family: var(--font-body);
     font-size: 12pt;
     line-height: 1.8;
-    max-width: 152mm;   /* 6 inches = KDP trim width */
+    max-width: 152mm;
     margin: 0 auto;
     -webkit-font-smoothing: antialiased;
     word-wrap: break-word;
@@ -1096,7 +1085,6 @@ body {{
     padding: 20mm 15mm;
     position: relative;
     overflow: hidden;
-    page-break-after: always;
 }}
 .cover-page::before {{
     content: '';
@@ -1171,7 +1159,6 @@ body {{
     align-items: center;
     text-align: center;
     padding: 20mm;
-    page-break-after: always;
 }}
 .tp-title {{
     font-family: var(--font-title);
@@ -1200,26 +1187,12 @@ body {{
     text-transform: uppercase;
     color: #333;
 }}
-.tp-year {{
-    margin-top: 60px;
-    font-size: 0.8rem;
-    color: #999;
-}}
+.tp-year {{ margin-top: 60px; font-size: 0.8rem; color: #999; }}
 
-.copyright-page {{
-    padding: 20mm;
-    page-break-after: always;
-    font-size: 9pt;
-    color: #666;
-    line-height: 1.7;
-}}
+.copyright-page {{ padding: 20mm; font-size: 9pt; color: #666; line-height: 1.7; }}
 .copyright-page p {{ margin-bottom: 10px; }}
 
-/* ====== TOC ====== */
-.toc-page {{
-    padding: 20mm;
-    page-break-after: always;
-}}
+.toc-page {{ padding: 20mm; }}
 .section-heading {{
     font-family: var(--font-title);
     font-size: 1.5rem;
@@ -1239,14 +1212,9 @@ body {{
 .toc-ch {{ flex: 1; }}
 .toc-dots {{ flex: 1; }}
 
-/* ====== INTRO / CONCLUSION ====== */
-.intro-page, .conclusion-page {{
-    padding: 20mm;
-    page-break-after: always;
-}}
+.intro-page, .conclusion-page {{ padding: 20mm; }}
 
 /* ====== CHAPTERS ====== */
-.chapter-break {{ page-break-before: always; }}
 .chapter {{ padding: 18mm 20mm 20mm; }}
 .ch-header {{ margin-bottom: 24px; text-align: center; }}
 .ch-label {{
@@ -1265,110 +1233,33 @@ body {{
     line-height: 1.2;
     margin-bottom: 8px;
 }}
-.ch-subtitle {{
-    font-size: 1rem;
-    color: #555;
-    font-style: italic;
-    margin-bottom: 14px;
-}}
-.ch-rule {{
-    width: 60px; height: 3px;
-    background: {accent};
-    margin: 0 auto;
-    border-radius: 2px;
-}}
+.ch-subtitle {{ font-size: 1rem; color: #555; font-style: italic; margin-bottom: 14px; }}
+.ch-rule {{ width: 60px; height: 3px; background: {accent}; margin: 0 auto; border-radius: 2px; }}
+
 blockquote.ch-hook {{
     margin: 20px 0;
     padding: 14px 20px;
-    border-left: 4px solid {accent};
+    border-{border_side}: 4px solid {accent};
     background: #fafafa;
-    border-radius: 0 8px 8px 0;
     font-style: italic;
     font-size: 10.5pt;
     color: #444;
     line-height: 1.7;
 }}
-.sidebar {{
-    background: #f7f7f7;
-    border-radius: 8px;
-    padding: 16px 18px;
-    margin-bottom: 20px;
-    border: 1px solid #e5e5e5;
-}}
-.sidebar-label {{
-    font-family: var(--font-title);
-    font-size: 0.6rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: {accent};
-    margin-bottom: 10px;
-}}
-.kp-list {{
-    padding-left: 18px;
-    font-size: 10pt;
-    line-height: 1.7;
-    color: #333;
-}}
+.sidebar {{ background: #f7f7f7; border-radius: 8px; padding: 16px 18px; margin-bottom: 20px; border: 1px solid #e5e5e5; }}
+.sidebar-label {{ font-family: var(--font-title); font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: {accent}; margin-bottom: 10px; }}
+.kp-list {{ padding-left: 18px; font-size: 10pt; line-height: 1.7; color: #333; }}
 .kp-list li {{ margin-bottom: 4px; }}
-.body {{
-    font-size: 11.5pt;
-    line-height: 1.85;
-    color: #1a1a1a;
-    margin-bottom: 14px;
-    text-align: justify;
-    hyphens: auto;
-}}
-.technique-box {{
-    background: #f0f0f0;
-    border-radius: 8px;
-    padding: 14px 18px;
-    margin: 20px 0;
-    border-left: 4px solid {accent};
-}}
-.exercises-box {{
-    background: #fefefe;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 16px 18px;
-    margin: 20px 0;
-}}
-.box-title {{
-    font-family: var(--font-title);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #333;
-    margin-bottom: 12px;
-}}
-.exercise {{
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-    font-size: 10.5pt;
-    line-height: 1.65;
-    color: #333;
-}}
+.body {{ font-size: 11.5pt; line-height: 1.85; color: #1a1a1a; margin-bottom: 14px; text-align: justify; }}
+.technique-box {{ background: #f0f0f0; border-radius: 8px; padding: 14px 18px; margin: 20px 0; border-{border_side}: 4px solid {accent}; }}
+.exercises-box {{ background: #fefefe; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px 18px; margin: 20px 0; }}
+.box-title {{ font-family: var(--font-title); font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #333; margin-bottom: 12px; }}
+.exercise {{ display: flex; gap: 10px; margin-bottom: 10px; font-size: 10.5pt; line-height: 1.65; color: #333; }}
 .ex-num {{ font-weight: 700; color: {accent}; flex-shrink: 0; }}
-.summary-box {{
-    background: #fff9f0;
-    border-radius: 8px;
-    padding: 14px 18px;
-    border: 1px solid #f0d080;
-    font-size: 10.5pt;
-    color: #333;
-    line-height: 1.7;
-    margin-top: 20px;
-}}
+.summary-box {{ background: #fff9f0; border-radius: 8px; padding: 14px 18px; border: 1px solid #f0d080; font-size: 10.5pt; color: #333; line-height: 1.7; margin-top: 20px; }}
 
-/* ====== AUTHOR ====== */
-.author-page {{ padding: 20mm; page-break-before: always; }}
-.author-name-kdp {{
-    font-family: var(--font-title);
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-}}
+.author-page {{ padding: 20mm; }}
+.author-name-kdp {{ font-family: var(--font-title); font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; }}
 .author-bio {{ font-size: 10.5pt; line-height: 1.8; color: #333; }}
 
 /* ====== BACK COVER ====== */
@@ -1377,56 +1268,18 @@ blockquote.ch-hook {{
     min-height: 120mm;
     background: linear-gradient(170deg, #111 0%, #222 60%, #333 100%);
     padding: 20mm;
-    page-break-before: always;
     color: #fff;
     position: relative;
     overflow: hidden;
 }}
-.back-cover-kdp::before {{
-    content: '';
-    position: absolute;
-    bottom: -40px; left: -40px;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: {accent};
-    opacity: 0.07;
-}}
-.bc-title {{
-    font-family: var(--font-title);
-    font-size: 1.4rem;
-    font-weight: 900;
-    color: #fff;
-    margin-bottom: 16px;
-}}
-.bc-description {{
-    font-size: 10pt;
-    line-height: 1.8;
-    color: rgba(255,255,255,0.75);
-    margin-bottom: 20px;
-}}
+.back-cover-kdp::before {{ content: ''; position: absolute; bottom: -40px; left: -40px; width: 200px; height: 200px; border-radius: 50%; background: {accent}; opacity: 0.07; }}
+.bc-title {{ font-family: var(--font-title); font-size: 1.4rem; font-weight: 900; color: #fff; margin-bottom: 16px; }}
+.bc-description {{ font-size: 10pt; line-height: 1.8; color: rgba(255,255,255,0.75); margin-bottom: 20px; }}
 .bc-benefits {{ list-style: none; margin-bottom: 24px; }}
-.bc-benefits li {{
-    font-size: 9.5pt;
-    color: rgba(255,255,255,0.85);
-    padding: 5px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    padding-left: 18px;
-    position: relative;
-}}
-.bc-benefits li::before {{
-    content: '✓';
-    position: absolute; left: 0;
-    color: {accent};
-    font-weight: 900;
-}}
-.bc-author {{
-    font-size: 9pt;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}}
+.bc-benefits li {{ font-size: 9.5pt; color: rgba(255,255,255,0.85); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.08); padding-left: 18px; position: relative; }}
+.bc-benefits li::before {{ content: '✓'; position: absolute; left: 0; color: {accent}; font-weight: 900; }}
+.bc-author {{ font-size: 9pt; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; }}
 
-/* ====== KDP DOWNLOAD BUTTON ====== */
 .kdp-btn {{
     position: fixed; bottom: 22px; right: 18px;
     background: {accent}; color: #111;
@@ -1435,29 +1288,31 @@ blockquote.ch-hook {{
     font-weight: 900; cursor: pointer; z-index: 998;
     display: flex; align-items: center; gap: 7px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-    transition: transform 0.15s;
     font-family: var(--font-title);
 }}
-.kdp-btn:active {{ transform: scale(0.95); }}
 
-/* ====== PRINT ====== */
+/* ====== PRINT RESOLUTION FOR KDP ====== */
+.page-break {{
+    page-break-before: always !important;
+    break-before: always !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}}
+
 @media print {{
     .kdp-btn {{ display: none !important; }}
-    body {{ max-width: 152mm; font-size: 11.5pt; }}
-    .chapter-break {{ page-break-before: always; }}
-    .cover-page, .title-page, .copyright-page,
-    .toc-page, .intro-page, .conclusion-page,
-    .author-page {{ page-break-after: always; }}
-    .body {{ orphans: 3; widows: 3; }}
-    .sidebar, .technique-box, .exercises-box, .summary-box {{ page-break-inside: avoid; }}
+    body {{ max-width: 152mm !important; width: 152mm !important; font-size: 11.5pt; background: #fff !important; }}
+    .cover-page, .title-page, .copyright-page, .toc-page, .intro-page, .chapter-break, .conclusion-page, .author-page, .back-cover-kdp {{
+        page-break-after: always !important;
+        break-after: always !important;
+    }}
 }}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
-<!-- ===== COVER ===== -->
-<section class="cover-page">
+<section class="cover-page page-break">
     <span class="cover-emoji-kdp">{cover_emoji}</span>
     <div class="cover-accent-line"></div>
     <h1 class="cover-title-kdp">{book_data.get("title","")}</h1>
@@ -1466,8 +1321,7 @@ blockquote.ch-hook {{
     <span class="cover-year-kdp">{year}</span>
 </section>
 
-<!-- ===== TITLE PAGE ===== -->
-<section class="title-page">
+<section class="title-page page-break">
     <h1 class="tp-title">{book_data.get("title","")}</h1>
     <p class="tp-subtitle">{book_data.get("subtitle","")}</p>
     <div class="tp-rule"></div>
@@ -1475,8 +1329,7 @@ blockquote.ch-hook {{
     <p class="tp-year">{year}</p>
 </section>
 
-<!-- ===== COPYRIGHT ===== -->
-<section class="copyright-page">
+<section class="copyright-page page-break">
     <p><strong>{book_data.get("title","")}</strong></p>
     <p>Copyright © {year} {book_data.get("author","Professional Author")}. All rights reserved.</p>
     <p>No part of this publication may be reproduced, distributed, or transmitted in any form without the prior written permission of the publisher.</p>
@@ -1484,8 +1337,7 @@ blockquote.ch-hook {{
     <p>First Edition, {year}.</p>
 </section>
 
-<!-- ===== TOC ===== -->
-<section class="toc-page">
+<section class="toc-page page-break">
     <h2 class="section-heading">Table of Contents</h2>
     <div class="toc-row"><span class="toc-ch">Introduction</span></div>
     {toc_html}
@@ -1493,30 +1345,25 @@ blockquote.ch-hook {{
     <div class="toc-row"><span class="toc-ch">About the Author</span></div>
 </section>
 
-<!-- ===== INTRO ===== -->
-<section class="intro-page">
+<section class="intro-page page-break">
     <h2 class="section-heading">Introduction</h2>
     {intro_html}
 </section>
 
-<!-- ===== CHAPTERS ===== -->
 {chapters_html}
 
-<!-- ===== CONCLUSION ===== -->
-<section class="conclusion-page">
+<section class="conclusion-page page-break">
     <h2 class="section-heading">Conclusion</h2>
     {conc_html}
 </section>
 
-<!-- ===== AUTHOR ===== -->
-<section class="author-page">
+<section class="author-page page-break">
     <h2 class="section-heading">About the Author</h2>
     <p class="author-name-kdp">{book_data.get("author","Professional Author")}</p>
     <p class="author-bio">{book_data.get("about_author","")}</p>
 </section>
 
-<!-- ===== BACK COVER ===== -->
-<section class="back-cover-kdp">
+<section class="back-cover-kdp page-break">
     <p class="bc-title">{book_data.get("title","")}</p>
     <p class="bc-description">{book_data.get("back_cover_description", book_data.get("description",""))}</p>
     <ul class="bc-benefits">
@@ -1525,7 +1372,6 @@ blockquote.ch-hook {{
     <p class="bc-author">by {book_data.get("author","Professional Author")}</p>
 </section>
 
-<!-- ===== DOWNLOAD ===== -->
 <button class="kdp-btn" id="kdp-btn" onclick="downloadKDP()">📥 Download for KDP</button>
 
 <script>
@@ -1533,29 +1379,33 @@ async function downloadKDP() {{
     const btn = document.getElementById('kdp-btn');
     btn.style.opacity = '0.6';
     btn.textContent = '⏳ Preparing...';
-    btn.style.display = 'none';
+    btn.style.setProperty('display', 'none', 'important');
+    
     const title = '{book_data.get("title","book")}'.replace(/[^\\w\\s-]/g,'').trim().replace(/\\s+/g,'_').substring(0,50);
     const opt = {{
         margin: 0,
         filename: title + '_KDP.pdf',
-        image: {{ type: 'jpeg', quality: 0.95 }},
+        image: {{ type: 'jpeg', quality: 0.98 }},
         html2canvas: {{
-            scale: 2, useCORS: true,
+            scale: 2, 
+            useCORS: true,
             backgroundColor: '#ffffff',
-            logging: false, letterRendering: true,
-            /* KDP 6-inch page width in px at 96dpi ≈ 576px */
-            windowWidth: 576
+            logging: false, 
+            letterRendering: true,
+            scrollY: 0,
+            scrollX: 0
         }},
         jsPDF: {{
             unit: 'mm',
             format: [152, 228],
             orientation: 'portrait'
         }},
-        pagebreak: {{ mode: 'legacy' }}
+        pagebreak: {{ mode: ['avoid-all', 'css'] }}
     }};
     try {{
         await html2pdf().set(opt).from(document.body).save();
     }} catch(e) {{
+        console.error(e);
         window.print();
     }} finally {{
         btn.style.display = 'flex';
