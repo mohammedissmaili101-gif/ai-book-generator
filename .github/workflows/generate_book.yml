@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       book_title:
-        description: '📖 Book Title + Full Description (e.g: "The Secret to Financial Freedom: A complete guide for people stuck in 9-5 jobs who want to build passive income streams, escape debt, and achieve true financial independence in 12 months")'
+        description: '📖 Book Title + Full Description'
         required: true
         type: string
       author_name:
@@ -34,7 +34,7 @@ on:
           - hi
           - id
       book_format:
-        description: '📦 Format — pdf = sell directly (TikTok/Gumroad) | kdp = Amazon KDP print+digital'
+        description: '📦 Format'
         required: true
         default: 'pdf'
         type: choice
@@ -76,29 +76,27 @@ jobs:
           ACTION: ${{ github.event.inputs.action }}
         run: python generate_book.py
 
+      - name: 📂 Prepare Output Directory
+        run: |
+          mkdir -p output
+          mv book_output.html output/index.html || true
+
       - name: 🌐 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./output
-          keep_files: true
 
       - name: 📊 Show Results
         run: |
           echo "=================================="
           echo "✅ BOOK GENERATED SUCCESSFULLY!"
           echo "=================================="
-          if [ -f output/metadata.json ]; then cat output/metadata.json; fi
-          echo ""
-          echo "📖 Files:"
           ls -la output/
-          echo ""
-          echo "🌐 Live at:"
-          echo "https://${{ github.repository_owner }}.github.io/${{ github.repository_name }}/"
 
       - name: 📤 Upload as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ebook-${{ github.event.inputs.book_title }}
+          name: ebook-generated
           path: output/
-          retention-days: 30
+          retention-days: 5
