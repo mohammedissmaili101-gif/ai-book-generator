@@ -72,8 +72,8 @@ BOOK_THEMES = {
         "accent": "#00ff88",
         "text": "#e0e0e0",
         "highlight": "#00d4ff",
-        "font_title": "Space Mono",
-        "font_body": "IBM Plex Mono",
+        "font_title": "Montserrat",
+        "font_body": "Source Sans Pro",
         "emoji": "🤖",
         "gradient": "linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%)"
     },
@@ -1185,6 +1185,7 @@ def main():
     book_title = os.environ.get("BOOK_TITLE", "")
     language = os.environ.get("BOOK_LANGUAGE", "en")
     action = os.environ.get("ACTION", "generate")
+    author_name = os.environ.get("BOOK_AUTHOR", "").strip()
     
     if not GROQ_API_KEY:
         print("ERROR: GROQ_API_KEY not set!")
@@ -1217,6 +1218,11 @@ def main():
         # Generate book structure
         print("✍️ Writing book content with Groq AI...")
         book_data = generate_book_structure(book_title, language)
+        
+        # Override author name if provided
+        if author_name:
+            book_data["author"] = author_name
+            print(f"✍️ Author set to: {author_name}")
         
         # Save JSON
         with open("output/book_data.json", "w", encoding="utf-8") as f:
