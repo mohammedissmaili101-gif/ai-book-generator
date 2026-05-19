@@ -1,0 +1,93 @@
+name: 📚 Generate Professional Ebook
+
+on:
+  workflow_dispatch:
+    inputs:
+      book_title:
+        description: '📖 Book Title (e.g: "How to Build Wealth in 30 Days")'
+        required: true
+        type: string
+      language:
+        description: '🌍 Language'
+        required: true
+        default: 'en'
+        type: choice
+        options:
+          - en
+          - ar
+          - fr
+          - es
+          - de
+          - pt
+          - it
+          - zh
+          - ja
+          - ru
+          - tr
+          - nl
+          - ko
+          - hi
+          - id
+      action:
+        description: '⚡ Action'
+        required: true
+        default: 'generate'
+        type: choice
+        options:
+          - generate
+          - suggest
+
+jobs:
+  create-book:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install Dependencies
+        run: |
+          pip install requests
+
+      - name: 📚 Generate Book
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          BOOK_TITLE: ${{ github.event.inputs.book_title }}
+          BOOK_LANGUAGE: ${{ github.event.inputs.language }}
+          ACTION: ${{ github.event.inputs.action }}
+        run: |
+          python generate_book.py
+
+      - name: 🌐 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
+          keep_files: true
+
+      - name: 📊 Show Results
+        run: |
+          echo "=========================="
+          echo "✅ BOOK GENERATED SUCCESSFULLY!"
+          echo "=========================="
+          if [ -f output/metadata.json ]; then
+            cat output/metadata.json
+          fi
+          echo ""
+          echo "📖 Files generated:"
+          ls -la output/
+          echo ""
+          echo "🌐 Your book will be live at:"
+          echo "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+
+      - name: 📤 Upload Book as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ebook-${{ github.event.inputs.book_title }}
+          path: output/
+          retention-days: 30
