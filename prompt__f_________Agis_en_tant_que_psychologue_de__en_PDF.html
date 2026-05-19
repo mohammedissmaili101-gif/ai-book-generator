@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Shadow Protocol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito,wght@400;700;900&family=Open+Sans,wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+    --primary:   #1e1b4b;
+    --secondary: #312e81;
+    --accent:    #a78bfa;
+    --text:      #ede9fe;
+    --highlight: #c4b5fd;
+    --gradient:  linear-gradient(160deg, #1e1b4b 0%, #312e81 50%, #3730a3 100%);
+    --cover-gradient: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    --cover-accent:   #a78bfa;
+    --font-title: 'Nunito', Georgia, serif;
+    --font-body:  'Open Sans', Georgia, serif;
+    --size-xs: 0.75rem; --size-sm: 0.875rem; --size-base: 1rem;
+    --size-lg: 1.125rem; --size-xl: 1.375rem;
+    --size-2xl: 1.75rem; --size-3xl: 2.25rem;
+    --gap-sm: 12px; --gap-md: 24px; --gap-lg: 40px;
+    --gap-xl: 56px; --side: 22px; --radius: 14px;
+}
+html { scroll-behavior: smooth; }
+body {
+    background: var(--primary);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: var(--size-base);
+    line-height: 1.85;
+    max-width: 480px;
+    margin: 0 auto;
+    -webkit-font-smoothing: antialiased;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* ====== COVER ====== */
+.cover-page {
+    min-height: 100vh;
+    background: var(--cover-gradient);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 60px var(--side) 50px;
+    position: relative;
+    overflow: hidden;
+}
+.cover-page::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: var(--cover-accent);
+    opacity: 0.08;
+}
+.cover-page::after {
+    content: '';
+    position: absolute;
+    bottom: 120px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    border: 2px solid var(--cover-accent);
+    opacity: 0.15;
+}
+/* ---- NEW: large decorative circle ---- */
+.cover-circle-big {
+    position: absolute;
+    top: 30px; left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 40px solid var(--cover-accent);
+    opacity: 0.06;
+}
+.cover-top-bar {
+    position: absolute;
+    top: var(--side); left: var(--side); right: var(--side);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cover-genre-tag {
+    background: var(--cover-accent);
+    color: var(--primary);
+    font-size: var(--size-xs);
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+}
+.cover-year { font-size: var(--size-xs); color: rgba(255,255,255,0.35); letter-spacing: 2px; }
+.cover-emoji {
+    font-size: 64px;
+    margin-bottom: 28px;
+    display: block;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+}
+.cover-line {
+    width: 60px; height: 4px;
+    background: var(--cover-accent);
+    border-radius: 2px;
+    margin-bottom: 20px;
+}
+.cover-title {
+    font-family: var(--font-title);
+    font-size: clamp(1.9rem, 6vw, 2.6rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+.cover-subtitle {
+    font-size: var(--size-sm);
+    color: var(--cover-accent);
+    font-style: italic;
+    margin-bottom: 36px;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+.cover-author-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    width: 100%;
+}
+.cover-author-dot {
+    width: 36px; height: 36px;
+    background: var(--cover-accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--primary);
+}
+.cover-author-name {
+    font-size: var(--size-xs);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+}
+
+/* ====== NAV ====== */
+.nav-bar {
+    position: sticky; top: 0;
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 13px var(--side);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+.nav-title {
+    font-family: var(--font-title);
+    font-size: var(--size-xs);
+    color: var(--accent);
+    font-weight: 700;
+}
+.nav-progress-text { font-size: var(--size-xs); color: rgba(255,255,255,0.35); }
+
+/* ====== DESCRIPTION ====== */
+.description-page {
+    padding: var(--gap-xl) var(--side);
+    background: var(--secondary);
+    border-bottom: 3px solid var(--accent);
+}
+.section-label {
+    font-size: var(--size-xs);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: block;
+}
+.description-text {
+    font-size: var(--size-base);
+    line-height: 1.85;
+    color: rgba(255,255,255,0.78);
+    margin-bottom: var(--gap-lg);
+}
+.benefits-list { display: flex; flex-direction: column; gap: 10px; }
+.benefit-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 13px 15px;
+    background: rgba(255,255,255,0.04);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--accent);
+}
+.benefit-check { color: var(--accent); font-weight: 900; font-size: var(--size-lg); flex-shrink: 0; line-height: 1.3; }
+.benefit-text { font-size: var(--size-sm); line-height: 1.6; color: rgba(255,255,255,0.82); }
+
+/* ====== TOC ====== */
+.toc-page { padding: var(--gap-xl) var(--side); background: var(--primary); }
+.page-title {
+    font-family: var(--font-title);
+    font-size: var(--size-2xl);
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: var(--gap-md);
+    line-height: 1.2;
+}
+.toc-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer;
+    transition: padding-left 0.2s;
+}
+.toc-item:hover { padding-left: 8px; }
+.toc-item:hover .toc-arrow { color: var(--accent); }
+.toc-num {
+    font-family: var(--font-title);
+    font-size: var(--size-lg);
+    font-weight: 900;
+    color: var(--accent);
+    min-width: 34px;
+}
+.toc-text { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.toc-title { font-size: var(--size-sm); font-weight: 600; color: #fff; line-height: 1.3; }
+.toc-sub { font-size: var(--size-xs); color: rgba(255,255,255,0.4); }
+.toc-arrow { color: rgba(255,255,255,0.25); font-size: var(--size-base); transition: color 0.2s; flex-shrink: 0; }
+
+/* ====== INTRO ====== */
+.intro-page {
+    padding: var(--gap-xl) var(--side);
+    background: var(--secondary);
+    position: relative;
+}
+.intro-page::before {
+    content: '“';
+    font-family: var(--font-title);
+    font-size: 140px;
+    color: var(--accent);
+    opacity: 0.07;
+    position: absolute;
+    top: 10px; left: 10px;
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* ====== CHAPTERS ====== */
+/* FIX: wrapper prevents blank pages */
+.chapter-wrapper {
+    display: block;
+}
+.chapter {
+    border-bottom: 3px solid var(--accent);
+}
+.chapter-header {
+    background: var(--gradient);
+    padding: var(--gap-xl) var(--side) var(--gap-lg);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.chapter-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.04) 0%, transparent 70%);
+    pointer-events: none;
+}
+.chapter-meta { display: flex; justify-content: center; margin-bottom: 20px; }
+.chapter-number-badge {
+    display: inline-flex; flex-direction: column; align-items: center;
+    background: rgba(255,255,255,0.08);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 8px 22px;
+}
+.ch-label { font-size: 0.6rem; letter-spacing: 4px; color: var(--accent); text-transform: uppercase; }
+.ch-num { font-family: var(--font-title); font-size: 2rem; font-weight: 900; color: #fff; line-height: 1; }
+.chapter-title {
+    font-family: var(--font-title);
+    font-size: var(--size-2xl);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 10px;
+}
+.chapter-subtitle { color: var(--accent); font-size: var(--size-sm); font-style: italic; opacity: 0.88; line-height: 1.5; }
+.chapter-hook {
+    margin: var(--gap-md) var(--side) 0;
+    padding: 18px 20px;
+    border-left: 4px solid var(--accent);
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-style: italic;
+    font-size: var(--size-base);
+    color: rgba(255,255,255,0.75);
+    line-height: 1.75;
+}
+.chapter-body { padding: var(--gap-md) var(--side) var(--gap-lg); }
+/* KEY FIX for blank pages: no page-break-before on body-text */
+.body-text {
+    display: block;
+    font-size: var(--size-base);
+    line-height: 1.9;
+    color: rgba(255,255,255,0.82);
+    margin-bottom: 18px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+.box-label {
+    font-size: var(--size-xs);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+}
+.key-points-box {
+    padding: 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: var(--radius);
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: var(--gap-md);
+}
+.key-points-box .box-label { color: var(--accent); }
+.key-points-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.key-point {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 9px 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    font-size: var(--size-sm);
+    line-height: 1.55;
+    color: rgba(255,255,255,0.85);
+}
+.kp-arrow { color: var(--accent); flex-shrink: 0; font-style: normal; line-height: 1.55; }
+.technique-badge {
+    display: flex; flex-direction: column; gap: 6px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+    border-radius: var(--radius);
+    border: 1px solid var(--accent);
+    margin-bottom: var(--gap-md);
+}
+.technique-label { font-size: var(--size-xs); letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+.technique-name { font-family: var(--font-title); font-size: var(--size-lg); font-weight: 700; color: #fff; line-height: 1.3; }
+.exercises-section {
+    padding: 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--highlight);
+    margin-bottom: var(--gap-md);
+}
+.exercises-section .box-label { color: var(--highlight); }
+.exercises-list { display: flex; flex-direction: column; gap: 12px; }
+.exercise-item { display: flex; gap: 12px; align-items: flex-start; }
+.exercise-num {
+    background: var(--highlight);
+    color: var(--primary);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--size-xs); font-weight: 900;
+    flex-shrink: 0; margin-top: 2px;
+}
+.exercise-item p { font-size: var(--size-sm); line-height: 1.65; color: rgba(255,255,255,0.8); word-break: break-word; }
+.chapter-summary {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 18px 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: var(--radius);
+    margin-bottom: var(--gap-md);
+    font-style: italic;
+}
+.summary-icon { font-size: 1.4rem; flex-shrink: 0; line-height: 1.4; }
+.summary-text { font-size: var(--size-sm); line-height: 1.75; color: rgba(255,255,255,0.88); word-break: break-word; }
+
+/* ====== CONCLUSION / AUTHOR / BACK ====== */
+.conclusion-page { padding: var(--gap-xl) var(--side); background: var(--gradient); }
+.author-page { padding: var(--gap-xl) var(--side); background: var(--secondary); }
+.author-card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 20px; padding: 30px 24px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+.author-avatar {
+    width: 72px; height: 72px;
+    background: var(--gradient);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 18px;
+    border: 3px solid var(--accent);
+}
+.author-name { font-family: var(--font-title); font-size: var(--size-xl); font-weight: 700; color: #fff; margin-bottom: 6px; }
+.author-bio { font-size: var(--size-sm); line-height: 1.8; color: rgba(255,255,255,0.65); margin-top: 12px; word-break: break-word; }
+.back-cover {
+    min-height: 55vh;
+    background: var(--cover-gradient);
+    padding: var(--gap-xl) var(--side);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; gap: 20px;
+    position: relative; overflow: hidden;
+}
+.back-cover-title { font-family: var(--font-title); font-size: var(--size-2xl); font-weight: 900; color: #fff; line-height: 1.2; }
+.back-cover-text { font-size: var(--size-sm); color: rgba(255,255,255,0.75); line-height: 1.75; max-width: 340px; }
+.edition-badge {
+    background: var(--cover-accent); color: var(--primary);
+    font-size: var(--size-sm); font-weight: 900;
+    font-family: var(--font-title);
+    padding: 12px 28px; border-radius: 50px;
+}
+
+/* ====== PROGRESS ====== */
+#reading-progress {
+    position: fixed; top: 0; left: 0;
+    height: 3px; background: var(--accent);
+    z-index: 999; transition: width 0.15s linear; width: 0%;
+}
+
+/* ====== PDF BUTTON ====== */
+.pdf-btn {
+    position: fixed; bottom: 22px; right: 18px;
+    background: var(--accent); color: var(--primary);
+    border: none; border-radius: 50px;
+    padding: 13px 20px; font-size: var(--size-sm);
+    font-weight: 900; cursor: pointer; z-index: 998;
+    display: flex; align-items: center; gap: 7px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+    transition: transform 0.15s;
+    font-family: var(--font-body);
+}
+.pdf-btn:active { transform: scale(0.95); }
+
+/* ====== PRINT ====== */
+@media print {
+    .nav-bar, .pdf-btn, #reading-progress { display: none !important; }
+    body { max-width: 100%; font-size: 11pt; }
+    .cover-page { min-height: 100vh; page-break-after: always; }
+    .body-text { orphans: 3; widows: 3; }
+    /* FIX: only chapters break, not every element */
+    .chapter-wrapper { page-break-before: always; }
+    .chapter-header, .key-points-box, .exercises-section,
+    .chapter-summary, .technique-badge { page-break-inside: avoid; }
+}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<div id="reading-progress"></div>
+
+<section class="cover-page">
+    <div class="cover-circle-big"></div>
+    <div class="cover-top-bar">
+        <span class="cover-genre-tag">✨ Book</span>
+        <span class="cover-year">2026</span>
+    </div>
+    <span class="cover-emoji">✨</span>
+    <div class="cover-line"></div>
+    <h1 class="cover-title">The Shadow Protocol</h1>
+    <p class="cover-subtitle">Transform Your Life in 30 Days by Conquering Your Deepest Fears and Weaknesses</p>
+    <div class="cover-author-row">
+        <div class="cover-author-dot">M</div>
+        <span class="cover-author-name">by MARIA</span>
+    </div>
+</section>
+
+<nav class="nav-bar">
+    <span class="nav-title">The Shadow Protocol</span>
+    <span class="nav-progress-text" id="progress-text">0% read</span>
+</nav>
+
+<section class="description-page">
+    <span class="section-label">About This Book</span>
+    <p class="description-text">Are you tired of feeling stuck and powerless in your life? Do you want to break free from the shackles of social media and the constant noise of the world? The Shadow Protocol is a 30-day journey of self-discovery and transformation that will help you confront your deepest fears and weaknesses, and emerge stronger, more focused, and more determined than ever before. By following this protocol, you will learn how to silence your inner critic, build unshakeable confidence, and unlock your full potential.</p>
+    <span class="section-label">What You Will Learn</span>
+    <div class="benefits-list"><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Develop the mental toughness to overcome any obstacle and achieve your goals</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Build unshakeable confidence and self-trust</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Silence your inner critic and develop a positive self-image</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Unlock your full potential and live a life of purpose and meaning</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Transform your relationships and become a more empathetic and compassionate person</span></div></div>
+</section>
+
+<section class="toc-page">
+    <h2 class="page-title">Table of Contents</h2>
+    <div class="toc-item" onclick="scrollToChapter(1)">
+            <span class="toc-num">01</span>
+            <div class="toc-text">
+                <span class="toc-title">The Darkness Within</span>
+                <span class="toc-sub">Confronting the Shadow Self</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div><div class="toc-item" onclick="scrollToChapter(2)">
+            <span class="toc-num">02</span>
+            <div class="toc-text">
+                <span class="toc-title">The Power of Silence</span>
+                <span class="toc-sub">How to Use Solitude to Fuel Your Growth</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div><div class="toc-item" onclick="scrollToChapter(3)">
+            <span class="toc-num">03</span>
+            <div class="toc-text">
+                <span class="toc-title">The Art of Self-Inquiry</span>
+                <span class="toc-sub">How to Ask Yourself the Right Questions</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div><div class="toc-item" onclick="scrollToChapter(4)">
+            <span class="toc-num">04</span>
+            <div class="toc-text">
+                <span class="toc-title">The Power of Vulnerability</span>
+                <span class="toc-sub">How to Open Yourself Up to Deeper Connections and Growth</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div><div class="toc-item" onclick="scrollToChapter(5)">
+            <span class="toc-num">05</span>
+            <div class="toc-text">
+                <span class="toc-title">The Art of Letting Go</span>
+                <span class="toc-sub">How to Release the Past and Embrace the Present</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div><div class="toc-item" onclick="scrollToChapter(6)">
+            <span class="toc-num">06</span>
+            <div class="toc-text">
+                <span class="toc-title">The Power of Discipline</span>
+                <span class="toc-sub">How to Build Unshakeable Habits and Achieve Your Goals</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div><div class="toc-item" onclick="scrollToChapter(7)">
+            <span class="toc-num">07</span>
+            <div class="toc-text">
+                <span class="toc-title">The Art of Resilience</span>
+                <span class="toc-sub">How to Bounce Back from Adversity and Keep Moving Forward</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div><div class="toc-item" onclick="scrollToChapter(8)">
+            <span class="toc-num">08</span>
+            <div class="toc-text">
+                <span class="toc-title">The Power of Integration</span>
+                <span class="toc-sub">How to Bring It All Together and Create a Life of Purpose and Meaning</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div>
+</section>
+
+<section class="intro-page">
+    <h2 class="page-title">Introduction</h2>
+    <p class="body-text">Welcome to The Shadow Protocol, a 30-day journey of self-discovery and transformation. Over the next 30 days, you'll be guided through a series of exercises, reflections, and challenges designed to help you confront your deepest fears and weaknesses, and emerge stronger, more focused, and more determined than ever before. By following this protocol, you'll learn how to silence your inner critic, build unshakeable confidence, and unlock your full potential. So let's get started on this journey of transformation, and discover the power of the shadow within.</p>
+</section>
+
+
+<div class="chapter-wrapper">
+<section class="chapter" id="chapter-1">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">1</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">The Darkness Within</h2>
+        <p class="chapter-subtitle">Confronting the Shadow Self</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;The most powerful force in the universe is not love, but the human ego, and it's time to confront the darkest corners of your own psyche&rdquo;</div>
+
+    <div class="chapter-body">
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>The concept of the shadow self</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The importance of acknowledging and accepting your flaws</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The role of self-compassion in personal growth</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">The shadow self is the part of our psyche that contains all the qualities we hide from the world, including our darkest fears, desires, and weaknesses. To truly transform our lives, we must confront this shadow self and integrate it into our conscious awareness. This requires a deep level of self-acceptance and compassion, as well as the courage to face our deepest flaws and weaknesses. By acknowledging and accepting our shadow self, we can begin to break free from the constraints of our ego and develop a more authentic and whole sense of self. For example, consider the story of a young woman who struggled with self-doubt and insecurity. By confronting her shadow self and acknowledging her deepest fears, she was able to develop a more compassionate and accepting relationship with herself, and ultimately achieve her goals with greater confidence and ease.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">Shadow Work</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercise 1: Write down your deepest fears and weaknesses, and then imagine yourself accepting and embracing them</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercise 2: Practice self-compassion by writing yourself a letter of kindness and understanding</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">The key to personal growth and transformation lies in confronting and integrating our shadow self, and developing a deeper level of self-acceptance and compassion</p>
+        </div>
+    </div>
+</section>
+</div>
+<div class="chapter-wrapper">
+<section class="chapter" id="chapter-2">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">2</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">The Power of Silence</h2>
+        <p class="chapter-subtitle">How to Use Solitude to Fuel Your Growth</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;In a world that's increasingly addicted to noise and distraction, the most powerful tool for personal growth is silence&rdquo;</div>
+
+    <div class="chapter-body">
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>The importance of solitude in personal growth</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The benefits of meditation and mindfulness</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The role of silence in creative problem-solving</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">Silence is a powerful catalyst for personal growth, as it allows us to tune into our inner world and access our deepest thoughts, feelings, and desires. By incorporating more silence into our daily lives, we can develop greater clarity, focus, and creativity, and make more intentional decisions that align with our values and goals. For example, consider the story of a successful entrepreneur who credits his daily meditation practice with helping him stay focused and motivated, even in the face of intense pressure and competition. By using silence to fuel our growth, we can become more resilient, adaptable, and effective in all areas of our lives.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">Mindfulness Meditation</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercise 1: Commit to a daily meditation practice, starting with just 5 minutes a day</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercise 2: Take a 24-hour silence retreat, where you avoid all forms of media and distraction</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">Silence is a powerful tool for personal growth, and by incorporating more of it into our daily lives, we can develop greater clarity, focus, and creativity</p>
+        </div>
+    </div>
+</section>
+</div>
+<div class="chapter-wrapper">
+<section class="chapter" id="chapter-3">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">3</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">The Art of Self-Inquiry</h2>
+        <p class="chapter-subtitle">How to Ask Yourself the Right Questions</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;The most powerful questions are not the ones we ask others, but the ones we ask ourselves, and it's time to learn the art of self-inquiry&rdquo;</div>
+
+    <div class="chapter-body">
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>The importance of self-inquiry in personal growth</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The benefits of journaling and reflection</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The role of curiosity in creative problem-solving</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">Self-inquiry is the process of asking ourselves questions that help us gain insight, clarity, and understanding of our thoughts, feelings, and behaviors. By learning to ask ourselves the right questions, we can develop greater self-awareness, identify areas for improvement, and make more intentional decisions that align with our values and goals. For example, consider the story of a young artist who used self-inquiry to overcome a creative block and produce some of her most innovative work. By asking herself questions like 'What am I afraid of?' and 'What do I truly desire?', she was able to tap into her deepest sources of inspiration and creativity.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">The 5 Whys</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercise 1: Write down 10 questions you want to ask yourself, and then answer them honestly</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercise 2: Practice journaling by writing down your thoughts, feelings, and insights each day</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">Self-inquiry is a powerful tool for personal growth, and by learning to ask ourselves the right questions, we can develop greater self-awareness and make more intentional decisions</p>
+        </div>
+    </div>
+</section>
+</div>
+<div class="chapter-wrapper">
+<section class="chapter" id="chapter-4">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">4</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">The Power of Vulnerability</h2>
+        <p class="chapter-subtitle">How to Open Yourself Up to Deeper Connections and Growth</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;Vulnerability is not a weakness, but a superpower, and it's time to learn how to harness it&rdquo;</div>
+
+    <div class="chapter-body">
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>The importance of vulnerability in building deep connections</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The benefits of emotional intimacy</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The role of trust in personal growth</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">Vulnerability is the willingness to be open, honest, and authentic with ourselves and others, and it's a key component of building deep and meaningful connections. By learning to be more vulnerable, we can develop greater emotional intelligence, empathy, and compassion, and create more fulfilling and satisfying relationships. For example, consider the story of a couple who used vulnerability to overcome a major conflict and deepen their relationship. By being willing to be open and honest with each other, they were able to build greater trust and understanding, and create a more loving and supportive partnership.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">Radical Honesty</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercise 1: Practice vulnerability by sharing your deepest fears and desires with a trusted friend or partner</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercise 2: Write a letter to someone you trust, expressing your true feelings and intentions</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">Vulnerability is a powerful tool for building deep connections and personal growth, and by learning to be more open and honest, we can create more fulfilling and satisfying relationships</p>
+        </div>
+    </div>
+</section>
+</div>
+<div class="chapter-wrapper">
+<section class="chapter" id="chapter-5">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">5</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">The Art of Letting Go</h2>
+        <p class="chapter-subtitle">How to Release the Past and Embrace the Present</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;The most powerful thing you can do to transform your life is to let go of the past, and it's time to learn the art of release&rdquo;</div>
+
+    <div class="chapter-body">
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>The importance of letting go of the past</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The benefits of forgiveness and acceptance</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The role of mindfulness in staying present</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">Letting go of the past is a powerful act of liberation, as it allows us to release the burdens and weights that hold us back and keep us stuck. By learning to forgive, accept, and release the past, we can develop greater freedom, clarity, and peace of mind, and create a more fulfilling and satisfying present. For example, consider the story of a person who used the art of letting go to overcome a traumatic experience and find greater healing and closure. By releasing the past and embracing the present, they were able to create a more meaningful and purposeful life, and find greater joy and fulfillment.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">The Forgiveness Process</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercise 1: Write down 5 things you're willing to let go of, and then create a ritual to release them</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercise 2: Practice mindfulness by focusing on the present moment, without judgment or distraction</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">Letting go of the past is a powerful act of liberation, and by learning to release and forgive, we can create a more fulfilling and satisfying present</p>
+        </div>
+    </div>
+</section>
+</div>
+<div class="chapter-wrapper">
+<section class="chapter" id="chapter-6">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">6</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">The Power of Discipline</h2>
+        <p class="chapter-subtitle">How to Build Unshakeable Habits and Achieve Your Goals</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;Discipline is not a dirty word, but a powerful tool for achieving success, and it's time to learn how to harness it&rdquo;</div>
+
+    <div class="chapter-body">
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>The importance of discipline in achieving success</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The benefits of building unshakeable habits</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The role of accountability in personal growth</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">Discipline is the ability to consistently take action towards our goals, even when it's hard or uncomfortable. By building unshakeable habits and creating systems of accountability, we can develop greater self-control, motivation, and resilience, and achieve our goals with greater ease and effectiveness. For example, consider the story of a successful athlete who used discipline to train for a major competition. By creating a rigorous training schedule and sticking to it, they were able to build the strength, endurance, and mental toughness needed to win, and achieve their goals with greater confidence and precision.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">The 2-Minute Rule</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercise 1: Identify 3 habits you want to build, and then create a plan to implement them</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercise 2: Find an accountability partner to support and motivate you</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">Discipline is a powerful tool for achieving success, and by building unshakeable habits and creating systems of accountability, we can develop greater self-control and motivation</p>
+        </div>
+    </div>
+</section>
+</div>
+<div class="chapter-wrapper">
+<section class="chapter" id="chapter-7">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">7</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">The Art of Resilience</h2>
+        <p class="chapter-subtitle">How to Bounce Back from Adversity and Keep Moving Forward</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;Resilience is not just about bouncing back from adversity, but about using it as a catalyst for growth, and it's time to learn the art of resilience&rdquo;</div>
+
+    <div class="chapter-body">
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>The importance of resilience in personal growth</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The benefits of learning from failure</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The role of self-care in maintaining emotional well-being</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">Resilience is the ability to bounce back from adversity, and to use it as a catalyst for growth and transformation. By learning to reframe challenges as opportunities, and to prioritize self-care and emotional well-being, we can develop greater resilience, adaptability, and creativity, and achieve our goals with greater ease and effectiveness. For example, consider the story of a person who used resilience to overcome a major setback and achieve greater success. By learning to reframe their challenges and prioritize their own well-being, they were able to create a more fulfilling and satisfying life, and achieve their goals with greater confidence and precision.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">The 3Rs of Resilience</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercise 1: Write down 3 challenges you're currently facing, and then reframe them as opportunities for growth</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercise 2: Practice self-care by prioritizing your physical, emotional, and mental well-being</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">Resilience is a powerful tool for personal growth, and by learning to reframe challenges and prioritize self-care, we can develop greater adaptability and creativity</p>
+        </div>
+    </div>
+</section>
+</div>
+<div class="chapter-wrapper">
+<section class="chapter" id="chapter-8">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">8</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">The Power of Integration</h2>
+        <p class="chapter-subtitle">How to Bring It All Together and Create a Life of Purpose and Meaning</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;The most powerful thing you can do to transform your life is to integrate all the lessons and insights you've gained, and it's time to learn the power of integration&rdquo;</div>
+
+    <div class="chapter-body">
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>The importance of integration in personal growth</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The benefits of creating a life of purpose and meaning</span></li><li class="key-point"><span class="kp-arrow">→</span><span>The role of reflection and evaluation in maintaining momentum</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">Integration is the process of bringing together all the lessons and insights we've gained, and using them to create a life of purpose and meaning. By reflecting on our experiences, evaluating our progress, and making intentional decisions about our values and goals, we can develop greater clarity, direction, and motivation, and create a more fulfilling and satisfying life. For example, consider the story of a person who used integration to create a life of purpose and meaning. By reflecting on their values and goals, and making intentional decisions about their priorities and actions, they were able to create a more fulfilling and satisfying life, and achieve their goals with greater confidence and precision.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">The Integration Process</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercise 1: Write down 5 key insights you've gained from your journey, and then reflect on how to integrate them into your life</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercise 2: Evaluate your progress and create a plan to maintain momentum and continue growing</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">Integration is a powerful tool for personal growth, and by reflecting on our experiences and making intentional decisions, we can create a life of purpose and meaning</p>
+        </div>
+    </div>
+</section>
+</div>
+
+<section class="conclusion-page">
+    <h2 class="page-title">Conclusion</h2>
+    <p class="body-text">Congratulations on completing The Shadow Protocol! Over the past 30 days, you've confronted your deepest fears and weaknesses, and emerged stronger, more focused, and more determined than ever before. You've learned how to silence your inner critic, build unshakeable confidence, and unlock your full potential. Remember, the journey of self-discovery and transformation is a lifelong path, and it's up to you to continue growing, learning, and evolving. So take the lessons and insights you've gained, and use them to create a life of purpose and meaning. You got this!</p>
+</section>
+
+<section class="author-page">
+    <h2 class="page-title">About the Author</h2>
+    <div class="author-card">
+        <div class="author-avatar">✨</div>
+        <p class="author-name">MARIA</p>
+        <p class="author-bio">Aurum Grey is a renowned expert in the field of personal growth and transformation. With a background in psychology and philosophy, Aurum has spent years studying the human condition, and developing practical tools and techniques for overcoming fear, building confidence, and achieving success. Aurum's work has been featured in numerous publications and media outlets, and has helped thousands of people around the world to transform their lives and achieve their goals.</p>
+    </div>
+</section>
+
+<section class="back-cover">
+    <h2 class="back-cover-title">The Shadow Protocol</h2>
+    <p class="back-cover-text">Disappear from the world for 30 days and re-emerge as an unstoppable force of nature</p>
+    <div class="edition-badge">✦ Professional Edition 2026</div>
+</section>
+
+<button class="pdf-btn" id="pdf-btn" onclick="downloadPDF()">📥 Download PDF</button>
+
+<script>
+window.addEventListener('scroll', () => {
+    const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+    document.getElementById('reading-progress').style.width = pct.toFixed(1) + '%';
+    document.getElementById('progress-text').textContent = Math.round(pct) + '% read';
+});
+function scrollToChapter(num) {
+    const el = document.getElementById('chapter-' + num);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+async function downloadPDF() {
+    const btn = document.getElementById('pdf-btn');
+    btn.style.opacity = '0.6';
+    btn.textContent = '⏳ Preparing...';
+    ['pdf-btn','reading-progress'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display='none';
+    });
+    document.querySelector('.nav-bar').style.display = 'none';
+    const title = document.querySelector('.cover-title')?.textContent || 'book';
+    const safeName = title.replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'_').substring(0,50);
+    const opt = {
+        margin: 0,
+        filename: safeName + '.pdf',
+        image: { type: 'jpeg', quality: 0.92 },
+        html2canvas: {
+            scale: 2, useCORS: true,
+            backgroundColor: '#1e1b4b',
+            logging: false, letterRendering: true,
+            /* FIX blank pages: windowWidth matches body max-width */
+            windowWidth: 480
+        },
+        jsPDF: {
+            unit: 'mm',
+            format: [120, 213],
+            orientation: 'portrait'
+        },
+        /* FIX: use 'legacy' mode — avoids phantom blank pages from css/avoid-all */
+        pagebreak: { mode: 'legacy' }
+    };
+    try {
+        await html2pdf().set(opt).from(document.body).save();
+    } catch(e) {
+        window.print();
+    } finally {
+        ['pdf-btn','reading-progress'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.style.display='';
+        });
+        document.querySelector('.nav-bar').style.display = 'flex';
+        btn.style.opacity = '1';
+        btn.innerHTML = '📥 Download PDF';
+    }
+}
+</script>
+</body>
+</html>
