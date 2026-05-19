@@ -7,15 +7,20 @@ on:
         description: '📖 Book Title (e.g: "How to Build Wealth in 30 Days")'
         required: true
         type: string
+      author_name:
+        description: '✍️ Author Name (e.g: Maria, John Doe)'
+        required: false
+        default: 'Maria'
+        type: string
       language:
         description: '🌍 Language'
         required: true
-        default: 'en'
+        default: 'fr'
         type: choice
         options:
+          - fr
           - en
           - ar
-          - fr
           - es
           - de
           - pt
@@ -59,6 +64,7 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           BOOK_TITLE: ${{ github.event.inputs.book_title }}
           BOOK_LANGUAGE: ${{ github.event.inputs.language }}
+          BOOK_AUTHOR: ${{ github.event.inputs.author_name }}
           ACTION: ${{ github.event.inputs.action }}
         run: |
           python generate_book.py
