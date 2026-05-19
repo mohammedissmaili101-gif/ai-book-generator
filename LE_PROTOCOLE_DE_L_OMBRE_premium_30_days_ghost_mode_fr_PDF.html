@@ -69,7 +69,6 @@ body {
     border: 2px solid var(--cover-accent);
     opacity: 0.15;
 }
-/* ---- NEW: large decorative circle ---- */
 .cover-circle-big {
     position: absolute;
     top: 30px; left: 50%;
@@ -217,10 +216,7 @@ body {
     padding: 14px 0;
     border-bottom: 1px solid rgba(255,255,255,0.06);
     cursor: pointer;
-    transition: padding-left 0.2s;
 }
-.toc-item:hover { padding-left: 8px; }
-.toc-item:hover .toc-arrow { color: var(--accent); }
 .toc-num {
     font-family: var(--font-title);
     font-size: var(--size-lg);
@@ -231,7 +227,7 @@ body {
 .toc-text { flex: 1; display: flex; flex-direction: column; gap: 3px; }
 .toc-title { font-size: var(--size-sm); font-weight: 600; color: #fff; line-height: 1.3; }
 .toc-sub { font-size: var(--size-xs); color: rgba(255,255,255,0.4); }
-.toc-arrow { color: rgba(255,255,255,0.25); font-size: var(--size-base); transition: color 0.2s; flex-shrink: 0; }
+.toc-arrow { color: rgba(255,255,255,0.25); font-size: var(--size-base); flex-shrink: 0; }
 
 /* ====== INTRO ====== */
 .intro-page {
@@ -239,22 +235,11 @@ body {
     background: var(--secondary);
     position: relative;
 }
-.intro-page::before {
-    content: '“';
-    font-family: var(--font-title);
-    font-size: 140px;
-    color: var(--accent);
-    opacity: 0.07;
-    position: absolute;
-    top: 10px; left: 10px;
-    line-height: 1;
-    pointer-events: none;
-}
 
 /* ====== CHAPTERS ====== */
-/* FIX: wrapper prevents blank pages */
 .chapter-wrapper {
     display: block;
+    position: relative;
 }
 .chapter {
     border-bottom: 3px solid var(--accent);
@@ -265,12 +250,6 @@ body {
     text-align: center;
     position: relative;
     overflow: hidden;
-}
-.chapter-header::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.04) 0%, transparent 70%);
-    pointer-events: none;
 }
 .chapter-meta { display: flex; justify-content: center; margin-bottom: 20px; }
 .chapter-number-badge {
@@ -296,14 +275,12 @@ body {
     padding: 18px 20px;
     border-left: 4px solid var(--accent);
     background: rgba(255,255,255,0.03);
-    border-radius: 0 var(--radius) var(--radius) 0;
     font-style: italic;
     font-size: var(--size-base);
     color: rgba(255,255,255,0.75);
     line-height: 1.75;
 }
 .chapter-body { padding: var(--gap-md) var(--side) var(--gap-lg); }
-/* KEY FIX for blank pages: no page-break-before on body-text */
 .body-text {
     display: block;
     font-size: var(--size-base);
@@ -312,7 +289,6 @@ body {
     margin-bottom: 18px;
     word-break: break-word;
     overflow-wrap: break-word;
-    hyphens: auto;
 }
 .box-label {
     font-size: var(--size-xs);
@@ -339,7 +315,7 @@ body {
     line-height: 1.55;
     color: rgba(255,255,255,0.85);
 }
-.kp-arrow { color: var(--accent); flex-shrink: 0; font-style: normal; line-height: 1.55; }
+.kp-arrow { color: var(--accent); flex-shrink: 0; }
 .technique-badge {
     display: flex; flex-direction: column; gap: 6px;
     padding: 16px 18px;
@@ -369,7 +345,7 @@ body {
     font-size: var(--size-xs); font-weight: 900;
     flex-shrink: 0; margin-top: 2px;
 }
-.exercise-item p { font-size: var(--size-sm); line-height: 1.65; color: rgba(255,255,255,0.8); word-break: break-word; }
+.exercise-item p { font-size: var(--size-sm); line-height: 1.65; color: rgba(255,255,255,0.8); }
 .chapter-summary {
     display: flex; gap: 14px; align-items: flex-start;
     padding: 18px 20px;
@@ -378,8 +354,8 @@ body {
     margin-bottom: var(--gap-md);
     font-style: italic;
 }
-.summary-icon { font-size: 1.4rem; flex-shrink: 0; line-height: 1.4; }
-.summary-text { font-size: var(--size-sm); line-height: 1.75; color: rgba(255,255,255,0.88); word-break: break-word; }
+.summary-icon { font-size: 1.4rem; flex-shrink: 0; }
+.summary-text { font-size: var(--size-sm); line-height: 1.75; color: rgba(255,255,255,0.88); }
 
 /* ====== CONCLUSION / AUTHOR / BACK ====== */
 .conclusion-page { padding: var(--gap-xl) var(--side); background: var(--gradient); }
@@ -400,7 +376,7 @@ body {
     border: 3px solid var(--accent);
 }
 .author-name { font-family: var(--font-title); font-size: var(--size-xl); font-weight: 700; color: #fff; margin-bottom: 6px; }
-.author-bio { font-size: var(--size-sm); line-height: 1.8; color: rgba(255,255,255,0.65); margin-top: 12px; word-break: break-word; }
+.author-bio { font-size: var(--size-sm); line-height: 1.8; color: rgba(255,255,255,0.65); margin-top: 12px; }
 .back-cover {
     min-height: 55vh;
     background: var(--cover-gradient);
@@ -440,16 +416,23 @@ body {
 }
 .pdf-btn:active { transform: scale(0.95); }
 
-/* ====== PRINT ====== */
+/* ====== CRITICAL RESOLUTION FOR BLANK PAGES & CLIPPING ====== */
+.page-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 10px !important;
+}
+
 @media print {
     .nav-bar, .pdf-btn, #reading-progress { display: none !important; }
-    body { max-width: 100%; font-size: 11pt; }
-    .cover-page { min-height: 100vh; page-break-after: always; }
-    .body-text { orphans: 3; widows: 3; }
-    /* FIX: only chapters break, not every element */
-    .chapter-wrapper { page-break-before: always; }
-    .chapter-header, .key-points-box, .exercises-section,
-    .chapter-summary, .technique-badge { page-break-inside: avoid; }
+    body { max-width: 100% !important; width: 100% !important; font-size: 11pt; background: var(--primary) !important; }
+    .cover-page, .description-page, .toc-page, .intro-page, .chapter-wrapper, .conclusion-page, .author-page, .back-cover {
+        page-break-after: always !important;
+        break-after: always !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
 }
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -470,7 +453,7 @@ body {
     <span class="cover-emoji">🤖</span>
     <div class="cover-line"></div>
     <h1 class="cover-title">LE PROTOCOLE DE L'OMBRE</h1>
-    <p class="cover-subtitle">30 jours de conditionnement mental et de discipline stoïque pour les jeunes adultes</p>
+    <p class="cover-subtitle">30 jours de conditionnement mental et de discipline stoïcienne pour les jeunes adultes</p>
     <div class="cover-author-row">
         <div class="cover-author-dot">M</div>
         <span class="cover-author-name">by Maria</span>
@@ -482,81 +465,81 @@ body {
     <span class="nav-progress-text" id="progress-text">0% read</span>
 </nav>
 
-<section class="description-page">
+<section class="description-page page-break">
     <span class="section-label">About This Book</span>
-    <p class="description-text">Vous vous sentez perdu et sans direction ? Vous avez l'impression de ne pas atteindre votre plein potentiel ? Le Protocole de l'Ombre est là pour vous aider à sortir de l'ombre et à devenir la personne que vous avez toujours voulu être. Pendant 30 jours, vous suivrez un programme de conditionnement mental et de discipline stoïque pour développer la confiance en vous, améliorer votre concentration et atteindre vos objectifs. Avec des exercices pratiques et des conseils personnalisés, vous serez en mesure de surmonter vos peurs et vos doutes et de devenir la meilleure version de vous-même.</p>
+    <p class="description-text">Vous vous sentez perdu et sans direction ? Vous avez l'impression de vivre dans l'ombre de vos rêves ? Ce livre est conçu pour vous aider à sortir de cette zone de confort et à devenir la personne que vous avez toujours voulu être. En 30 jours, vous apprendrez à développer une mentalité gagnante, à surmonter vos peurs et à atteindre vos objectifs. Vous découvrirez les secrets de la discipline stoïcienne et de la conditionnement mental pour devenir la meilleure version de vous-même.</p>
     <span class="section-label">What You Will Learn</span>
-    <div class="benefits-list"><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Développer la confiance en vous en 30 jours</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Améliorer votre concentration et votre capacité à atteindre vos objectifs</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Surmonter vos peurs et vos doutes</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Devenir la meilleure version de vous-même</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Apprendre des techniques de conditionnement mental et de discipline stoïque pour améliorer votre vie</span></div></div>
+    <div class="benefits-list"><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Développez une mentalité gagnante en 30 jours</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Apprenez à surmonter vos peurs et à atteindre vos objectifs</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Découvrez les secrets de la discipline stoïcienne pour améliorer votre vie</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Améliorez votre confiance en vous et votre estime de soi</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Devenez la meilleure version de vous-même</span></div></div>
 </section>
 
-<section class="toc-page">
+<section class="toc-page page-break">
     <h2 class="page-title">Table of Contents</h2>
     <div class="toc-item" onclick="scrollToChapter(1)">
             <span class="toc-num">01</span>
             <div class="toc-text">
-                <span class="toc-title">Le Pouvoir de l'Ombre</span>
-                <span class="toc-sub">Comprendre l'importance de l'ombre dans votre vie</span>
+                <span class="toc-title">La découverte de l'ombre</span>
+                <span class="toc-sub">Comprendre les origines de vos peurs et de vos doutes</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(2)">
             <span class="toc-num">02</span>
             <div class="toc-text">
-                <span class="toc-title">La Discipline Stoïque</span>
+                <span class="toc-title">La discipline stoïcienne</span>
                 <span class="toc-sub">Apprendre à contrôler vos émotions et vos pensées</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(3)">
             <span class="toc-num">03</span>
             <div class="toc-text">
-                <span class="toc-title">Le Conditionnement Mental</span>
-                <span class="toc-sub">Apprendre à programmer votre esprit pour le succès</span>
+                <span class="toc-title">La conditionnement mental</span>
+                <span class="toc-sub">Apprendre à développer une mentalité gagnante</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(4)">
             <span class="toc-num">04</span>
             <div class="toc-text">
-                <span class="toc-title">La Puissance de la Concentration</span>
-                <span class="toc-sub">Apprendre à se concentrer pour atteindre vos objectifs</span>
+                <span class="toc-title">La gestion du stress</span>
+                <span class="toc-sub">Apprendre à gérer vos émotions et vos pensées</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(5)">
             <span class="toc-num">05</span>
             <div class="toc-text">
-                <span class="toc-title">La Gestion des Émotions</span>
-                <span class="toc-sub">Apprendre à gérer vos émotions pour atteindre vos objectifs</span>
+                <span class="toc-title">La motivation</span>
+                <span class="toc-sub">Apprendre à trouver votre motivation et à la maintenir</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(6)">
             <span class="toc-num">06</span>
             <div class="toc-text">
-                <span class="toc-title">La Discipline de l'Action</span>
-                <span class="toc-sub">Apprendre à agir pour atteindre vos objectifs</span>
+                <span class="toc-title">La créativité</span>
+                <span class="toc-sub">Apprendre à développer votre créativité et à la utiliser pour atteindre vos objectifs</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(7)">
             <span class="toc-num">07</span>
             <div class="toc-text">
-                <span class="toc-title">La Puissance de la Réflexion</span>
-                <span class="toc-sub">Apprendre à réfléchir pour atteindre vos objectifs</span>
+                <span class="toc-title">La résilience</span>
+                <span class="toc-sub">Apprendre à développer votre résilience et à surmonter les obstacles</span>
             </div>
             <span class="toc-arrow">→</span>
         </div><div class="toc-item" onclick="scrollToChapter(8)">
             <span class="toc-num">08</span>
             <div class="toc-text">
-                <span class="toc-title">La Victoire sur Soi-Même</span>
-                <span class="toc-sub">Apprendre à vaincre vos peurs et vos doutes</span>
+                <span class="toc-title">La mise en pratique</span>
+                <span class="toc-sub">Apprendre à mettre en pratique vos nouvelles compétences et à atteindre vos objectifs</span>
             </div>
             <span class="toc-arrow">→</span>
         </div>
 </section>
 
-<section class="intro-page">
+<section class="intro-page page-break">
     <h2 class="page-title">Introduction</h2>
-    <p class="body-text">Bienvenue dans le Protocole de l'Ombre ! Dans les prochains 30 jours, vous allez apprendre à développer la confiance en vous et à atteindre vos objectifs. Vous allez découvrir les secrets de la discipline stoïque, du conditionnement mental et de la concentration pour devenir la meilleure version de vous-même. Vous allez également apprendre à gérer vos émotions, à agir pour atteindre vos objectifs et à réfléchir pour améliorer votre confiance en vous. Alors, prêt à commencer ?</p>
+    <p class="body-text">Bienvenue dans ce livre qui va vous aider à atteindre vos objectifs et à devenir la meilleure version de vous-même. Dans les prochains chapitres, nous allons explorer les principes de la conditionnement mental, de la discipline stoïcienne et de la motivation. Nous allons apprendre à développer une mentalité gagnante, à gérer notre stress et à trouver notre motivation. Nous allons également apprendre à mettre en pratique nos nouvelles compétences et à atteindre nos objectifs. Ce livre est conçu pour vous aider à atteindre vos objectifs et à devenir la personne que vous avez toujours voulu être.</p>
 </section>
 
 
-<div class="chapter-wrapper">
+<div class="chapter-wrapper page-break">
 <section class="chapter" id="chapter-1">
     <div class="chapter-header">
         <div class="chapter-meta">
@@ -565,25 +548,25 @@ body {
                 <span class="ch-num">1</span>
             </div>
         </div>
-        <h2 class="chapter-title">Le Pouvoir de l'Ombre</h2>
-        <p class="chapter-subtitle">Comprendre l'importance de l'ombre dans votre vie</p>
+        <h2 class="chapter-title">La découverte de l'ombre</h2>
+        <p class="chapter-subtitle">Comprendre les origines de vos peurs et de vos doutes</p>
     </div>
 
-    <div class="chapter-hook">&ldquo;Savez-vous que l'ombre est la partie la plus puissante de votre personnalité ?&rdquo;</div>
+    <div class="chapter-hook">&ldquo;Vous savez que vous avez un potentiel immense, mais vous ne savez pas comment l'exploiter&rdquo;</div>
 
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>L'ombre est la partie inconsciente de votre personnalité</span></li><li class="key-point"><span class="kp-arrow">→</span><span>L'ombre contient vos peurs et vos doutes</span></li><li class="key-point"><span class="kp-arrow">→</span><span>L'ombre est la clé pour développer la confiance en vous</span></li></ul>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les origines de vos peurs</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Identifier vos doutes</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir votre potentiel</span></li></ul>
         </div>
 
         <div class="chapter-content">
-            <p class="body-text">L'ombre est la partie de votre personnalité que vous cachez aux autres et à vous-même. Mais savez-vous que l'ombre est également la partie la plus puissante de votre personnalité ? En comprenant l'importance de l'ombre, vous pourrez développer la confiance en vous et atteindre vos objectifs. Dans ce chapitre, nous allons explorer les différentes facettes de l'ombre et comment elles impactent votre vie. Nous allons également vous donner des exercices pratiques pour commencer à travailler avec votre ombre.</p>
+            <p class="body-text">Vous avez toujours rêvé de réussir, mais vous avez peur de l'échec. Vous vous sentez perdu et sans direction. Mais qu'est-ce qui vous empêche de réaliser vos rêves ? C'est souvent vos peurs et vos douts qui vous tiennent en arrière. Dans ce chapitre, nous allons explorer les origines de vos peurs et de vos doutes. Nous allons découvrir comment ils se sont développés et comment ils vous empêchent de réaliser vos objectifs. Nous allons également découvrir votre potentiel et comment l'exploiter. Nous allons utiliser la technique de la réflexion introspective pour comprendre vos pensées et vos émotions. Nous allons également utiliser des exercices pratiques pour vous aider à surmonter vos peurs et à atteindre vos objectifs.</p>
         </div>
 
         <div class="technique-badge">
             <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La technique de l'ombre</span>
+            <span class="technique-name">La réflexion introspective</span>
         </div>
 
         <div class="exercises-section">
@@ -593,18 +576,18 @@ body {
                     <p>Exercice 1 : Écrivez vos peurs et vos doutes sur un papier</p>
                 </div><div class="exercise-item">
                     <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Faites une liste de vos qualités et de vos forces</p>
+                    <p>Exercice 2 : Réfléchissez à vos pensées et à vos émotions</p>
                 </div></div>
         </div>
 
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">L'ombre est la partie la plus puissante de votre personnalité et la clé pour développer la confiance en vous</p>
+            <p class="summary-text">La découverte de l'ombre est le premier pas vers la liberté</p>
         </div>
     </div>
 </section>
 </div>
-<div class="chapter-wrapper">
+<div class="chapter-wrapper page-break">
 <section class="chapter" id="chapter-2">
     <div class="chapter-header">
         <div class="chapter-meta">
@@ -613,46 +596,46 @@ body {
                 <span class="ch-num">2</span>
             </div>
         </div>
-        <h2 class="chapter-title">La Discipline Stoïque</h2>
+        <h2 class="chapter-title">La discipline stoïcienne</h2>
         <p class="chapter-subtitle">Apprendre à contrôler vos émotions et vos pensées</p>
     </div>
 
-    <div class="chapter-hook">&ldquo;Savez-vous que les stoïciens étaient capables de contrôler leurs émotions et leurs pensées ?&rdquo;</div>
+    <div class="chapter-hook">&ldquo;Les stoïciens étaient connus pour leur capacité à contrôler leurs émotions et leurs pensées&rdquo;</div>
 
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>La discipline stoïque est une philosophie de vie</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La discipline stoïque vous aide à contrôler vos émotions et vos pensées</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La discipline stoïque vous donne la force de persévérer</span></li></ul>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les principes de la discipline stoïcienne</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à contrôler vos émotions</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de la pensée positive</span></li></ul>
         </div>
 
         <div class="chapter-content">
-            <p class="body-text">La discipline stoïque est une philosophie de vie qui vous aide à contrôler vos émotions et vos pensées. En apprenant à contrôler vos émotions et vos pensées, vous pourrez développer la confiance en vous et atteindre vos objectifs. Dans ce chapitre, nous allons explorer les principes de la discipline stoïque et comment les appliquer dans votre vie. Nous allons également vous donner des exercices pratiques pour commencer à travailler avec la discipline stoïque.</p>
+            <p class="body-text">Les stoïciens étaient des maîtres de la discipline mentale. Ils savaient comment contrôler leurs émotions et leurs pensées pour atteindre leurs objectifs. Dans ce chapitre, nous allons explorer les principes de la discipline stoïcienne. Nous allons apprendre à contrôler nos émotions et nos pensées pour atteindre nos objectifs. Nous allons utiliser la technique de la méditation pour calmer notre esprit et nous concentrer sur nos objectifs. Nous allons également utiliser des exercices pratiques pour vous aider à développer une mentalité positive.</p>
         </div>
 
         <div class="technique-badge">
             <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La technique de la résistance</span>
+            <span class="technique-name">La méditation</span>
         </div>
 
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
             <div class="exercises-list"><div class="exercise-item">
                     <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Faites une liste de vos émotions et de vos pensées négatives</p>
+                    <p>Exercice 1 : Pratiquez la méditation pendant 10 minutes par jour</p>
                 </div><div class="exercise-item">
                     <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Pratiquez la méditation pour contrôler vos émotions et vos pensées</p>
+                    <p>Exercice 2 : Écrivez vos pensées positives sur un journal</p>
                 </div></div>
         </div>
 
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La discipline stoïque vous aide à contrôler vos émotions et vos pensées et à développer la confiance en vous</p>
+            <p class="summary-text">La discipline stoïcienne est la clé pour contrôler vos émotions et vos pensées</p>
         </div>
     </div>
 </section>
 </div>
-<div class="chapter-wrapper">
+<div class="chapter-wrapper page-break">
 <section class="chapter" id="chapter-3">
     <div class="chapter-header">
         <div class="chapter-meta">
@@ -661,46 +644,46 @@ body {
                 <span class="ch-num">3</span>
             </div>
         </div>
-        <h2 class="chapter-title">Le Conditionnement Mental</h2>
-        <p class="chapter-subtitle">Apprendre à programmer votre esprit pour le succès</p>
+        <h2 class="chapter-title">La conditionnement mental</h2>
+        <p class="chapter-subtitle">Apprendre à développer une mentalité gagnante</p>
     </div>
 
-    <div class="chapter-hook">&ldquo;Savez-vous que votre esprit est comme un ordinateur qui peut être programmé pour le succès ?&rdquo;</div>
+    <div class="chapter-hook">&ldquo;Les champions sont ceux qui ont une mentalité gagnante&rdquo;</div>
 
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Le conditionnement mental est une technique pour programmer votre esprit</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Le conditionnement mental vous aide à développer la confiance en vous</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Le conditionnement mental vous donne la force de persévérer</span></li></ul>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les principes de la conditionnement mental</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à développer une mentalité gagnante</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de l'autosuggestion</span></li></ul>
         </div>
 
         <div class="chapter-content">
-            <p class="body-text">Le conditionnement mental est une technique pour programmer votre esprit pour le succès. En apprenant à programmer votre esprit, vous pourrez développer la confiance en vous et atteindre vos objectifs. Dans ce chapitre, nous allons explorer les principes du conditionnement mental et comment les appliquer dans votre vie. Nous allons également vous donner des exercices pratiques pour commencer à travailler avec le conditionnement mental.</p>
+            <p class="body-text">Les champions sont ceux qui ont une mentalité gagnante. Ils savent comment développer une mentalité positive et comment utiliser l'autosuggestion pour atteindre leurs objectifs. Dans ce chapitre, nous allons explorer les principes de la conditionnement mental. Nous allons apprendre à développer une mentalité gagnante et à utiliser l'autosuggestion pour atteindre nos objectifs. Nous allons utiliser la technique de l'affirmation pour renforcer notre mentalité positive. Nous allons également utiliser des exercices pratiques pour vous aider à développer une mentalité gagnante.</p>
         </div>
 
         <div class="technique-badge">
             <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La technique de l'affirmation</span>
+            <span class="technique-name">L'affirmation</span>
         </div>
 
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
             <div class="exercises-list"><div class="exercise-item">
                     <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Écrivez des affirmations positives pour vous-même</p>
+                    <p>Exercice 1 : Écrivez vos affirmations positives sur un papier</p>
                 </div><div class="exercise-item">
                     <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Pratiquez la visualisation pour programmer votre esprit</p>
+                    <p>Exercice 2 : Répétez vos affirmations pendant 10 minutes par jour</p>
                 </div></div>
         </div>
 
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">Le conditionnement mental vous aide à programmer votre esprit pour le succès et à développer la confiance en vous</p>
+            <p class="summary-text">La conditionnement mental est la clé pour développer une mentalité gagnante</p>
         </div>
     </div>
 </section>
 </div>
-<div class="chapter-wrapper">
+<div class="chapter-wrapper page-break">
 <section class="chapter" id="chapter-4">
     <div class="chapter-header">
         <div class="chapter-meta">
@@ -709,46 +692,46 @@ body {
                 <span class="ch-num">4</span>
             </div>
         </div>
-        <h2 class="chapter-title">La Puissance de la Concentration</h2>
-        <p class="chapter-subtitle">Apprendre à se concentrer pour atteindre vos objectifs</p>
+        <h2 class="chapter-title">La gestion du stress</h2>
+        <p class="chapter-subtitle">Apprendre à gérer vos émotions et vos pensées</p>
     </div>
 
-    <div class="chapter-hook">&ldquo;Savez-vous que la concentration est la clé pour atteindre vos objectifs ?&rdquo;</div>
+    <div class="chapter-hook">&ldquo;Le stress est un des principaux facteurs de l'échec&rdquo;</div>
 
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>La concentration est la clé pour atteindre vos objectifs</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La concentration vous aide à développer la confiance en vous</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La concentration vous donne la force de persévérer</span></li></ul>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les causes du stress</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à gérer vos émotions et vos pensées</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de la respiration profonde</span></li></ul>
         </div>
 
         <div class="chapter-content">
-            <p class="body-text">La concentration est la clé pour atteindre vos objectifs. En apprenant à vous concentrer, vous pourrez développer la confiance en vous et atteindre vos objectifs. Dans ce chapitre, nous allons explorer les principes de la concentration et comment les appliquer dans votre vie. Nous allons également vous donner des exercices pratiques pour commencer à travailler avec la concentration.</p>
+            <p class="body-text">Le stress est un des principaux facteurs de l'échec. Il peut vous empêcher de réaliser vos rêves et de atteindre vos objectifs. Dans ce chapitre, nous allons explorer les causes du stress et les moyens de le gérer. Nous allons apprendre à gérer nos émotions et nos pensées pour réduire le stress. Nous allons utiliser la technique de la respiration profonde pour calmer notre esprit et nous concentrer sur nos objectifs. Nous allons également utiliser des exercices pratiques pour vous aider à gérer votre stress.</p>
         </div>
 
         <div class="technique-badge">
             <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La technique de la focalisation</span>
+            <span class="technique-name">La respiration profonde</span>
         </div>
 
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
             <div class="exercises-list"><div class="exercise-item">
                     <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Faites une liste de vos objectifs et de vos priorités</p>
+                    <p>Exercice 1 : Pratiquez la respiration profonde pendant 10 minutes par jour</p>
                 </div><div class="exercise-item">
                     <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Pratiquez la méditation pour améliorer votre concentration</p>
+                    <p>Exercice 2 : Écrivez vos pensées et vos émotions sur un journal</p>
                 </div></div>
         </div>
 
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La concentration vous aide à atteindre vos objectifs et à développer la confiance en vous</p>
+            <p class="summary-text">La gestion du stress est la clé pour atteindre vos objectifs</p>
         </div>
     </div>
 </section>
 </div>
-<div class="chapter-wrapper">
+<div class="chapter-wrapper page-break">
 <section class="chapter" id="chapter-5">
     <div class="chapter-header">
         <div class="chapter-meta">
@@ -757,46 +740,46 @@ body {
                 <span class="ch-num">5</span>
             </div>
         </div>
-        <h2 class="chapter-title">La Gestion des Émotions</h2>
-        <p class="chapter-subtitle">Apprendre à gérer vos émotions pour atteindre vos objectifs</p>
+        <h2 class="chapter-title">La motivation</h2>
+        <p class="chapter-subtitle">Apprendre à trouver votre motivation et à la maintenir</p>
     </div>
 
-    <div class="chapter-hook">&ldquo;Savez-vous que les émotions peuvent être un obstacle pour atteindre vos objectifs ?&rdquo;</div>
+    <div class="chapter-hook">&ldquo;La motivation est la clé pour atteindre vos objectifs&rdquo;</div>
 
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Les émotions peuvent être un obstacle pour atteindre vos objectifs</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La gestion des émotions vous aide à développer la confiance en vous</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La gestion des émotions vous donne la force de persévérer</span></li></ul>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les sources de la motivation</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à trouver votre motivation</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de la récompense</span></li></ul>
         </div>
 
         <div class="chapter-content">
-            <p class="body-text">Les émotions peuvent être un obstacle pour atteindre vos objectifs. En apprenant à gérer vos émotions, vous pourrez développer la confiance en vous et atteindre vos objectifs. Dans ce chapitre, nous allons explorer les principes de la gestion des émotions et comment les appliquer dans votre vie. Nous allons également vous donner des exercices pratiques pour commencer à travailler avec la gestion des émotions.</p>
+            <p class="body-text">La motivation est la clé pour atteindre vos objectifs. Mais comment trouver et maintenir la motivation ? Dans ce chapitre, nous allons explorer les sources de la motivation et les moyens de la trouver. Nous allons apprendre à trouver notre motivation et à la maintenir. Nous allons utiliser la technique de la récompense pour renforcer notre motivation. Nous allons également utiliser des exercices pratiques pour vous aider à trouver et à maintenir votre motivation.</p>
         </div>
 
         <div class="technique-badge">
             <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La technique de la reconnaissance des émotions</span>
+            <span class="technique-name">La récompense</span>
         </div>
 
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
             <div class="exercises-list"><div class="exercise-item">
                     <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Faites une liste de vos émotions et de vos réactions</p>
+                    <p>Exercice 1 : Écrivez vos objectifs et vos récompenses sur un papier</p>
                 </div><div class="exercise-item">
                     <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Pratiquez la respiration profonde pour gérer vos émotions</p>
+                    <p>Exercice 2 : Créez un système de récompense pour vous-même</p>
                 </div></div>
         </div>
 
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La gestion des émotions vous aide à atteindre vos objectifs et à développer la confiance en vous</p>
+            <p class="summary-text">La motivation est la clé pour atteindre vos objectifs</p>
         </div>
     </div>
 </section>
 </div>
-<div class="chapter-wrapper">
+<div class="chapter-wrapper page-break">
 <section class="chapter" id="chapter-6">
     <div class="chapter-header">
         <div class="chapter-meta">
@@ -805,46 +788,46 @@ body {
                 <span class="ch-num">6</span>
             </div>
         </div>
-        <h2 class="chapter-title">La Discipline de l'Action</h2>
-        <p class="chapter-subtitle">Apprendre à agir pour atteindre vos objectifs</p>
+        <h2 class="chapter-title">La créativité</h2>
+        <p class="chapter-subtitle">Apprendre à développer votre créativité et à la utiliser pour atteindre vos objectifs</p>
     </div>
 
-    <div class="chapter-hook">&ldquo;Savez-vous que l'action est la clé pour atteindre vos objectifs ?&rdquo;</div>
+    <div class="chapter-hook">&ldquo;La créativité est la clé pour trouver des solutions innovantes&rdquo;</div>
 
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>L'action est la clé pour atteindre vos objectifs</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La discipline de l'action vous aide à développer la confiance en vous</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La discipline de l'action vous donne la force de persévérer</span></li></ul>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les principes de la créativité</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à développer votre créativité</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de la pensée latérale</span></li></ul>
         </div>
 
         <div class="chapter-content">
-            <p class="body-text">L'action est la clé pour atteindre vos objectifs. En apprenant à agir, vous pourrez développer la confiance en vous et atteindre vos objectifs. Dans ce chapitre, nous allons explorer les principes de la discipline de l'action et comment les appliquer dans votre vie. Nous allons également vous donner des exercices pratiques pour commencer à travailler avec la discipline de l'action.</p>
+            <p class="body-text">La créativité est la clé pour trouver des solutions innovantes et atteindre vos objectifs. Mais comment développer votre créativité ? Dans ce chapitre, nous allons explorer les principes de la créativité et les moyens de la développer. Nous allons apprendre à développer notre créativité et à l'utiliser pour atteindre nos objectifs. Nous allons utiliser la technique de la pensée latérale pour trouver des solutions innovantes. Nous allons également utiliser des exercices pratiques pour vous aider à développer votre créativité.</p>
         </div>
 
         <div class="technique-badge">
             <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La technique de la planification</span>
+            <span class="technique-name">La pensée latérale</span>
         </div>
 
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
             <div class="exercises-list"><div class="exercise-item">
                     <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Faites une liste de vos objectifs et de vos priorités</p>
+                    <p>Exercice 1 : Pratiquez la pensée latérale pendant 10 minutes par jour</p>
                 </div><div class="exercise-item">
                     <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Pratiquez la planification pour agir</p>
+                    <p>Exercice 2 : Écrivez vos idées et vos solutions sur un journal</p>
                 </div></div>
         </div>
 
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La discipline de l'action vous aide à atteindre vos objectifs et à développer la confiance en vous</p>
+            <p class="summary-text">La créativité est la clé pour trouver des solutions innovantes</p>
         </div>
     </div>
 </section>
 </div>
-<div class="chapter-wrapper">
+<div class="chapter-wrapper page-break">
 <section class="chapter" id="chapter-7">
     <div class="chapter-header">
         <div class="chapter-meta">
@@ -853,46 +836,46 @@ body {
                 <span class="ch-num">7</span>
             </div>
         </div>
-        <h2 class="chapter-title">La Puissance de la Réflexion</h2>
-        <p class="chapter-subtitle">Apprendre à réfléchir pour atteindre vos objectifs</p>
+        <h2 class="chapter-title">La résilience</h2>
+        <p class="chapter-subtitle">Apprendre à développer votre résilience et à surmonter les obstacles</p>
     </div>
 
-    <div class="chapter-hook">&ldquo;Savez-vous que la réflexion est la clé pour atteindre vos objectifs ?&rdquo;</div>
+    <div class="chapter-hook">&ldquo;La résilience est la clé pour surmonter les obstacles et atteindre vos objectifs&rdquo;</div>
 
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>La réflexion est la clé pour atteindre vos objectifs</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La réflexion vous aide à développer la confiance en vous</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La réflexion vous donne la force de persévérer</span></li></ul>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les principes de la résilience</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à développer votre résilience</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de la persévérance</span></li></ul>
         </div>
 
         <div class="chapter-content">
-            <p class="body-text">La réflexion est la clé pour atteindre vos objectifs. En apprenant à réfléchir, vous pourrez développer la confiance en vous et atteindre vos objectifs. Dans ce chapitre, nous allons explorer les principes de la réflexion et comment les appliquer dans votre vie. Nous allons également vous donner des exercices pratiques pour commencer à travailler avec la réflexion.</p>
+            <p class="body-text">La résilience est la clé pour surmonter les obstacles et atteindre vos objectifs. Mais comment développer votre résilience ? Dans ce chapitre, nous allons explorer les principes de la résilience et les moyens de la développer. Nous allons apprendre à développer notre résilience et à surmonter les obstacles. Nous allons utiliser la technique de la persévérance pour renforcer notre résilience. Nous allons également utiliser des exercices pratiques pour vous aider à développer votre résilience.</p>
         </div>
 
         <div class="technique-badge">
             <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La technique de la réflexion quotidienne</span>
+            <span class="technique-name">La persévérance</span>
         </div>
 
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
             <div class="exercises-list"><div class="exercise-item">
                     <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Faites une liste de vos pensées et de vos réflexions</p>
+                    <p>Exercice 1 : Écrivez vos objectifs et vos obstacles sur un papier</p>
                 </div><div class="exercise-item">
                     <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Pratiquez la réflexion quotidienne pour améliorer votre confiance en vous</p>
+                    <p>Exercice 2 : Créez un plan pour surmonter les obstacles</p>
                 </div></div>
         </div>
 
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La réflexion vous aide à atteindre vos objectifs et à développer la confiance en vous</p>
+            <p class="summary-text">La résilience est la clé pour surmonter les obstacles et atteindre vos objectifs</p>
         </div>
     </div>
 </section>
 </div>
-<div class="chapter-wrapper">
+<div class="chapter-wrapper page-break">
 <section class="chapter" id="chapter-8">
     <div class="chapter-header">
         <div class="chapter-meta">
@@ -901,61 +884,61 @@ body {
                 <span class="ch-num">8</span>
             </div>
         </div>
-        <h2 class="chapter-title">La Victoire sur Soi-Même</h2>
-        <p class="chapter-subtitle">Apprendre à vaincre vos peurs et vos doutes</p>
+        <h2 class="chapter-title">La mise en pratique</h2>
+        <p class="chapter-subtitle">Apprendre à mettre en pratique vos nouvelles compétences et à atteindre vos objectifs</p>
     </div>
 
-    <div class="chapter-hook">&ldquo;Savez-vous que la victoire sur soi-même est la clé pour atteindre vos objectifs ?&rdquo;</div>
+    <div class="chapter-hook">&ldquo;La mise en pratique est la clé pour atteindre vos objectifs&rdquo;</div>
 
     <div class="chapter-body">
         <div class="key-points-box">
             <h4 class="box-label">🎯 KEY POINTS</h4>
-            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>La victoire sur soi-même est la clé pour atteindre vos objectifs</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La victoire sur soi-même vous aide à développer la confiance en vous</span></li><li class="key-point"><span class="kp-arrow">→</span><span>La victoire sur soi-même vous donne la force de persévérer</span></li></ul>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>Comprendre les principes de la mise en pratique</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Apprendre à mettre en pratique vos nouvelles compétences</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Découvrir la puissance de l'action</span></li></ul>
         </div>
 
         <div class="chapter-content">
-            <p class="body-text">La victoire sur soi-même est la clé pour atteindre vos objectifs. En apprenant à vaincre vos peurs et vos doutes, vous pourrez développer la confiance en vous et atteindre vos objectifs. Dans ce chapitre, nous allons explorer les principes de la victoire sur soi-même et comment les appliquer dans votre vie. Nous allons également vous donner des exercices pratiques pour commencer à travailler avec la victoire sur soi-même.</p>
+            <p class="body-text">La mise en pratique est la clé pour atteindre vos objectifs. Mais comment mettre en pratique vos nouvelles compétences ? Dans ce chapitre, nous allons explorer les principes de la mise en pratique et les moyens de la mettre en œuvre. Nous allons apprendre à mettre en pratique nos nouvelles compétences et à atteindre nos objectifs. Nous allons utiliser la technique de l'action pour renforcer notre motivation. Nous allons également utiliser des exercices pratiques pour vous aider à mettre en pratique vos nouvelles compétences.</p>
         </div>
 
         <div class="technique-badge">
             <span class="technique-label">🔑 KEY TECHNIQUE</span>
-            <span class="technique-name">La technique de la réaffirmation</span>
+            <span class="technique-name">L'action</span>
         </div>
 
         <div class="exercises-section">
             <h4 class="box-label">✍️ ACTION EXERCISES</h4>
             <div class="exercises-list"><div class="exercise-item">
                     <span class="exercise-num">1</span>
-                    <p>Exercice 1 : Faites une liste de vos peurs et de vos doutes</p>
+                    <p>Exercice 1 : Écrivez vos objectifs et vos plans d'action sur un papier</p>
                 </div><div class="exercise-item">
                     <span class="exercise-num">2</span>
-                    <p>Exercice 2 : Pratiquez la réaffirmation pour vaincre vos peurs et vos doutes</p>
+                    <p>Exercice 2 : Mettez en pratique vos plans d'action</p>
                 </div></div>
         </div>
 
         <div class="chapter-summary">
             <span class="summary-icon">💡</span>
-            <p class="summary-text">La victoire sur soi-même vous aide à atteindre vos objectifs et à développer la confiance en vous</p>
+            <p class="summary-text">La mise en pratique est la clé pour atteindre vos objectifs</p>
         </div>
     </div>
 </section>
 </div>
 
-<section class="conclusion-page">
+<section class="conclusion-page page-break">
     <h2 class="page-title">Conclusion</h2>
-    <p class="body-text">Félicitations ! Vous avez atteint la fin du Protocole de l'Ombre. Vous avez appris à développer la confiance en vous, à gérer vos émotions, à agir pour atteindre vos objectifs et à réfléchir pour améliorer votre confiance en vous. Vous êtes maintenant prêt à affronter les défis de la vie avec confiance et détermination. Alors, continuez à travailler sur vous-même et à améliorer votre confiance en vous. Vous êtes capable de réaliser tout ce que vous voulez !</p>
+    <p class="body-text">Félicitations pour avoir lu ce livre et pour avoir pris le premier pas vers la réalisation de vos rêves. Nous espérons que vous avez appris à développer une mentalité gagnante, à gérer votre stress et à trouver votre motivation. Nous espérons également que vous avez appris à mettre en pratique vos nouvelles compétences et à atteindre vos objectifs. N'oubliez pas que la réussite est un processus qui prend du temps et de l'effort. Mais avec la bonne mentalité et les bonnes compétences, vous pouvez atteindre tout ce que vous voulez.</p>
 </section>
 
-<section class="author-page">
+<section class="author-page page-break">
     <h2 class="page-title">About the Author</h2>
     <div class="author-card">
         <div class="author-avatar">🤖</div>
         <p class="author-name">Maria</p>
-        <p class="author-bio">Maria Talks est une experte en développement personnel et en psychologie. Elle a aidé des milliers de personnes à développer la confiance en elles et à atteindre leurs objectifs. Elle est l'auteur de plusieurs livres et articles sur le développement personnel et la psychologie.</p>
+        <p class="author-bio">Maria Talks est une auteure et une coach qui a aidé des milliers de personnes à atteindre leurs objectifs et à devenir la meilleure version d'elles-mêmes. Elle est connue pour ses compétences en conditionnement mental, en discipline stoïcienne et en motivation. Elle a écrit ce livre pour vous aider à atteindre vos objectifs et à devenir la personne que vous avez toujours voulu être.</p>
     </div>
 </section>
 
-<section class="back-cover">
+<section class="back-cover page-break">
     <h2 class="back-cover-title">LE PROTOCOLE DE L'OMBRE</h2>
     <p class="back-cover-text">Découvrez le secret pour devenir la meilleure version de vous-même en 30 jours</p>
     <div class="edition-badge">✦ Professional Edition 2026</div>
@@ -966,8 +949,10 @@ body {
 <script>
 window.addEventListener('scroll', () => {
     const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-    document.getElementById('reading-progress').style.width = pct.toFixed(1) + '%';
-    document.getElementById('progress-text').textContent = Math.round(pct) + '% read';
+    const progressEl = document.getElementById('reading-progress');
+    const textEl = document.getElementById('progress-text');
+    if(progressEl) progressEl.style.width = pct.toFixed(1) + '%';
+    if(textEl) textEl.textContent = Math.round(pct) + '% read';
 });
 function scrollToChapter(num) {
     const el = document.getElementById('chapter-' + num);
@@ -977,42 +962,51 @@ async function downloadPDF() {
     const btn = document.getElementById('pdf-btn');
     btn.style.opacity = '0.6';
     btn.textContent = '⏳ Preparing...';
+    
+    // Hide UI elements completely before capture
     ['pdf-btn','reading-progress'].forEach(id => {
         const el = document.getElementById(id);
-        if(el) el.style.display='none';
+        if(el) el.style.setProperty('display', 'none', 'important');
     });
-    document.querySelector('.nav-bar').style.display = 'none';
+    const navbar = document.querySelector('.nav-bar');
+    if(navbar) navbar.style.setProperty('display', 'none', 'important');
+    
     const title = document.querySelector('.cover-title')?.textContent || 'book';
     const safeName = title.replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'_').substring(0,50);
+    
     const opt = {
         margin: 0,
         filename: safeName + '.pdf',
-        image: { type: 'jpeg', quality: 0.92 },
+        image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
-            scale: 2, useCORS: true,
+            scale: 2, 
+            useCORS: true,
             backgroundColor: '#030712',
-            logging: false, letterRendering: true,
-            /* FIX blank pages: windowWidth matches body max-width */
-            windowWidth: 480
+            logging: false, 
+            letterRendering: true,
+            scrollY: 0,
+            scrollX: 0
         },
         jsPDF: {
             unit: 'mm',
             format: [120, 213],
             orientation: 'portrait'
         },
-        /* FIX: use 'legacy' mode — avoids phantom blank pages from css/avoid-all */
-        pagebreak: { mode: 'legacy' }
+        // FIXED: smart rendering mode instead of legacy to eliminate layout shifting
+        pagebreak: { mode: ['avoid-all', 'css'] }
     };
     try {
         await html2pdf().set(opt).from(document.body).save();
     } catch(e) {
+        console.error(e);
         window.print();
     } finally {
+        // Restore UI elements safely
         ['pdf-btn','reading-progress'].forEach(id => {
             const el = document.getElementById(id);
-            if(el) el.style.display='';
+            if(el) el.style.display = '';
         });
-        document.querySelector('.nav-bar').style.display = 'flex';
+        if(navbar) navbar.style.display = 'flex';
         btn.style.opacity = '1';
         btn.innerHTML = '📥 Download PDF';
     }
