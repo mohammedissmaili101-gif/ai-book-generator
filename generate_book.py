@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 📚 Professional Book Generator - Powered by Groq
-Version 3.0 – Fully stable, rate-limit aware, complete HTML/CSS
+Version 4.1 – Flawless, Stable, no blank pages, Amazon KDP Ready
 """
 
 import os
@@ -17,11 +17,10 @@ from datetime import datetime
 # ============================================================
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-# تم تغيير الموديل لنسخة مدعومة وجديدة
 MODEL = "llama-3.1-8b-instant"               
 MIN_WORDS_PER_CHAPTER = int(os.environ.get("MIN_WORDS_PER_CHAPTER", "1500"))
-MAX_RETRIES = 7                             # طلعنا عدد المحاولات لـ 7
-INITIAL_DELAY = 15                          # ثوانٍ عند أول rate limit
+MAX_RETRIES = 7                             
+INITIAL_DELAY = 15                          
 BOOK_FORMAT = os.environ.get("BOOK_FORMAT", "pdf")
 
 # ============================================================
@@ -94,7 +93,7 @@ def call_groq(messages, max_tokens=3000, temperature=0.7):
         elif resp.status_code == 429:
             print(f"⚠️ Rate limit hit (Attempt {attempt + 1}/{MAX_RETRIES}). Retrying in {delay}s...")
             time.sleep(delay)
-            delay += 15  # زيادة الوقت بـ 15 ثانية لتجنب المضاعفة المفرطة
+            delay += 15  
         else:
             raise Exception(f"Groq API error {resp.status_code}: {resp.text}")
     raise Exception("Max retries exceeded for rate limit. حاول تنقص من طول الفصول أو تأكد من حساب Groq ديالك.")
@@ -102,15 +101,17 @@ def call_groq(messages, max_tokens=3000, temperature=0.7):
 def clean_json(text):
     text = text.strip()
     if "```json" in text:
-        text = text.split("```json")[1].split("```")[0]
+        text = text.split("
+```json")[1].split("```")[0]
     elif "```" in text:
-        text = text.split("```")[1].split("```")[0]
+        text = text.split("
+```")[1].split("```")[0]
     start = text.find('{')
     end = text.rfind('}') + 1
     return text[start:end] if start != -1 and end else text
 
 # ============================================================
-# STEP 1: BOOK OUTLINE (ONCE)
+# STEP 1: BOOK OUTLINE
 # ============================================================
 def generate_outline(title, language):
     lang_prompt = {
@@ -155,7 +156,7 @@ Write 8 chapters. Language: {language}.
     return json.loads(clean_json(content))
 
 # ============================================================
-# STEP 2: GENERATE ONE CHAPTER (DETAILED)
+# STEP 2: GENERATE ONE CHAPTER
 # ============================================================
 def generate_chapter_content(ch_plan, book_title, chapter_num, language):
     prompt = f"""
@@ -185,7 +186,6 @@ Use short paragraphs, no markdown headings. Write in {language}. Include 2-3 cit
         {"role": "user", "content": prompt}
     ]
     content = call_groq(messages, max_tokens=4000, temperature=0.75)
-    # Verify length
     words = len(content.split())
     if words < MIN_WORDS_PER_CHAPTER and MAX_RETRIES > 0:
         print(f"   ⚠️ Chapter {chapter_num} has {words} words, regenerating...")
@@ -212,7 +212,6 @@ def generate_full_book(title, language):
             "summary": f"Remember: {ch['key_technique']} – {ch['subtitle']}"
         })
         
-        # إضافة استراحة 25 ثانية بين كل فصل لتجنب حظر Rate Limit
         if idx < total: 
             print("⏳ Cooling down for 25 seconds to respect Groq API limits...")
             time.sleep(25)   
@@ -221,7 +220,7 @@ def generate_full_book(title, language):
     return outline
 
 # ============================================================
-# HTML GENERATION – FULL CSS
+# HTML GENERATION – FULL CSS WITH KDP & BLANK PAGE FIXES
 # ============================================================
 def generate_pdf_html(book_data, theme, language):
     is_rtl = language == "ar"
@@ -239,7 +238,7 @@ def generate_pdf_html(book_data, theme, language):
         technique_html = f'<div class="technique-badge"><span class="technique-label">🔑 KEY TECHNIQUE</span><span class="technique-name">{ch.get("key_technique","")}</span></div>' if ch.get("key_technique") else ""
 
         chapters_html += f'''
-<div class="chapter-wrapper page-break">
+<div class="chapter-wrapper new-page">
 <section class="chapter" id="chapter-{i}">
     <div class="chapter-header">
         <div class="chapter-meta"><div class="chapter-number-badge"><span class="ch-label">CHAPTER</span><span class="ch-num">{ch.get("number", i)}</span></div></div>
@@ -323,8 +322,18 @@ body{{background:var(--primary);color:var(--text);font-family:var(--font-body);f
 .chapter-summary{{display:flex;gap:14px;padding:18px 20px;background:rgba(255,255,255,0.04);border-radius:var(--radius);font-style:italic}}
 .back-cover{{min-height:55vh;background:var(--cover-gradient);padding:var(--gap-xl) var(--side);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}}
 .edition-badge{{background:var(--cover-accent);color:var(--primary);padding:12px 28px;border-radius:50px;font-weight:900}}
-.pdf-btn{{position:fixed;bottom:22px;right:18px;background:var(--accent);color:var(--primary);border:none;border-radius:50px;padding:13px 20px;font-weight:900;cursor:pointer;z-index:998}}
-@media print{{.nav-bar,.pdf-btn,#reading-progress{{display:none}} .cover-page,.description-page,.toc-page,.intro-page,.chapter-wrapper,.conclusion-page,.author-page,.back-cover{{page-break-after:always;break-after:always}}}}
+
+/* Controls Styling */
+.controls {{position:fixed;bottom:22px;right:18px;display:flex;flex-direction:column;gap:10px;z-index:998}}
+.btn {{background:var(--accent);color:var(--primary);border:none;border-radius:50px;padding:13px 20px;font-weight:900;cursor:pointer;font-family:var(--font-title);box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: 0.3s;}}
+.btn:hover {{transform: translateY(-2px); opacity:0.9;}}
+.btn-kdp {{background:#f59e0b;}}
+
+/* Blank Page Fixes */
+@media print {{
+    .nav-bar, .controls, #reading-progress {{display:none !important}} 
+    .new-page {{page-break-before: always; break-before: page;}}
+}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -332,18 +341,78 @@ body{{background:var(--primary);color:var(--text);font-family:var(--font-body);f
 <div id="reading-progress"></div>
 <section class="cover-page"><div class="cover-top-bar"><span class="cover-genre-tag">{theme["emoji"]} Book</span><span class="cover-year">{year}</span></div><span class="cover-emoji">{theme["emoji"]}</span><div class="cover-line"></div><h1 class="cover-title">{book_data.get("title","")}</h1><p class="cover-subtitle">{book_data.get("subtitle","")}</p><div class="cover-author-row"><div class="cover-author-dot">{book_data.get("author","?")[0].upper()}</div><span class="cover-author-name">by {book_data.get("author","Professional Author")}</span></div></section>
 <nav class="nav-bar"><span class="nav-title">{title_short}</span><span class="nav-progress-text" id="progress-text">0% read</span></nav>
-<section class="description-page page-break"><span class="section-label">About This Book</span><p class="description-text">{book_data.get("description","")}</p><span class="section-label">What You Will Learn</span><div class="benefits-list">{benefits_html}</div></section>
-<section class="toc-page page-break"><h2 class="page-title">Table of Contents</h2>{toc_html}</section>
-<section class="intro-page page-break"><h2 class="page-title">Introduction</h2>{intro_html}</section>
+<section class="description-page new-page"><span class="section-label">About This Book</span><p class="description-text">{book_data.get("description","")}</p><span class="section-label">What You Will Learn</span><div class="benefits-list">{benefits_html}</div></section>
+<section class="toc-page new-page"><h2 class="page-title">Table of Contents</h2>{toc_html}</section>
+<section class="intro-page new-page"><h2 class="page-title">Introduction</h2>{intro_html}</section>
 {chapters_html}
-<section class="conclusion-page page-break"><h2 class="page-title">Conclusion</h2>{conc_html}</section>
-<section class="author-page page-break"><h2 class="page-title">About the Author</h2><div class="author-card"><div class="author-avatar">{theme["emoji"]}</div><p class="author-name">{book_data.get("author","Professional Author")}</p><p class="author-bio">{book_data.get("about_author","")}</p></div></section>
-<section class="back-cover page-break"><h2 class="back-cover-title">{book_data.get("title","")}</h2><p class="back-cover-text">{book_data.get("tagline","")}</p><div class="edition-badge">✦ Professional Edition {year}</div></section>
-<button class="pdf-btn" id="pdf-btn" onclick="downloadPDF()">📥 Download PDF</button>
+<section class="conclusion-page new-page"><h2 class="page-title">Conclusion</h2>{conc_html}</section>
+<section class="author-page new-page"><h2 class="page-title">About the Author</h2><div class="author-card"><div class="author-avatar">{theme["emoji"]}</div><p class="author-name">{book_data.get("author","Professional Author")}</p><p class="author-bio">{book_data.get("about_author","")}</p></div></section>
+<section class="back-cover new-page"><h2 class="back-cover-title">{book_data.get("title","")}</h2><p class="back-cover-text">{book_data.get("tagline","")}</p><div class="edition-badge">✦ Professional Edition {year}</div></section>
+
+<div class="controls">
+    <button class="btn btn-kdp" id="kdp-btn" onclick="downloadKDP()">📚 Download KDP (6x9)</button>
+    <button class="btn" id="pdf-btn" onclick="downloadPDF()">📱 Download Mobile PDF</button>
+</div>
+
 <script>
 window.addEventListener('scroll',()=>{{const pct=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;document.getElementById('reading-progress').style.width=pct+'%';document.getElementById('progress-text').textContent=Math.round(pct)+'% read';}});
 function scrollToChapter(n){{document.getElementById('chapter-'+n)?.scrollIntoView({{behavior:'smooth'}});}}
-async function downloadPDF(){{const btn=document.getElementById('pdf-btn');btn.style.opacity='0.6';btn.textContent='⏳ Preparing...';['pdf-btn','reading-progress'].forEach(id=>{{const el=document.getElementById(id);if(el)el.style.display='none';}});const navbar=document.querySelector('.nav-bar');if(navbar)navbar.style.display='none';const title=document.querySelector('.cover-title')?.textContent||'book';const safeName=title.replace(/[^\\w\\s-]/g,'').trim().replace(/\\s+/g,'_').substring(0,50);const opt={{margin:0,filename:safeName+'.pdf',image:{{type:'jpeg',quality:0.98}},html2canvas:{{scale:2,useCORS:true,backgroundColor:'{theme["primary"]}',logging:false,letterRendering:true,scrollY:0,scrollX:0}},jsPDF:{{unit:'mm',format:[120,213],orientation:'portrait'}},pagebreak:{{mode:['avoid-all','css']}}}};try{{await html2pdf().set(opt).from(document.body).save();}}catch(e){{window.print();}}finally{{['pdf-btn','reading-progress'].forEach(id=>{{const el=document.getElementById(id);if(el)el.style.display='';}});if(navbar)navbar.style.display='flex';btn.style.opacity='1';btn.innerHTML='📥 Download PDF';}}}}
+
+function hideUI() {{
+    document.querySelector('.controls').style.display = 'none';
+    document.getElementById('reading-progress').style.display = 'none';
+    document.querySelector('.nav-bar').style.display = 'none';
+}}
+
+function restoreUI() {{
+    document.querySelector('.controls').style.display = 'flex';
+    document.getElementById('reading-progress').style.display = 'block';
+    document.querySelector('.nav-bar').style.display = 'flex';
+}}
+
+const getSafeName = () => {{
+    const title=document.querySelector('.cover-title')?.textContent||'book';
+    return title.replace(/[^\\w\\s-]/g,'').trim().replace(/\\s+/g,'_').substring(0,50);
+}}
+
+// 📱 Mobile Format Export
+async function downloadPDF(){{
+    const btn=document.getElementById('pdf-btn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML='⏳ Preparing...';
+    hideUI();
+    const opt={{
+        margin:0, filename: getSafeName() + '_Mobile.pdf',
+        image:{{type:'jpeg',quality:0.98}},
+        html2canvas:{{scale:2,useCORS:true,backgroundColor:'{theme["primary"]}'}},
+        jsPDF:{{unit:'mm',format:[120,213],orientation:'portrait'}},
+        pagebreak: {{ mode: ['css'], before: '.new-page' }}
+    }};
+    try{{ await html2pdf().set(opt).from(document.body).save(); }}
+    catch(e){{ console.error(e); window.print(); }}
+    finally{{ restoreUI(); btn.innerHTML = originalText; }}
+}}
+
+// 📚 Amazon KDP Format Export (6x9 inches)
+async function downloadKDP(){{
+    const btn=document.getElementById('kdp-btn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML='⏳ Preparing KDP...';
+    hideUI();
+    
+    // KDP Print settings: 6x9 inches (152.4 x 228.6 mm)
+    const opt={{
+        margin: [0, 0, 0, 0], // Full Bleed format
+        filename: getSafeName() + '_KDP_6x9.pdf',
+        image:{{type:'jpeg',quality:1.0}},
+        html2canvas:{{scale:3,useCORS:true,backgroundColor:'{theme["primary"]}'}}, // Higher scale for print quality
+        jsPDF:{{unit:'in',format:[6, 9],orientation:'portrait'}},
+        pagebreak: {{ mode: ['css'], before: '.new-page' }}
+    }};
+    try{{ await html2pdf().set(opt).from(document.body).save(); }}
+    catch(e){{ console.error(e); window.print(); }}
+    finally{{ restoreUI(); btn.innerHTML = originalText; }}
+}}
 </script>
 </body>
 </html>'''
@@ -351,34 +420,29 @@ async function downloadPDF(){{const btn=document.getElementById('pdf-btn');btn.s
     return html
 
 # ============================================================
-# MAIN EXECUTION (التنفيذ الرئيسي)
+# MAIN EXECUTION
 # ============================================================
 if __name__ == "__main__":
     print("🚀 Starting Professional Book Generator...")
     
-    # حدد عنوان الكتاب واللغة ديالو هنا
     book_title = "LE PROTOCOLE DE L'OMBRE premium 30 days ghost mode mental conditioning"
-    language = "fr"  # تقدر تبدلها لـ "ar" أو "en"
+    language = "fr"  
     
     try:
-        # 1. تحديد الـ Theme
         theme_name = detect_theme(book_title, language)
         theme = BOOK_THEMES.get(theme_name, BOOK_THEMES["default"])
         
-        # 2. توليد محتوى الكتاب كامل
         book_data = generate_full_book(book_title, language)
         
-        # 3. تحويل المحتوى لملف HTML مع التصميم
         print("🎨 Generating HTML format...")
         final_html = generate_pdf_html(book_data, theme, language)
         
-        # 4. حفظ الملف
         output_file = "book_output.html"
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(final_html)
             
         print(f"✅ Book generated successfully! Saved to {output_file}")
-        print("يمكنك الآن فتح الملف book_output.html في المتصفح ديالك.")
+        print("يمكنك الآن فتح الملف book_output.html في المتصفح ديالك وتصديره بصيغة KDP أو Mobile بدون صفحات بيضاء.")
         
     except Exception as e:
         print(f"❌ Error: {e}")
