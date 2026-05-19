@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="fr" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Ce que personne ne t'a jamais dit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #1a1a1a;
+            --accent: #00ff88;
+            --text: #e0e0e0;
+            --highlight: #00d4ff;
+            --gradient: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            --font-title: 'Space Mono', serif;
+            --font-body: 'IBM Plex Mono', serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.8;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            min-height: 100vh;
+            background: var(--gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cover-page::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        .cover-page::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        .cover-emoji {
+            font-size: 72px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .cover-title {
+            font-family: var(--font-title);
+            font-size: 2.2rem;
+            font-weight: 900;
+            line-height: 1.2;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        
+        .cover-subtitle {
+            font-size: 1rem;
+            color: var(--accent);
+            font-style: italic;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .cover-tagline {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-size: 0.85rem;
+            color: #fff;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .cover-author {
+            font-size: 0.9rem;
+            color: var(--highlight);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .cover-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+        
+        /* ===== NAVIGATION ===== */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .nav-title {
+            font-family: var(--font-title);
+            font-size: 0.85rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        .nav-progress {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.4);
+        }
+        
+        /* ===== DESCRIPTION PAGE ===== */
+        .description-page {
+            padding: 50px 25px;
+            background: var(--primary);
+            border-bottom: 3px solid var(--accent);
+        }
+        
+        .section-label {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        .description-text {
+            font-size: 1rem;
+            line-height: 1.9;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 30px;
+        }
+        
+        .benefits-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            border-left: 3px solid var(--accent);
+            font-size: 0.9rem;
+        }
+        
+        .benefit-check {
+            color: var(--accent);
+            font-weight: 900;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc-page {
+            padding: 50px 25px;
+            background: var(--secondary);
+        }
+        
+        .page-title {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+        
+        .toc-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .toc-item:hover {
+            padding-left: 10px;
+        }
+        
+        .toc-item:hover .toc-arrow {
+            color: var(--accent);
+        }
+        
+        .toc-num {
+            font-family: var(--font-title);
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--accent);
+            min-width: 35px;
+        }
+        
+        .toc-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .toc-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .toc-sub {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .toc-arrow {
+            color: rgba(255,255,255,0.3);
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+        
+        /* ===== INTRODUCTION ===== */
+        .intro-page {
+            padding: 50px 25px;
+            background: var(--primary);
+            position: relative;
+        }
+        
+        .intro-page::before {
+            content: '"';
+            font-family: var(--font-title);
+            font-size: 150px;
+            color: var(--accent);
+            opacity: 0.1;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            line-height: 1;
+        }
+        
+        .intro-text {
+            font-size: 1.05rem;
+            line-height: 2;
+            color: rgba(255,255,255,0.85);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ===== CHAPTERS ===== */
+        .chapter {
+            padding: 0 0 30px 0;
+            border-bottom: 3px solid var(--accent);
+        }
+        
+        .chapter-header {
+            background: var(--gradient);
+            padding: 50px 25px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chapter-number-badge {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 8px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .ch-label {
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+        }
+        
+        .ch-num {
+            font-family: var(--font-title);
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1;
+        }
+        
+        .chapter-title {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.3;
+            margin-bottom: 10px;
+        }
+        
+        .chapter-subtitle {
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-style: italic;
+            opacity: 0.9;
+        }
+        
+        .key-points-box {
+            margin: 25px;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .key-points-box h4 {
+            color: var(--accent);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        
+        .key-points-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .key-point {
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            font-size: 0.88rem;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .key-point::before {
+            content: '→';
+            position: absolute;
+            left: 8px;
+            color: var(--accent);
+        }
+        
+        .chapter-content {
+            padding: 0 25px;
+        }
+        
+        .chapter-content p {
+            margin-bottom: 18px;
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: rgba(255,255,255,0.82);
+        }
+        
+        .exercises-section {
+            margin: 25px;
+            padding: 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 15px;
+            border-left: 4px solid var(--highlight);
+        }
+        
+        .exercises-section h4 {
+            color: var(--highlight);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        
+        .exercises-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .exercise-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            font-size: 0.88rem;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .exercise-num {
+            background: var(--highlight);
+            color: var(--primary);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+        
+        .chapter-summary {
+            margin: 25px;
+            padding: 20px 20px 20px 60px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            font-size: 0.95rem;
+            font-style: italic;
+            color: rgba(255,255,255,0.9);
+            position: relative;
+        }
+        
+        .summary-icon {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            font-size: 1.5rem;
+        }
+        
+        /* ===== NOTES SECTION ===== */
+        .notes-section {
+            margin: 25px;
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 15px;
+            border: 1px dashed rgba(255,255,255,0.15);
+        }
+        
+        .notes-section h4 {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.78rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        
+        .note-line {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 28px;
+            border-radius: 1px;
+        }
+        
+        /* ===== CONCLUSION ===== */
+        .conclusion-page {
+            padding: 50px 25px;
+            background: var(--gradient);
+            text-align: center;
+        }
+        
+        .conclusion-page .page-title {
+            text-align: center;
+        }
+        
+        .conclusion-text {
+            font-size: 1rem;
+            line-height: 2;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+        }
+        
+        /* ===== ABOUT AUTHOR ===== */
+        .author-page {
+            padding: 50px 25px;
+            background: var(--primary);
+        }
+        
+        .author-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+            border: 3px solid var(--accent);
+        }
+        
+        .author-name {
+            font-family: var(--font-title);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .author-bio {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.7);
+            margin-top: 15px;
+        }
+        
+        /* ===== BACK COVER ===== */
+        .back-cover {
+            min-height: 60vh;
+            background: var(--gradient);
+            padding: 50px 25px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .back-cover-title {
+            font-family: var(--font-title);
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        
+        .back-cover-text {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.8;
+            max-width: 380px;
+            margin-bottom: 30px;
+        }
+        
+        .price-badge {
+            background: var(--accent);
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-family: var(--font-title);
+            padding: 15px 30px;
+            border-radius: 50px;
+            letter-spacing: 1px;
+        }
+        
+        /* ===== PAGE BREAK ===== */
+        .page-break {
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.03));
+        }
+        
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        /* ===== READING PROGRESS ===== */
+        #reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent);
+            z-index: 200;
+            transition: width 0.1s;
+        }
+        
+        /* ===== PDF DOWNLOAD BUTTON ===== */
+        .pdf-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 20px;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            padding: 14px 22px;
+            font-size: 0.88rem;
+            font-weight: 900;
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: all 0.2s;
+            font-family: var(--font-body);
+        }
+        
+        .pdf-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.5);
+        }
+        
+        .pdf-btn:active {
+            transform: scale(0.96);
+        }
+        
+        .pdf-btn.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        @media print {
+            .nav-bar { display: none; }
+            .pdf-btn { display: none; }
+            #reading-progress { display: none; }
+            body { max-width: 100%; }
+            .cover-page { min-height: 100vh; page-break-after: always; }
+            .chapter { page-break-before: always; }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<div id="reading-progress"></div>
+
+<!-- COVER PAGE -->
+<section class="cover-page">
+    <div class="cover-emoji">🤖</div>
+    <h1 class="cover-title">Ce que personne ne t'a jamais dit</h1>
+    <p class="cover-subtitle">Les secrets pour réussir dans la vie et atteindre vos objectifs</p>
+    <div class="cover-divider"></div>
+    <div class="cover-tagline">Découvrez les secrets pour vivre une vie épanouie et réussie</div>
+    <p class="cover-author">by Auteur Professionnel</p>
+</section>
+
+<!-- NAV BAR -->
+<nav class="nav-bar">
+    <span class="nav-title">Ce que personne ne t'a jamais ...</span>
+    <span class="nav-progress" id="progress-text">0% read</span>
+</nav>
+
+<!-- DESCRIPTION PAGE -->
+<section class="description-page">
+    <p class="section-label">About This Book</p>
+    <p class="description-text">Dans ce livre, vous découvrirez les secrets pour réussir dans la vie et atteindre vos objectifs. Vous apprendrez à développer une mentalité positive, à gérer vos émotions et à prendre des décisions éclairées. Vous découvrirez également comment créer des relations solides et durables, et comment atteindre vos objectifs personnels et professionnels.</p>
+    
+    <p class="section-label">What You Will Learn</p>
+    <div class="benefits-grid">
+        <div class="benefit-item"><span class="benefit-check">✓</span><span>Découvrez les secrets pour réussir dans la vie</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span>Apprenez à développer une mentalité positive</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span>Gérez vos émotions et prenez des décisions éclairées</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span>Créez des relations solides et durables</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span>Atteignez vos objectifs personnels et professionnels</span></div>
+    </div>
+</section>
+
+<!-- TABLE OF CONTENTS -->
+<section class="toc-page">
+    <h2 class="page-title">Table of Contents</h2>
+    
+        <div class="toc-item" onclick="document.getElementById('chapter-1').scrollIntoView({behavior:'smooth'})">
+            <span class="toc-num">01</span>
+            <div class="toc-text">
+                <span class="toc-title">La puissance de la pensée positive</span>
+                <span class="toc-sub">Comment changer votre vie en changeant votre façon de penser</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('chapter-2').scrollIntoView({behavior:'smooth'})">
+            <span class="toc-num">02</span>
+            <div class="toc-text">
+                <span class="toc-title">La gestion des émotions</span>
+                <span class="toc-sub">Comment gérer vos émotions pour atteindre vos objectifs</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('chapter-3').scrollIntoView({behavior:'smooth'})">
+            <span class="toc-num">03</span>
+            <div class="toc-text">
+                <span class="toc-title">La création de relations solides</span>
+                <span class="toc-sub">Comment créer des relations solides et durables</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('chapter-4').scrollIntoView({behavior:'smooth'})">
+            <span class="toc-num">04</span>
+            <div class="toc-text">
+                <span class="toc-title">La prise de décisions éclairées</span>
+                <span class="toc-sub">Comment prendre des décisions éclairées pour atteindre vos objectifs</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('chapter-5').scrollIntoView({behavior:'smooth'})">
+            <span class="toc-num">05</span>
+            <div class="toc-text">
+                <span class="toc-title">La gestion du stress et de l'anxiété</span>
+                <span class="toc-sub">Comment gérer le stress et l'anxiété pour atteindre vos objectifs</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('chapter-6').scrollIntoView({behavior:'smooth'})">
+            <span class="toc-num">06</span>
+            <div class="toc-text">
+                <span class="toc-title">La création d'un plan d'action</span>
+                <span class="toc-sub">Comment créer un plan d'action pour atteindre vos objectifs</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('chapter-7').scrollIntoView({behavior:'smooth'})">
+            <span class="toc-num">07</span>
+            <div class="toc-text">
+                <span class="toc-title">La gestion du temps</span>
+                <span class="toc-sub">Comment gérer votre temps pour atteindre vos objectifs</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('chapter-8').scrollIntoView({behavior:'smooth'})">
+            <span class="toc-num">08</span>
+            <div class="toc-text">
+                <span class="toc-title">La création d'une vie épanouie</span>
+                <span class="toc-sub">Comment créer une vie épanouie et réussie</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('chapter-9').scrollIntoView({behavior:'smooth'})">
+            <span class="toc-num">09</span>
+            <div class="toc-text">
+                <span class="toc-title">La gestion des obstacles</span>
+                <span class="toc-sub">Comment gérer les obstacles pour atteindre vos objectifs</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div>
+        <div class="toc-item" onclick="document.getElementById('chapter-10').scrollIntoView({behavior:'smooth'})">
+            <span class="toc-num">010</span>
+            <div class="toc-text">
+                <span class="toc-title">La conclusion</span>
+                <span class="toc-sub">Comment intégrer les compétences apprises dans votre vie quotidienne</span>
+            </div>
+            <span class="toc-arrow">→</span>
+        </div>
+</section>
+
+<!-- INTRODUCTION -->
+<section class="intro-page">
+    <h2 class="page-title">Introduction</h2>
+    <p class="intro-text">Bienvenue dans ce livre ! Dans les pages qui suivent, nous allons explorer les secrets pour réussir dans la vie et atteindre vos objectifs. Vous apprendrez comment développer une mentalité positive, gérer vos émotions, créer des relations solides et atteindre vos objectifs personnels et professionnels.</p>
+</section>
+
+<!-- CHAPTERS -->
+
+        <section class="chapter" id="chapter-1">
+            <div class="chapter-header">
+                <div class="chapter-number-badge">
+                    <span class="ch-label">CHAPTER</span>
+                    <span class="ch-num">1</span>
+                </div>
+                <h2 class="chapter-title">La puissance de la pensée positive</h2>
+                <p class="chapter-subtitle">Comment changer votre vie en changeant votre façon de penser</p>
+            </div>
+            
+            <div class="key-points-box">
+                <h4>🎯 Key Points</h4>
+                <ul class="key-points-list"><li class="key-point">La pensée positive peut changer votre vie</li><li class="key-point">Comment développer une mentalité positive</li><li class="key-point">Les bienfaits de la pensée positive</li></ul>
+            </div>
+            
+            <div class="chapter-content">
+                <p>La pensée positive est une des clés pour réussir dans la vie. Lorsque vous pensez de manière positive, vous êtes plus confiant, plus motivé et plus capable de surmonter les obstacles. Dans ce chapitre, nous allons explorer les secrets de la pensée positive et comment vous pouvez l'intégrer dans votre vie quotidienne. Vous apprendrez comment développer une mentalité positive, comment gérer les pensées négatives et comment utiliser la visualisation pour atteindre vos objectifs.</p>
+            </div>
+            
+            <div class="exercises-section">
+                <h4>✍️ Action Exercises</h4>
+                <div class="exercises-grid">
+            <div class="exercise-item">
+                <span class="exercise-num">1</span>
+                <p>Exercice 1 : Écrivez vos pensées positives pour la journée</p>
+            </div>
+            <div class="exercise-item">
+                <span class="exercise-num">2</span>
+                <p>Exercice 2 : Créez un tableau de visualisation pour vos objectifs</p>
+            </div></div>
+            </div>
+            
+            <div class="chapter-summary">
+                <div class="summary-icon">💡</div>
+                <p>La pensée positive est une puissante outil pour changer votre vie. En développant une mentalité positive, vous pouvez devenir plus confiant, plus motivé et plus capable de surmonter les obstacles.</p>
+            </div>
+            
+            <div class="notes-section">
+                <h4>📝 My Notes</h4>
+                <div class="notes-lines">
+                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+                </div>
+            </div>
+            
+            <div class="page-break"></div>
+        </section>
+        <section class="chapter" id="chapter-2">
+            <div class="chapter-header">
+                <div class="chapter-number-badge">
+                    <span class="ch-label">CHAPTER</span>
+                    <span class="ch-num">2</span>
+                </div>
+                <h2 class="chapter-title">La gestion des émotions</h2>
+                <p class="chapter-subtitle">Comment gérer vos émotions pour atteindre vos objectifs</p>
+            </div>
+            
+            <div class="key-points-box">
+                <h4>🎯 Key Points</h4>
+                <ul class="key-points-list"><li class="key-point">Les émotions peuvent vous aider ou vous handicaper</li><li class="key-point">Comment gérer les émotions négatives</li><li class="key-point">Les bienfaits de la gestion des émotions</li></ul>
+            </div>
+            
+            <div class="chapter-content">
+                <p>Les émotions peuvent avoir un impact énorme sur votre vie. Lorsque vous êtes capable de gérer vos émotions, vous pouvez prendre des décisions plus éclairées, vous sentir plus calme et plus centré, et atteindre vos objectifs plus facilement. Dans ce chapitre, nous allons explorer les secrets de la gestion des émotions et comment vous pouvez l'intégrer dans votre vie quotidienne. Vous apprendrez comment gérer les émotions négatives, comment utiliser la respiration pour calmer votre esprit et comment développer une plus grande conscience émotionnelle.</p>
+            </div>
+            
+            <div class="exercises-section">
+                <h4>✍️ Action Exercises</h4>
+                <div class="exercises-grid">
+            <div class="exercise-item">
+                <span class="exercise-num">1</span>
+                <p>Exercice 1 : Écrivez vos émotions pour la journée</p>
+            </div>
+            <div class="exercise-item">
+                <span class="exercise-num">2</span>
+                <p>Exercice 2 : Pratiquez la respiration profonde pour calmer votre esprit</p>
+            </div></div>
+            </div>
+            
+            <div class="chapter-summary">
+                <div class="summary-icon">💡</div>
+                <p>La gestion des émotions est une compétence essentielle pour atteindre vos objectifs. En apprenant à gérer vos émotions, vous pouvez devenir plus calme, plus centré et plus capable de prendre des décisions éclairées.</p>
+            </div>
+            
+            <div class="notes-section">
+                <h4>📝 My Notes</h4>
+                <div class="notes-lines">
+                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+                </div>
+            </div>
+            
+            <div class="page-break"></div>
+        </section>
+        <section class="chapter" id="chapter-3">
+            <div class="chapter-header">
+                <div class="chapter-number-badge">
+                    <span class="ch-label">CHAPTER</span>
+                    <span class="ch-num">3</span>
+                </div>
+                <h2 class="chapter-title">La création de relations solides</h2>
+                <p class="chapter-subtitle">Comment créer des relations solides et durables</p>
+            </div>
+            
+            <div class="key-points-box">
+                <h4>🎯 Key Points</h4>
+                <ul class="key-points-list"><li class="key-point">Les relations sont essentielles pour la vie</li><li class="key-point">Comment créer des relations solides</li><li class="key-point">Les bienfaits des relations solides</li></ul>
+            </div>
+            
+            <div class="chapter-content">
+                <p>Les relations sont une partie essentielle de la vie. Lorsque vous avez des relations solides et durables, vous vous sentez plus soutenu, plus aimé et plus connecté aux autres. Dans ce chapitre, nous allons explorer les secrets de la création de relations solides et comment vous pouvez l'intégrer dans votre vie quotidienne. Vous apprendrez comment communiquer de manière efficace, comment écouter activement et comment montrer de l'empathie et de la compassion.</p>
+            </div>
+            
+            <div class="exercises-section">
+                <h4>✍️ Action Exercises</h4>
+                <div class="exercises-grid">
+            <div class="exercise-item">
+                <span class="exercise-num">1</span>
+                <p>Exercice 1 : Écrivez une lettre à un ami ou un membre de la famille</p>
+            </div>
+            <div class="exercise-item">
+                <span class="exercise-num">2</span>
+                <p>Exercice 2 : Pratiquez l'écoute active avec un ami ou un membre de la famille</p>
+            </div></div>
+            </div>
+            
+            <div class="chapter-summary">
+                <div class="summary-icon">💡</div>
+                <p>La création de relations solides est essentielle pour la vie. En apprenant à communiquer de manière efficace, à écouter activement et à montrer de l'empathie et de la compassion, vous pouvez créer des relations solides et durables qui vous soutiendront tout au long de votre vie.</p>
+            </div>
+            
+            <div class="notes-section">
+                <h4>📝 My Notes</h4>
+                <div class="notes-lines">
+                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+                </div>
+            </div>
+            
+            <div class="page-break"></div>
+        </section>
+        <section class="chapter" id="chapter-4">
+            <div class="chapter-header">
+                <div class="chapter-number-badge">
+                    <span class="ch-label">CHAPTER</span>
+                    <span class="ch-num">4</span>
+                </div>
+                <h2 class="chapter-title">La prise de décisions éclairées</h2>
+                <p class="chapter-subtitle">Comment prendre des décisions éclairées pour atteindre vos objectifs</p>
+            </div>
+            
+            <div class="key-points-box">
+                <h4>🎯 Key Points</h4>
+                <ul class="key-points-list"><li class="key-point">Les décisions peuvent vous aider ou vous handicaper</li><li class="key-point">Comment prendre des décisions éclairées</li><li class="key-point">Les bienfaits de la prise de décisions éclairées</li></ul>
+            </div>
+            
+            <div class="chapter-content">
+                <p>Les décisions que vous prenez peuvent avoir un impact énorme sur votre vie. Lorsque vous êtes capable de prendre des décisions éclairées, vous pouvez atteindre vos objectifs plus facilement, vous sentir plus confiant et plus capable de gérer les obstacles. Dans ce chapitre, nous allons explorer les secrets de la prise de décisions éclairées et comment vous pouvez l'intégrer dans votre vie quotidienne. Vous apprendrez comment évaluer les options, comment peser les avantages et les inconvénients et comment prendre des décisions qui s'alignent avec vos valeurs et vos objectifs.</p>
+            </div>
+            
+            <div class="exercises-section">
+                <h4>✍️ Action Exercises</h4>
+                <div class="exercises-grid">
+            <div class="exercise-item">
+                <span class="exercise-num">1</span>
+                <p>Exercice 1 : Écrivez vos objectifs pour la semaine</p>
+            </div>
+            <div class="exercise-item">
+                <span class="exercise-num">2</span>
+                <p>Exercice 2 : Évaluez les options pour une décision importante</p>
+            </div></div>
+            </div>
+            
+            <div class="chapter-summary">
+                <div class="summary-icon">💡</div>
+                <p>La prise de décisions éclairées est une compétence essentielle pour atteindre vos objectifs. En apprenant à évaluer les options, à peser les avantages et les inconvénients et à prendre des décisions qui s'alignent avec vos valeurs et vos objectifs, vous pouvez devenir plus confiant et plus capable de gérer les obstacles.</p>
+            </div>
+            
+            <div class="notes-section">
+                <h4>📝 My Notes</h4>
+                <div class="notes-lines">
+                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+                </div>
+            </div>
+            
+            <div class="page-break"></div>
+        </section>
+        <section class="chapter" id="chapter-5">
+            <div class="chapter-header">
+                <div class="chapter-number-badge">
+                    <span class="ch-label">CHAPTER</span>
+                    <span class="ch-num">5</span>
+                </div>
+                <h2 class="chapter-title">La gestion du stress et de l'anxiété</h2>
+                <p class="chapter-subtitle">Comment gérer le stress et l'anxiété pour atteindre vos objectifs</p>
+            </div>
+            
+            <div class="key-points-box">
+                <h4>🎯 Key Points</h4>
+                <ul class="key-points-list"><li class="key-point">Le stress et l'anxiété peuvent vous handicaper</li><li class="key-point">Comment gérer le stress et l'anxiété</li><li class="key-point">Les bienfaits de la gestion du stress et de l'anxiété</li></ul>
+            </div>
+            
+            <div class="chapter-content">
+                <p>Le stress et l'anxiété peuvent avoir un impact énorme sur votre vie. Lorsque vous êtes capable de gérer le stress et l'anxiété, vous pouvez vous sentir plus calme, plus centré et plus capable de prendre des décisions éclairées. Dans ce chapitre, nous allons explorer les secrets de la gestion du stress et de l'anxiété et comment vous pouvez l'intégrer dans votre vie quotidienne. Vous apprendrez comment utiliser la respiration pour calmer votre esprit, comment pratiquer la méditation pour réduire le stress et comment développer une plus grande conscience émotionnelle.</p>
+            </div>
+            
+            <div class="exercises-section">
+                <h4>✍️ Action Exercises</h4>
+                <div class="exercises-grid">
+            <div class="exercise-item">
+                <span class="exercise-num">1</span>
+                <p>Exercice 1 : Pratiquez la respiration profonde pour calmer votre esprit</p>
+            </div>
+            <div class="exercise-item">
+                <span class="exercise-num">2</span>
+                <p>Exercice 2 : Méditez pour réduire le stress et l'anxiété</p>
+            </div></div>
+            </div>
+            
+            <div class="chapter-summary">
+                <div class="summary-icon">💡</div>
+                <p>La gestion du stress et de l'anxiété est une compétence essentielle pour atteindre vos objectifs. En apprenant à gérer le stress et l'anxiété, vous pouvez devenir plus calme, plus centré et plus capable de prendre des décisions éclairées.</p>
+            </div>
+            
+            <div class="notes-section">
+                <h4>📝 My Notes</h4>
+                <div class="notes-lines">
+                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+                </div>
+            </div>
+            
+            <div class="page-break"></div>
+        </section>
+        <section class="chapter" id="chapter-6">
+            <div class="chapter-header">
+                <div class="chapter-number-badge">
+                    <span class="ch-label">CHAPTER</span>
+                    <span class="ch-num">6</span>
+                </div>
+                <h2 class="chapter-title">La création d'un plan d'action</h2>
+                <p class="chapter-subtitle">Comment créer un plan d'action pour atteindre vos objectifs</p>
+            </div>
+            
+            <div class="key-points-box">
+                <h4>🎯 Key Points</h4>
+                <ul class="key-points-list"><li class="key-point">Un plan d'action est essentiel pour atteindre vos objectifs</li><li class="key-point">Comment créer un plan d'action</li><li class="key-point">Les bienfaits de la création d'un plan d'action</li></ul>
+            </div>
+            
+            <div class="chapter-content">
+                <p>Un plan d'action est essentiel pour atteindre vos objectifs. Lorsque vous avez un plan d'action clair, vous pouvez vous sentir plus confiant, plus motivé et plus capable de gérer les obstacles. Dans ce chapitre, nous allons explorer les secrets de la création d'un plan d'action et comment vous pouvez l'intégrer dans votre vie quotidienne. Vous apprendrez comment établir des objectifs clairs, comment créer un plan d'action étape par étape et comment suivre vos progrès.</p>
+            </div>
+            
+            <div class="exercises-section">
+                <h4>✍️ Action Exercises</h4>
+                <div class="exercises-grid">
+            <div class="exercise-item">
+                <span class="exercise-num">1</span>
+                <p>Exercice 1 : Écrivez vos objectifs pour la semaine</p>
+            </div>
+            <div class="exercise-item">
+                <span class="exercise-num">2</span>
+                <p>Exercice 2 : Créez un plan d'action pour un objectif important</p>
+            </div></div>
+            </div>
+            
+            <div class="chapter-summary">
+                <div class="summary-icon">💡</div>
+                <p>La création d'un plan d'action est une compétence essentielle pour atteindre vos objectifs. En apprenant à établir des objectifs clairs, à créer un plan d'action étape par étape et à suivre vos progrès, vous pouvez devenir plus confiant et plus capable de gérer les obstacles.</p>
+            </div>
+            
+            <div class="notes-section">
+                <h4>📝 My Notes</h4>
+                <div class="notes-lines">
+                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+                </div>
+            </div>
+            
+            <div class="page-break"></div>
+        </section>
+        <section class="chapter" id="chapter-7">
+            <div class="chapter-header">
+                <div class="chapter-number-badge">
+                    <span class="ch-label">CHAPTER</span>
+                    <span class="ch-num">7</span>
+                </div>
+                <h2 class="chapter-title">La gestion du temps</h2>
+                <p class="chapter-subtitle">Comment gérer votre temps pour atteindre vos objectifs</p>
+            </div>
+            
+            <div class="key-points-box">
+                <h4>🎯 Key Points</h4>
+                <ul class="key-points-list"><li class="key-point">Le temps est une ressource précieuse</li><li class="key-point">Comment gérer votre temps</li><li class="key-point">Les bienfaits de la gestion du temps</li></ul>
+            </div>
+            
+            <div class="chapter-content">
+                <p>Le temps est une ressource précieuse. Lorsque vous êtes capable de gérer votre temps de manière efficace, vous pouvez atteindre vos objectifs plus facilement, vous sentir plus productif et plus capable de gérer les obstacles. Dans ce chapitre, nous allons explorer les secrets de la gestion du temps et comment vous pouvez l'intégrer dans votre vie quotidienne. Vous apprendrez comment prioriser vos tâches, comment créer un horaire et comment éviter les distractions.</p>
+            </div>
+            
+            <div class="exercises-section">
+                <h4>✍️ Action Exercises</h4>
+                <div class="exercises-grid">
+            <div class="exercise-item">
+                <span class="exercise-num">1</span>
+                <p>Exercice 1 : Écrivez vos tâches pour la journée</p>
+            </div>
+            <div class="exercise-item">
+                <span class="exercise-num">2</span>
+                <p>Exercice 2 : Créez un horaire pour la semaine</p>
+            </div></div>
+            </div>
+            
+            <div class="chapter-summary">
+                <div class="summary-icon">💡</div>
+                <p>La gestion du temps est une compétence essentielle pour atteindre vos objectifs. En apprenant à prioriser vos tâches, à créer un horaire et à éviter les distractions, vous pouvez devenir plus productif et plus capable de gérer les obstacles.</p>
+            </div>
+            
+            <div class="notes-section">
+                <h4>📝 My Notes</h4>
+                <div class="notes-lines">
+                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+                </div>
+            </div>
+            
+            <div class="page-break"></div>
+        </section>
+        <section class="chapter" id="chapter-8">
+            <div class="chapter-header">
+                <div class="chapter-number-badge">
+                    <span class="ch-label">CHAPTER</span>
+                    <span class="ch-num">8</span>
+                </div>
+                <h2 class="chapter-title">La création d'une vie épanouie</h2>
+                <p class="chapter-subtitle">Comment créer une vie épanouie et réussie</p>
+            </div>
+            
+            <div class="key-points-box">
+                <h4>🎯 Key Points</h4>
+                <ul class="key-points-list"><li class="key-point">Une vie épanouie est essentielle pour la réussite</li><li class="key-point">Comment créer une vie épanouie</li><li class="key-point">Les bienfaits de la création d'une vie épanouie</li></ul>
+            </div>
+            
+            <div class="chapter-content">
+                <p>Une vie épanouie est essentielle pour la réussite. Lorsque vous avez une vie épanouie, vous vous sentez plus heureux, plus satisfait et plus capable de gérer les obstacles. Dans ce chapitre, nous allons explorer les secrets de la création d'une vie épanouie et comment vous pouvez l'intégrer dans votre vie quotidienne. Vous apprendrez comment établir des objectifs personnels, comment créer un plan d'action pour atteindre vos objectifs et comment suivre vos progrès.</p>
+            </div>
+            
+            <div class="exercises-section">
+                <h4>✍️ Action Exercises</h4>
+                <div class="exercises-grid">
+            <div class="exercise-item">
+                <span class="exercise-num">1</span>
+                <p>Exercice 1 : Écrivez vos objectifs personnels</p>
+            </div>
+            <div class="exercise-item">
+                <span class="exercise-num">2</span>
+                <p>Exercice 2 : Créez un plan d'action pour atteindre vos objectifs personnels</p>
+            </div></div>
+            </div>
+            
+            <div class="chapter-summary">
+                <div class="summary-icon">💡</div>
+                <p>La création d'une vie épanouie est une compétence essentielle pour la réussite. En apprenant à établir des objectifs personnels, à créer un plan d'action et à suivre vos progrès, vous pouvez devenir plus heureux, plus satisfait et plus capable de gérer les obstacles.</p>
+            </div>
+            
+            <div class="notes-section">
+                <h4>📝 My Notes</h4>
+                <div class="notes-lines">
+                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+                </div>
+            </div>
+            
+            <div class="page-break"></div>
+        </section>
+        <section class="chapter" id="chapter-9">
+            <div class="chapter-header">
+                <div class="chapter-number-badge">
+                    <span class="ch-label">CHAPTER</span>
+                    <span class="ch-num">9</span>
+                </div>
+                <h2 class="chapter-title">La gestion des obstacles</h2>
+                <p class="chapter-subtitle">Comment gérer les obstacles pour atteindre vos objectifs</p>
+            </div>
+            
+            <div class="key-points-box">
+                <h4>🎯 Key Points</h4>
+                <ul class="key-points-list"><li class="key-point">Les obstacles sont inévitables</li><li class="key-point">Comment gérer les obstacles</li><li class="key-point">Les bienfaits de la gestion des obstacles</li></ul>
+            </div>
+            
+            <div class="chapter-content">
+                <p>Les obstacles sont inévitables. Lorsque vous êtes capable de gérer les obstacles, vous pouvez atteindre vos objectifs plus facilement, vous sentir plus confiant et plus capable de gérer les défis. Dans ce chapitre, nous allons explorer les secrets de la gestion des obstacles et comment vous pouvez l'intégrer dans votre vie quotidienne. Vous apprendrez comment identifier les obstacles, comment créer un plan d'action pour les surmonter et comment suivre vos progrès.</p>
+            </div>
+            
+            <div class="exercises-section">
+                <h4>✍️ Action Exercises</h4>
+                <div class="exercises-grid">
+            <div class="exercise-item">
+                <span class="exercise-num">1</span>
+                <p>Exercice 1 : Écrivez les obstacles que vous rencontrez</p>
+            </div>
+            <div class="exercise-item">
+                <span class="exercise-num">2</span>
+                <p>Exercice 2 : Créez un plan d'action pour surmonter les obstacles</p>
+            </div></div>
+            </div>
+            
+            <div class="chapter-summary">
+                <div class="summary-icon">💡</div>
+                <p>La gestion des obstacles est une compétence essentielle pour atteindre vos objectifs. En apprenant à identifier les obstacles, à créer un plan d'action et à suivre vos progrès, vous pouvez devenir plus confiant et plus capable de gérer les défis.</p>
+            </div>
+            
+            <div class="notes-section">
+                <h4>📝 My Notes</h4>
+                <div class="notes-lines">
+                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+                </div>
+            </div>
+            
+            <div class="page-break"></div>
+        </section>
+        <section class="chapter" id="chapter-10">
+            <div class="chapter-header">
+                <div class="chapter-number-badge">
+                    <span class="ch-label">CHAPTER</span>
+                    <span class="ch-num">10</span>
+                </div>
+                <h2 class="chapter-title">La conclusion</h2>
+                <p class="chapter-subtitle">Comment intégrer les compétences apprises dans votre vie quotidienne</p>
+            </div>
+            
+            <div class="key-points-box">
+                <h4>🎯 Key Points</h4>
+                <ul class="key-points-list"><li class="key-point">Les compétences apprises sont essentielles pour la réussite</li><li class="key-point">Comment intégrer les compétences apprises dans votre vie quotidienne</li><li class="key-point">Les bienfaits de l'intégration des compétences apprises</li></ul>
+            </div>
+            
+            <div class="chapter-content">
+                <p>Les compétences apprises dans ce livre sont essentielles pour la réussite. Lorsque vous êtes capable de les intégrer dans votre vie quotidienne, vous pouvez atteindre vos objectifs plus facilement, vous sentir plus confiant et plus capable de gérer les obstacles. Dans ce chapitre, nous allons explorer les secrets de l'intégration des compétences apprises et comment vous pouvez les appliquer dans votre vie quotidienne. Vous apprendrez comment créer un plan d'action pour intégrer les compétences apprises, comment suivre vos progrès et comment ajuster votre plan d'action en fonction de vos besoins.</p>
+            </div>
+            
+            <div class="exercises-section">
+                <h4>✍️ Action Exercises</h4>
+                <div class="exercises-grid">
+            <div class="exercise-item">
+                <span class="exercise-num">1</span>
+                <p>Exercice 1 : Écrivez un plan d'action pour intégrer les compétences apprises</p>
+            </div>
+            <div class="exercise-item">
+                <span class="exercise-num">2</span>
+                <p>Exercice 2 : Suivez vos progrès et ajustez votre plan d'action en fonction de vos besoins</p>
+            </div></div>
+            </div>
+            
+            <div class="chapter-summary">
+                <div class="summary-icon">💡</div>
+                <p>L'intégration des compétences apprises est essentielle pour la réussite. En apprenant à créer un plan d'action, à suivre vos progrès et à ajuster votre plan d'action en fonction de vos besoins, vous pouvez devenir plus confiant et plus capable de gérer les obstacles.</p>
+            </div>
+            
+            <div class="notes-section">
+                <h4>📝 My Notes</h4>
+                <div class="notes-lines">
+                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+                </div>
+            </div>
+            
+            <div class="page-break"></div>
+        </section>
+
+<!-- CONCLUSION -->
+<section class="conclusion-page">
+    <h2 class="page-title">Conclusion</h2>
+    <p class="conclusion-text">Félicitations pour avoir lu ce livre ! Nous espérons que vous avez appris de nouvelles compétences et que vous êtes prêt à les intégrer dans votre vie quotidienne. N'oubliez pas que la réussite est un processus continu et que vous devez toujours travailler pour améliorer vos compétences et atteindre vos objectifs.</p>
+</section>
+
+<!-- ABOUT AUTHOR -->
+<section class="author-page">
+    <h2 class="page-title">About the Author</h2>
+    <div class="author-card">
+        <div class="author-avatar">🤖</div>
+        <p class="author-name">Auteur Professionnel</p>
+        <p class="author-bio">L'auteur de ce livre est un expert dans le domaine de la réussite personnelle et professionnelle. Il a aidé des milliers de personnes à atteindre leurs objectifs et à améliorer leur vie.</p>
+    </div>
+</section>
+
+<!-- BACK COVER -->
+<section class="back-cover">
+    <p class="back-cover-title">Ce que personne ne t'a jamais dit</p>
+    <p class="back-cover-text">Découvrez les secrets pour vivre une vie épanouie et réussie</p>
+    <div class="price-badge">Professional Edition</div>
+</section>
+
+<!-- PDF DOWNLOAD BUTTON -->
+<button class="pdf-btn" id="pdf-btn" onclick="downloadPDF()">
+    📥 Download PDF
+</button>
+
+<script>
+    // Reading progress
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / docHeight) * 100;
+        document.getElementById('reading-progress').style.width = progress + '%';
+        document.getElementById('progress-text').textContent = Math.round(progress) + '% read';
+    });
+
+    // PDF Download
+    function downloadPDF() {
+        const btn = document.getElementById('pdf-btn');
+        btn.classList.add('loading');
+        btn.innerHTML = '⏳ Preparing PDF...';
+        
+        const title = document.querySelector('.cover-title').textContent || 'ebook';
+        const safeName = title.replace(/[^a-zA-Z0-9؀-ۿ]/g, '_').substring(0, 50);
+        
+        const opt = {
+            margin: 0,
+            filename: safeName + '.pdf',
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#0a0a0a',
+                logging: false
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: [120, 213],
+                orientation: 'portrait'
+            },
+            pagebreak: { mode: ['avoid-all', 'css'] }
+        };
+        
+        // Hide UI elements during PDF generation
+        document.getElementById('pdf-btn').style.display = 'none';
+        document.getElementById('reading-progress').style.display = 'none';
+        document.querySelector('.nav-bar').style.display = 'none';
+        
+        html2pdf().set(opt).from(document.body).save().then(() => {
+            // Restore UI
+            document.getElementById('pdf-btn').style.display = 'flex';
+            document.getElementById('reading-progress').style.display = 'block';
+            document.querySelector('.nav-bar').style.display = 'flex';
+            btn.classList.remove('loading');
+            btn.innerHTML = '📥 Download PDF';
+        }).catch(() => {
+            document.getElementById('pdf-btn').style.display = 'flex';
+            document.querySelector('.nav-bar').style.display = 'flex';
+            btn.classList.remove('loading');
+            btn.innerHTML = '📥 Download PDF';
+            alert('PDF ready! Use browser Print → Save as PDF for best quality.');
+            window.print();
+        });
+    }
+</script>
+
+</body>
+</html>
