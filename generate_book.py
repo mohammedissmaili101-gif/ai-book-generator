@@ -1590,15 +1590,28 @@ h3{{font-size:1rem;margin-bottom:7px}}
 
 
 def main():
-    book_title  = os.environ.get("BOOK_TITLE", "")
-    language    = os.environ.get("BOOK_LANGUAGE", "fr")  # Default to French for Maria Talks
+    global GROQ_API_KEY
+    
+    # 📱 Mobile-Friendly Update: Check for API Key, if missing, prompt for it in Terminal
+    if not GROQ_API_KEY:
+        GROQ_API_KEY = input("🔑 Enter your GROQ_API_KEY: ").strip()
+        if not GROQ_API_KEY:
+            print("ERROR: GROQ_API_KEY is required!")
+            sys.exit(1)
+
+    book_title = os.environ.get("BOOK_TITLE", "").strip()
+    
+    # 📱 Mobile-Friendly Update: Prompt for Book Title if not in environment
+    if not book_title:
+        book_title = input("📖 Enter the BOOK_TITLE (e.g., The Stoic Mind): ").strip()
+        if not book_title:
+            print("ERROR: BOOK_TITLE is required to generate a book!")
+            sys.exit(1)
+            
+    language    = os.environ.get("BOOK_LANGUAGE", "fr")  # Default to French
     action      = os.environ.get("ACTION", "generate")
     author_name = os.environ.get("BOOK_AUTHOR", "").strip()
     book_format = os.environ.get("BOOK_FORMAT", "pdf")  # "pdf" or "kdp"
-
-    if not GROQ_API_KEY:
-        print("ERROR: GROQ_API_KEY not set!")
-        sys.exit(1)
 
     os.makedirs("output", exist_ok=True)
 
@@ -1611,10 +1624,6 @@ def main():
         print("✅ output/niche_suggestions.html")
 
     elif action == "generate":
-        if not book_title:
-            print("ERROR: BOOK_TITLE not set!")
-            sys.exit(1)
-
         fmt_label = "Amazon KDP (6×9 print)" if book_format == "kdp" else "PDF Direct Sell"
         print(f"📚 Generating: '{book_title}' [{language}] — Format: {fmt_label}")
 
