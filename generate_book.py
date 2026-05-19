@@ -17,14 +17,15 @@ from datetime import datetime
 # ============================================================
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-MODEL = "llama3-8b-8192"                     # أقل استهلاكاً للـ tokens
+# تم تغيير الموديل لنسخة مدعومة وجديدة
+MODEL = "llama-3.1-8b-instant"               
 MIN_WORDS_PER_CHAPTER = int(os.environ.get("MIN_WORDS_PER_CHAPTER", "1500"))
 MAX_RETRIES = 3
 INITIAL_DELAY = 5                           # ثوانٍ عند أول rate limit
 BOOK_FORMAT = os.environ.get("BOOK_FORMAT", "pdf")
 
 # ============================================================
-# THEMES (كاملة، نفس السابق)
+# THEMES
 # ============================================================
 BOOK_THEMES = {
     "business": {
@@ -215,7 +216,7 @@ def generate_full_book(title, language):
     return outline
 
 # ============================================================
-# HTML GENERATION – FULL CSS (copied from original working version)
+# HTML GENERATION – FULL CSS
 # ============================================================
 def generate_pdf_html(book_data, theme, language):
     is_rtl = language == "ar"
@@ -344,10 +345,7 @@ async function downloadPDF(){{const btn=document.getElementById('pdf-btn');btn.s
     return html
 
 def generate_kdp_html(book_data, theme, language):
-    # Version simplifiée mais complète – on peut réutiliser la même logique mais avec format 152x228mm
-    # Pour gagner de la place, on peut simplement appeler generate_pdf_html et changer le format via JS? Non, mieux vaut une version dédiée.
-    # Mais pour l'instant, on se limite au PDF. L'utilisateur pourra l'adapter.
-    return generate_pdf_html(book_data, theme, language)  # fallback
+    return generate_pdf_html(book_data, theme, language)
 
 # ============================================================
 # MAIN
