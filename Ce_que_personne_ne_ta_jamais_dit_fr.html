@@ -1,1342 +1,1422 @@
 <!DOCTYPE html>
 <html lang="fr" >
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>Ce que personne ne t'a jamais dit</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #0a0a0a;
-            --secondary: #1a1a1a;
-            --accent: #00ff88;
-            --text: #e0e0e0;
-            --highlight: #00d4ff;
-            --gradient: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
-            --font-title: 'Montserrat', serif;
-            --font-body: 'Source Sans Pro', serif;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        body {
-            background: #0a0a0a;
-            color: var(--text);
-            font-family: var(--font-body);
-            font-size: 16px;
-            line-height: 1.8;
-            max-width: 480px;
-            margin: 0 auto;
-        }
-        
-        /* ===== COVER PAGE ===== */
-        .cover-page {
-            min-height: 100vh;
-            background: var(--gradient);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 40px 30px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .cover-page::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 60%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-        
-        .cover-page::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--accent);
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-        
-        .cover-emoji {
-            font-size: 72px;
-            margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .cover-title {
-            font-family: var(--font-title);
-            font-size: 2.2rem;
-            font-weight: 900;
-            line-height: 1.2;
-            color: #ffffff;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
-        }
-        
-        .cover-subtitle {
-            font-size: 1rem;
-            color: var(--accent);
-            font-style: italic;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-        
-        .cover-tagline {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50px;
-            padding: 12px 24px;
-            font-size: 0.85rem;
-            color: #fff;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .cover-author {
-            font-size: 0.9rem;
-            color: var(--highlight);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-        
-        .cover-divider {
-            width: 60px;
-            height: 3px;
-            background: var(--accent);
-            margin: 20px auto;
-            border-radius: 2px;
-        }
-        
-        /* ===== NAVIGATION ===== */
-        .nav-bar {
-            position: sticky;
-            top: 0;
-            background: rgba(10,10,10,0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-        }
-        
-        .nav-title {
-            font-family: var(--font-title);
-            font-size: 0.85rem;
-            color: var(--accent);
-            font-weight: 700;
-        }
-        
-        .nav-progress {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.4);
-        }
-        
-        /* ===== DESCRIPTION PAGE ===== */
-        .description-page {
-            padding: 50px 25px;
-            background: var(--primary);
-            border-bottom: 3px solid var(--accent);
-        }
-        
-        .section-label {
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 15px;
-        }
-        
-        .description-text {
-            font-size: 1rem;
-            line-height: 1.9;
-            color: rgba(255,255,255,0.8);
-            margin-bottom: 30px;
-        }
-        
-        .benefits-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .benefit-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px 15px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            border-left: 3px solid var(--accent);
-            font-size: 0.9rem;
-        }
-        
-        .benefit-check {
-            color: var(--accent);
-            font-weight: 900;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-        
-        /* ===== TABLE OF CONTENTS ===== */
-        .toc-page {
-            padding: 50px 25px;
-            background: var(--secondary);
-        }
-        
-        .page-title {
-            font-family: var(--font-title);
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #fff;
-            margin-bottom: 30px;
-        }
-        
-        .toc-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .toc-item:hover {
-            padding-left: 10px;
-        }
-        
-        .toc-item:hover .toc-arrow {
-            color: var(--accent);
-        }
-        
-        .toc-num {
-            font-family: var(--font-title);
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: var(--accent);
-            min-width: 35px;
-        }
-        
-        .toc-text {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-        
-        .toc-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #fff;
-        }
-        
-        .toc-sub {
-            font-size: 0.78rem;
-            color: rgba(255,255,255,0.5);
-        }
-        
-        .toc-arrow {
-            color: rgba(255,255,255,0.3);
-            font-size: 1.1rem;
-            transition: color 0.2s;
-        }
-        
-        /* ===== INTRODUCTION ===== */
-        .intro-page {
-            padding: 50px 25px;
-            background: var(--primary);
-            position: relative;
-        }
-        
-        .intro-page::before {
-            content: '"';
-            font-family: var(--font-title);
-            font-size: 150px;
-            color: var(--accent);
-            opacity: 0.1;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            line-height: 1;
-        }
-        
-        .intro-text {
-            font-size: 1.05rem;
-            line-height: 2;
-            color: rgba(255,255,255,0.85);
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* ===== CHAPTERS ===== */
-        .chapter {
-            padding: 0 0 30px 0;
-            border-bottom: 3px solid var(--accent);
-        }
-        
-        .chapter-header {
-            background: var(--gradient);
-            padding: 50px 25px 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .chapter-number-badge {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid var(--accent);
-            border-radius: 15px;
-            padding: 8px 20px;
-            margin-bottom: 20px;
-        }
-        
-        .ch-label {
-            font-size: 0.6rem;
-            letter-spacing: 3px;
-            color: var(--accent);
-        }
-        
-        .ch-num {
-            font-family: var(--font-title);
-            font-size: 2rem;
-            font-weight: 900;
-            color: #fff;
-            line-height: 1;
-        }
-        
-        .chapter-title {
-            font-family: var(--font-title);
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #fff;
-            line-height: 1.3;
-            margin-bottom: 10px;
-        }
-        
-        .chapter-subtitle {
-            color: var(--accent);
-            font-size: 0.9rem;
-            font-style: italic;
-            opacity: 0.9;
-        }
-        
-        .key-points-box {
-            margin: 25px;
-            padding: 20px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .key-points-box h4 {
-            color: var(--accent);
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-        
-        .key-points-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .key-point {
-            padding: 8px 12px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            font-size: 0.88rem;
-            position: relative;
-            padding-left: 25px;
-        }
-        
-        .key-point::before {
-            content: '→';
-            position: absolute;
-            left: 8px;
-            color: var(--accent);
-        }
-        
-        .chapter-content {
-            padding: 0 25px;
-        }
-        
-        .chapter-content p {
-            margin-bottom: 18px;
-            font-size: 0.95rem;
-            line-height: 1.9;
-            color: rgba(255,255,255,0.82);
-        }
-        
-        .exercises-section {
-            margin: 25px;
-            padding: 20px;
-            background: rgba(255,255,255,0.04);
-            border-radius: 15px;
-            border-left: 4px solid var(--highlight);
-        }
-        
-        .exercises-section h4 {
-            color: var(--highlight);
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-        
-        .exercises-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .exercise-item {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            font-size: 0.88rem;
-            color: rgba(255,255,255,0.8);
-        }
-        
-        .exercise-num {
-            background: var(--highlight);
-            color: var(--primary);
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 900;
-            flex-shrink: 0;
-        }
-        
-        .chapter-summary {
-            margin: 25px;
-            padding: 20px 20px 20px 60px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            font-size: 0.95rem;
-            font-style: italic;
-            color: rgba(255,255,255,0.9);
-            position: relative;
-        }
-        
-        .summary-icon {
-            position: absolute;
-            left: 20px;
-            top: 20px;
-            font-size: 1.5rem;
-        }
-        
-        /* ===== NOTES SECTION ===== */
-        .notes-section {
-            margin: 25px;
-            padding: 20px;
-            background: rgba(255,255,255,0.02);
-            border-radius: 15px;
-            border: 1px dashed rgba(255,255,255,0.15);
-        }
-        
-        .notes-section h4 {
-            color: rgba(255,255,255,0.4);
-            font-size: 0.78rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-        
-        .note-line {
-            height: 1px;
-            background: rgba(255,255,255,0.1);
-            margin-bottom: 28px;
-            border-radius: 1px;
-        }
-        
-        /* ===== CONCLUSION ===== */
-        .conclusion-page {
-            padding: 50px 25px;
-            background: var(--gradient);
-            text-align: center;
-        }
-        
-        .conclusion-page .page-title {
-            text-align: center;
-        }
-        
-        .conclusion-text {
-            font-size: 1rem;
-            line-height: 2;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 30px;
-        }
-        
-        /* ===== ABOUT AUTHOR ===== */
-        .author-page {
-            padding: 50px 25px;
-            background: var(--primary);
-        }
-        
-        .author-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .author-avatar {
-            width: 80px;
-            height: 80px;
-            background: var(--gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 20px;
-            border: 3px solid var(--accent);
-        }
-        
-        .author-name {
-            font-family: var(--font-title);
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 5px;
-        }
-        
-        .author-bio {
-            font-size: 0.9rem;
-            line-height: 1.8;
-            color: rgba(255,255,255,0.7);
-            margin-top: 15px;
-        }
-        
-        /* ===== BACK COVER ===== */
-        .back-cover {
-            min-height: 60vh;
-            background: var(--gradient);
-            padding: 50px 25px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .back-cover-title {
-            font-family: var(--font-title);
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #fff;
-            margin-bottom: 20px;
-        }
-        
-        .back-cover-text {
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.8);
-            line-height: 1.8;
-            max-width: 380px;
-            margin-bottom: 30px;
-        }
-        
-        .price-badge {
-            background: var(--accent);
-            color: var(--primary);
-            font-size: 1.5rem;
-            font-weight: 900;
-            font-family: var(--font-title);
-            padding: 15px 30px;
-            border-radius: 50px;
-            letter-spacing: 1px;
-        }
-        
-        /* ===== PAGE BREAK ===== */
-        .page-break {
-            height: 20px;
-            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.03));
-        }
-        
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 2px;
-        }
-        
-        /* ===== READING PROGRESS ===== */
-        #reading-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: var(--accent);
-            z-index: 200;
-            transition: width 0.1s;
-        }
-        
-        /* ===== PDF DOWNLOAD BUTTON ===== */
-        .pdf-btn {
-            position: fixed;
-            bottom: 25px;
-            right: 20px;
-            background: var(--accent);
-            color: var(--primary);
-            border: none;
-            border-radius: 50px;
-            padding: 14px 22px;
-            font-size: 0.88rem;
-            font-weight: 900;
-            cursor: pointer;
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            transition: all 0.2s;
-            font-family: var(--font-body);
-        }
-        
-        .pdf-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(0,0,0,0.5);
-        }
-        
-        .pdf-btn:active {
-            transform: scale(0.96);
-        }
-        
-        .pdf-btn.loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-        
-        @media print {
-            .nav-bar { display: none; }
-            .pdf-btn { display: none; }
-            #reading-progress { display: none; }
-            body { max-width: 100%; }
-            .cover-page { min-height: 100vh; page-break-after: always; }
-            .chapter { page-break-before: always; }
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ce que personne ne t'a jamais dit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat,wght@400;700;900&family=Source+Sans+Pro,wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ===================== RESET & BASE ===================== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary:   #030712;
+    --secondary: #0f172a;
+    --accent:    #22d3ee;
+    --text:      #e2e8f0;
+    --highlight: #38bdf8;
+    --gradient:  linear-gradient(160deg, #030712 0%, #0f172a 50%, #1e293b 100%);
+    --cover-gradient: linear-gradient(160deg, #020617 0%, #0f172a 60%, #1e293b 100%);
+    --cover-accent:   #22d3ee;
+    --font-title: 'Montserrat', Georgia, serif;
+    --font-body:  'Source Sans Pro', Georgia, serif;
+
+    /* Typography scale — prevents cramped text */
+    --size-xs:   0.75rem;
+    --size-sm:   0.875rem;
+    --size-base: 1rem;
+    --size-lg:   1.125rem;
+    --size-xl:   1.375rem;
+    --size-2xl:  1.75rem;
+    --size-3xl:  2.25rem;
+
+    /* Spacing */
+    --gap-sm:  12px;
+    --gap-md:  24px;
+    --gap-lg:  40px;
+    --gap-xl:  56px;
+    --side:    22px;
+    --radius:  14px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    background: var(--primary);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: var(--size-base);
+    /* KEY FIX: line-height prevents text overlap across pages */
+    line-height: 1.85;
+    max-width: 480px;
+    margin: 0 auto;
+    -webkit-font-smoothing: antialiased;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* ===================== COVER ===================== */
+.cover-page {
+    min-height: 100vh;
+    background: var(--cover-gradient);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 60px var(--side) 50px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decorative circles on cover */
+.cover-page::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: var(--cover-accent);
+    opacity: 0.08;
+}
+.cover-page::after {
+    content: '';
+    position: absolute;
+    bottom: 120px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 2px solid var(--cover-accent);
+    opacity: 0.15;
+}
+
+.cover-top-bar {
+    position: absolute;
+    top: var(--side);
+    left: var(--side);
+    right: var(--side);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cover-genre-tag {
+    background: var(--cover-accent);
+    color: var(--primary);
+    font-size: var(--size-xs);
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+}
+
+.cover-year {
+    font-size: var(--size-xs);
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 2px;
+}
+
+.cover-emoji {
+    font-size: 56px;
+    margin-bottom: 28px;
+    display: block;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+}
+
+.cover-line {
+    width: 48px;
+    height: 4px;
+    background: var(--cover-accent);
+    border-radius: 2px;
+    margin-bottom: 20px;
+}
+
+.cover-title {
+    font-family: var(--font-title);
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    letter-spacing: -0.5px;
+}
+
+.cover-subtitle {
+    font-size: var(--size-sm);
+    color: var(--cover-accent);
+    font-style: italic;
+    margin-bottom: 36px;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+.cover-author-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    width: 100%;
+}
+
+.cover-author-dot {
+    width: 32px;
+    height: 32px;
+    background: var(--cover-accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.cover-author-name {
+    font-size: var(--size-xs);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+}
+
+/* ===================== NAV BAR ===================== */
+.nav-bar {
+    position: sticky;
+    top: 0;
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 13px var(--side);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+.nav-title {
+    font-family: var(--font-title);
+    font-size: var(--size-xs);
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.nav-progress-text {
+    font-size: var(--size-xs);
+    color: rgba(255,255,255,0.35);
+}
+
+/* ===================== DESCRIPTION PAGE ===================== */
+.description-page {
+    padding: var(--gap-xl) var(--side);
+    background: var(--secondary);
+    border-bottom: 3px solid var(--accent);
+}
+
+.section-label {
+    font-size: var(--size-xs);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: block;
+}
+
+.description-text {
+    font-size: var(--size-base);
+    line-height: 1.85;
+    color: rgba(255,255,255,0.78);
+    margin-bottom: var(--gap-lg);
+}
+
+.benefits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 15px;
+    background: rgba(255,255,255,0.04);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--accent);
+}
+
+.benefit-check {
+    color: var(--accent);
+    font-weight: 900;
+    font-size: var(--size-lg);
+    flex-shrink: 0;
+    line-height: 1.3;
+}
+
+.benefit-text {
+    font-size: var(--size-sm);
+    line-height: 1.6;
+    color: rgba(255,255,255,0.82);
+}
+
+/* ===================== TABLE OF CONTENTS ===================== */
+.toc-page {
+    padding: var(--gap-xl) var(--side);
+    background: var(--primary);
+}
+
+.page-title {
+    font-family: var(--font-title);
+    font-size: var(--size-2xl);
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: var(--gap-md);
+    line-height: 1.2;
+}
+
+.toc-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer;
+    transition: padding-left 0.2s;
+}
+.toc-item:hover { padding-left: 8px; }
+.toc-item:hover .toc-arrow { color: var(--accent); }
+
+.toc-num {
+    font-family: var(--font-title);
+    font-size: var(--size-lg);
+    font-weight: 900;
+    color: var(--accent);
+    min-width: 34px;
+}
+
+.toc-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.toc-title {
+    font-size: var(--size-sm);
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.3;
+}
+
+.toc-sub {
+    font-size: var(--size-xs);
+    color: rgba(255,255,255,0.4);
+    line-height: 1.4;
+}
+
+.toc-arrow {
+    color: rgba(255,255,255,0.25);
+    font-size: var(--size-base);
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+
+/* ===================== INTRO PAGE ===================== */
+.intro-page {
+    padding: var(--gap-xl) var(--side);
+    background: var(--secondary);
+    position: relative;
+}
+
+.intro-page::before {
+    content: '“';
+    font-family: var(--font-title);
+    font-size: 140px;
+    color: var(--accent);
+    opacity: 0.07;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* ===================== CHAPTERS ===================== */
+.chapter {
+    /* KEY FIX: no overflow hidden — lets content breathe */
+    border-bottom: 3px solid var(--accent);
+}
+
+.chapter-header {
+    background: var(--gradient);
+    padding: var(--gap-xl) var(--side) var(--gap-lg);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.chapter-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.04) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.chapter-meta {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.chapter-number-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255,255,255,0.08);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 8px 22px;
+}
+
+.ch-label {
+    font-size: 0.6rem;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+}
+
+.ch-num {
+    font-family: var(--font-title);
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+}
+
+.chapter-title {
+    font-family: var(--font-title);
+    font-size: var(--size-2xl);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 10px;
+}
+
+.chapter-subtitle {
+    color: var(--accent);
+    font-size: var(--size-sm);
+    font-style: italic;
+    opacity: 0.88;
+    line-height: 1.5;
+}
+
+/* Hook quote */
+.chapter-hook {
+    margin: var(--gap-md) var(--side) 0;
+    padding: 18px 20px;
+    border-left: 4px solid var(--accent);
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-style: italic;
+    font-size: var(--size-base);
+    color: rgba(255,255,255,0.75);
+    line-height: 1.75;
+}
+
+/* Chapter body wrapper — critical for no-cut layout */
+.chapter-body {
+    padding: var(--gap-md) var(--side) var(--gap-lg);
+}
+
+/* KEY FIX: body-text uses display:block + avoids page-break inside */
+.body-text {
+    display: block;
+    font-size: var(--size-base);
+    line-height: 1.9;
+    color: rgba(255,255,255,0.82);
+    margin-bottom: 18px;
+    page-break-inside: avoid;
+    /* Forces text to wrap, never overflow */
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* ===== BOXES ===== */
+.box-label {
+    font-size: var(--size-xs);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+}
+
+.key-points-box {
+    padding: 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: var(--radius);
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: var(--gap-md);
+}
+
+.key-points-box .box-label { color: var(--accent); }
+
+.key-points-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.key-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    font-size: var(--size-sm);
+    line-height: 1.55;
+    color: rgba(255,255,255,0.85);
+}
+
+.kp-arrow {
+    color: var(--accent);
+    flex-shrink: 0;
+    font-style: normal;
+    line-height: 1.55;
+}
+
+/* Technique badge */
+.technique-badge {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+    border-radius: var(--radius);
+    border: 1px solid var(--accent);
+    margin-bottom: var(--gap-md);
+}
+
+.technique-label {
+    font-size: var(--size-xs);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.technique-name {
+    font-family: var(--font-title);
+    font-size: var(--size-lg);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+}
+
+/* Exercises */
+.exercises-section {
+    padding: 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--highlight);
+    margin-bottom: var(--gap-md);
+}
+
+.exercises-section .box-label { color: var(--highlight); }
+
+.exercises-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.exercise-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.exercise-num {
+    background: var(--highlight);
+    color: var(--primary);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--size-xs);
+    font-weight: 900;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.exercise-item p {
+    font-size: var(--size-sm);
+    line-height: 1.65;
+    color: rgba(255,255,255,0.8);
+    word-break: break-word;
+}
+
+/* Summary */
+.chapter-summary {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: var(--radius);
+    margin-bottom: var(--gap-md);
+    font-style: italic;
+}
+
+.summary-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    line-height: 1.4;
+}
+
+.summary-text {
+    font-size: var(--size-sm);
+    line-height: 1.75;
+    color: rgba(255,255,255,0.88);
+    word-break: break-word;
+}
+
+/* Notes */
+.notes-section {
+    padding: 18px 20px;
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius);
+    border: 1px dashed rgba(255,255,255,0.12);
+}
+
+.notes-label {
+    font-size: var(--size-xs);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 14px;
+    display: block;
+}
+
+.notes-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.note-line {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 1px;
+}
+
+/* ===================== CONCLUSION ===================== */
+.conclusion-page {
+    padding: var(--gap-xl) var(--side);
+    background: var(--gradient);
+    text-align: center;
+}
+
+.conclusion-page .page-title { text-align: center; }
+
+/* ===================== AUTHOR PAGE ===================== */
+.author-page {
+    padding: var(--gap-xl) var(--side);
+    background: var(--secondary);
+}
+
+.author-card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 20px;
+    padding: 30px 24px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.author-avatar {
+    width: 72px;
+    height: 72px;
+    background: var(--gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 18px;
+    border: 3px solid var(--accent);
+}
+
+.author-name {
+    font-family: var(--font-title);
+    font-size: var(--size-xl);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.author-bio {
+    font-size: var(--size-sm);
+    line-height: 1.8;
+    color: rgba(255,255,255,0.65);
+    margin-top: 12px;
+    word-break: break-word;
+}
+
+/* ===================== BACK COVER ===================== */
+.back-cover {
+    min-height: 55vh;
+    background: var(--cover-gradient);
+    padding: var(--gap-xl) var(--side);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.back-cover::before {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: -60px;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: var(--cover-accent);
+    opacity: 0.06;
+}
+
+.back-cover-title {
+    font-family: var(--font-title);
+    font-size: var(--size-2xl);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.2;
+}
+
+.back-cover-text {
+    font-size: var(--size-sm);
+    color: rgba(255,255,255,0.75);
+    line-height: 1.75;
+    max-width: 340px;
+}
+
+.edition-badge {
+    background: var(--cover-accent);
+    color: var(--primary);
+    font-size: var(--size-sm);
+    font-weight: 900;
+    font-family: var(--font-title);
+    padding: 12px 28px;
+    border-radius: 50px;
+    letter-spacing: 1px;
+}
+
+/* ===================== READING PROGRESS ===================== */
+#reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--accent);
+    z-index: 999;
+    transition: width 0.15s linear;
+    width: 0%;
+}
+
+/* ===================== PDF BUTTON ===================== */
+.pdf-btn {
+    position: fixed;
+    bottom: 22px;
+    right: 18px;
+    background: var(--accent);
+    color: var(--primary);
+    border: none;
+    border-radius: 50px;
+    padding: 13px 20px;
+    font-size: var(--size-sm);
+    font-weight: 900;
+    cursor: pointer;
+    z-index: 998;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+    transition: transform 0.15s, box-shadow 0.15s;
+    font-family: var(--font-body);
+}
+
+.pdf-btn:active { transform: scale(0.95); }
+
+/* ===================== PRINT STYLES ===================== */
+@media print {
+    .nav-bar, .pdf-btn, #reading-progress { display: none !important; }
+    body { max-width: 100%; font-size: 11pt; }
+    .cover-page { min-height: 100vh; page-break-after: always; }
+    /* KEY FIX: avoid orphaned lines on print */
+    .body-text { orphans: 3; widows: 3; }
+    .chapter { page-break-before: always; }
+    .chapter-header, .key-points-box, .exercises-section,
+    .chapter-summary, .technique-badge {
+        page-break-inside: avoid;
+    }
+}
+
+/* ===================== SCROLLBAR ===================== */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
 <div id="reading-progress"></div>
 
-<!-- COVER PAGE -->
+<!-- ==================== COVER ==================== -->
 <section class="cover-page">
-    <div class="cover-emoji">🤖</div>
+    <div class="cover-top-bar">
+        <span class="cover-genre-tag">🤖 Book</span>
+        <span class="cover-year">2026</span>
+    </div>
+    <span class="cover-emoji">🤖</span>
+    <div class="cover-line"></div>
     <h1 class="cover-title">Ce que personne ne t'a jamais dit</h1>
-    <p class="cover-subtitle">Les secrets pour réussir dans la vie et atteindre vos objectifs</p>
-    <div class="cover-divider"></div>
-    <div class="cover-tagline">Découvrez les clés pour débloquer votre plein potentiel et atteindre la réussite</div>
-    <p class="cover-author">by Maria</p>
-</section>
-
-<!-- NAV BAR -->
-<nav class="nav-bar">
-    <span class="nav-title">Ce que personne ne t'a jamais ...</span>
-    <span class="nav-progress" id="progress-text">0% read</span>
-</nav>
-
-<!-- DESCRIPTION PAGE -->
-<section class="description-page">
-    <p class="section-label">About This Book</p>
-    <p class="description-text">Dans ce livre, vous découvrirez les secrets pour réussir dans la vie et atteindre vos objectifs. Vous apprendrez comment débloquer votre plein potentiel, gérer vos émotions et développer une mentalité positive pour atteindre la réussite. Ce livre est destiné à ceux qui cherchent à améliorer leur vie et à atteindre leurs objectifs.</p>
-    
-    <p class="section-label">What You Will Learn</p>
-    <div class="benefits-grid">
-        <div class="benefit-item"><span class="benefit-check">✓</span><span>Découvrez les clés pour débloquer votre plein potentiel</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span>Apprenez comment gérer vos émotions et développer une mentalité positive</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span>Développez des stratégies pour atteindre vos objectifs</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span>Améliorez vos relations et votre communication</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span>Découvrez comment surmonter les obstacles et les échecs</span></div>
+    <p class="cover-subtitle">Les secrets pour vivre une vie authentique et épanouie</p>
+    <div class="cover-author-row">
+        <div class="cover-author-dot">🤖</div>
+        <span class="cover-author-name">by Maria</span>
     </div>
 </section>
 
-<!-- TABLE OF CONTENTS -->
+<!-- ==================== NAV ==================== -->
+<nav class="nav-bar">
+    <span class="nav-title">Ce que personne ne t'a jamai…</span>
+    <span class="nav-progress-text" id="progress-text">0% read</span>
+</nav>
+
+<!-- ==================== DESCRIPTION ==================== -->
+<section class="description-page">
+    <span class="section-label">About This Book</span>
+    <p class="description-text">Vous vous sentez parfois perdu ou insatisfait de votre vie ? Vous avez l'impression de suivre les règles sans jamais atteindre votre plein potentiel ? Ce livre vous révèle les secrets que personne ne vous a jamais dits pour vivre une vie authentique et épanouie. Découvrez comment briser les chaînes de la convention et créer une vie qui vous ressemble. Vous apprendrez à identifier vos véritables désirs, à développer une confiance en vous inébranlable et à atteindre vos objectifs les plus ambitieux.</p>
+
+    <span class="section-label">What You Will Learn</span>
+    <div class="benefits-list">
+        <div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Découvrez les 5 secrets pour vivre une vie authentique et épanouie</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Apprenez à identifier vos véritables désirs et à les atteindre</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Développez une confiance en vous inébranlable pour affronter les défis</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Créez une vie qui vous ressemble et atteignez vos objectifs les plus ambitieux</span></div><div class="benefit-item"><span class="benefit-check">✓</span><span class="benefit-text">Apprenez à gérer le stress et l'anxiété pour vivre une vie plus équilibrée</span></div>
+    </div>
+</section>
+
+<!-- ==================== TOC ==================== -->
 <section class="toc-page">
     <h2 class="page-title">Table of Contents</h2>
-    
-        <div class="toc-item" onclick="document.getElementById('chapter-1').scrollIntoView({behavior:'smooth'})">
+    <div class="toc-item" onclick="scrollToChapter(1)">
             <span class="toc-num">01</span>
             <div class="toc-text">
-                <span class="toc-title">Introduction à la réussite</span>
-                <span class="toc-sub">Comprendre les fondements de la réussite</span>
+                <span class="toc-title">Le Secret de l'Authenticité</span>
+                <span class="toc-sub">Comment vivre une vie qui vous ressemble</span>
             </div>
             <span class="toc-arrow">→</span>
-        </div>
-        <div class="toc-item" onclick="document.getElementById('chapter-2').scrollIntoView({behavior:'smooth'})">
+        </div><div class="toc-item" onclick="scrollToChapter(2)">
             <span class="toc-num">02</span>
             <div class="toc-text">
-                <span class="toc-title">La puissance de la pensée positive</span>
-                <span class="toc-sub">Comment la pensée positive peut changer votre vie</span>
+                <span class="toc-title">La Puissance de la Confiance en Soi</span>
+                <span class="toc-sub">Comment développer une confiance en vous inébranlable</span>
             </div>
             <span class="toc-arrow">→</span>
-        </div>
-        <div class="toc-item" onclick="document.getElementById('chapter-3').scrollIntoView({behavior:'smooth'})">
+        </div><div class="toc-item" onclick="scrollToChapter(3)">
             <span class="toc-num">03</span>
             <div class="toc-text">
-                <span class="toc-title">La gestion des émotions</span>
-                <span class="toc-sub">Comment gérer vos émotions pour atteindre la réussite</span>
+                <span class="toc-title">Le Pouvoir de la Visualisation</span>
+                <span class="toc-sub">Comment créer une vie qui vous ressemble</span>
             </div>
             <span class="toc-arrow">→</span>
-        </div>
-        <div class="toc-item" onclick="document.getElementById('chapter-4').scrollIntoView({behavior:'smooth'})">
+        </div><div class="toc-item" onclick="scrollToChapter(4)">
             <span class="toc-num">04</span>
             <div class="toc-text">
-                <span class="toc-title">Le développement de la confiance en soi</span>
-                <span class="toc-sub">Comment développer la confiance en soi pour atteindre la réussite</span>
+                <span class="toc-title">La Gestion du Stress et de l'Anxiété</span>
+                <span class="toc-sub">Comment gérer le stress et l'anxiété pour vivre une vie plus équilibrée</span>
             </div>
             <span class="toc-arrow">→</span>
-        </div>
-        <div class="toc-item" onclick="document.getElementById('chapter-5').scrollIntoView({behavior:'smooth'})">
+        </div><div class="toc-item" onclick="scrollToChapter(5)">
             <span class="toc-num">05</span>
             <div class="toc-text">
-                <span class="toc-title">La communication efficace</span>
-                <span class="toc-sub">Comment communiquer de manière efficace pour atteindre la réussite</span>
+                <span class="toc-title">Le Pouvoir de la Gratitude</span>
+                <span class="toc-sub">Comment utiliser la gratitude pour améliorer votre vie</span>
             </div>
             <span class="toc-arrow">→</span>
-        </div>
-        <div class="toc-item" onclick="document.getElementById('chapter-6').scrollIntoView({behavior:'smooth'})">
+        </div><div class="toc-item" onclick="scrollToChapter(6)">
             <span class="toc-num">06</span>
             <div class="toc-text">
-                <span class="toc-title">La gestion du temps</span>
-                <span class="toc-sub">Comment gérer votre temps pour atteindre la réussite</span>
+                <span class="toc-title">Le Pouvoir de la Compassion</span>
+                <span class="toc-sub">Comment utiliser la compassion pour améliorer vos relations</span>
             </div>
             <span class="toc-arrow">→</span>
-        </div>
-        <div class="toc-item" onclick="document.getElementById('chapter-7').scrollIntoView({behavior:'smooth'})">
+        </div><div class="toc-item" onclick="scrollToChapter(7)">
             <span class="toc-num">07</span>
             <div class="toc-text">
-                <span class="toc-title">La résilience</span>
-                <span class="toc-sub">Comment développer la résilience pour atteindre la réussite</span>
+                <span class="toc-title">Le Pouvoir de la Forgiveness</span>
+                <span class="toc-sub">Comment utiliser la forgiveness pour améliorer votre vie</span>
             </div>
             <span class="toc-arrow">→</span>
-        </div>
-        <div class="toc-item" onclick="document.getElementById('chapter-8').scrollIntoView({behavior:'smooth'})">
+        </div><div class="toc-item" onclick="scrollToChapter(8)">
             <span class="toc-num">08</span>
             <div class="toc-text">
-                <span class="toc-title">La motivation</span>
-                <span class="toc-sub">Comment développer la motivation pour atteindre la réussite</span>
-            </div>
-            <span class="toc-arrow">→</span>
-        </div>
-        <div class="toc-item" onclick="document.getElementById('chapter-9').scrollIntoView({behavior:'smooth'})">
-            <span class="toc-num">09</span>
-            <div class="toc-text">
-                <span class="toc-title">La créativité</span>
-                <span class="toc-sub">Comment développer la créativité pour atteindre la réussite</span>
-            </div>
-            <span class="toc-arrow">→</span>
-        </div>
-        <div class="toc-item" onclick="document.getElementById('chapter-10').scrollIntoView({behavior:'smooth'})">
-            <span class="toc-num">010</span>
-            <div class="toc-text">
-                <span class="toc-title">La conclusion</span>
-                <span class="toc-sub">Récapitulons les clés de la réussite</span>
+                <span class="toc-title">Le Pouvoir de la Créativité</span>
+                <span class="toc-sub">Comment utiliser la créativité pour améliorer votre vie</span>
             </div>
             <span class="toc-arrow">→</span>
         </div>
 </section>
 
-<!-- INTRODUCTION -->
+<!-- ==================== INTRODUCTION ==================== -->
 <section class="intro-page">
     <h2 class="page-title">Introduction</h2>
-    <p class="intro-text">Bienvenue dans ce livre qui vous aidera à découvrir les clés de la réussite et à atteindre vos objectifs. Dans les chapitres suivants, nous allons explorer les fondements de la réussite et les stratégies pour la mettre en pratique.</p>
+    <p class="body-text">Bienvenue dans ce livre qui va vous aider à découvrir les secrets pour vivre une vie authentique et épanouie. Vous allez apprendre à identifier vos véritables désirs, à développer une confiance en vous inébranlable et à atteindre vos objectifs les plus ambitieux. Ce livre est divisé en 8 chapitres qui vont vous guider étape par étape pour créer une vie qui vous ressemble.</p>
 </section>
 
-<!-- CHAPTERS -->
+<!-- ==================== CHAPTERS ==================== -->
 
-        <section class="chapter" id="chapter-1">
-            <div class="chapter-header">
-                <div class="chapter-number-badge">
-                    <span class="ch-label">CHAPTER</span>
-                    <span class="ch-num">1</span>
-                </div>
-                <h2 class="chapter-title">Introduction à la réussite</h2>
-                <p class="chapter-subtitle">Comprendre les fondements de la réussite</p>
-            </div>
-            
-            <div class="key-points-box">
-                <h4>🎯 Key Points</h4>
-                <ul class="key-points-list"><li class="key-point">La définition de la réussite</li><li class="key-point">Les facteurs clés de la réussite</li><li class="key-point">Les obstacles à la réussite</li></ul>
-            </div>
-            
-            <div class="chapter-content">
-                <p>La réussite est un concept qui varie d'une personne à l'autre. Pour certains, la réussite signifie atteindre un certain niveau de richesse ou de statut social, tandis que pour d'autres, elle signifie trouver un équilibre entre le travail et la vie personnelle. Dans ce chapitre, nous allons explorer les fondements de la réussite et les facteurs clés qui contribuent à son atteinte. Nous allons également examiner les obstacles qui peuvent empêcher les gens d'atteindre leurs objectifs.</p>
-            </div>
-            
-            <div class="exercises-section">
-                <h4>✍️ Action Exercises</h4>
-                <div class="exercises-grid">
-            <div class="exercise-item">
-                <span class="exercise-num">1</span>
-                <p>Exercice 1 : Définissez vos objectifs et vos priorités</p>
-            </div>
-            <div class="exercise-item">
-                <span class="exercise-num">2</span>
-                <p>Exercice 2 : Identifiez les obstacles qui vous empêchent d'atteindre vos objectifs</p>
-            </div></div>
-            </div>
-            
-            <div class="chapter-summary">
-                <div class="summary-icon">💡</div>
-                <p>La réussite est un concept complexe qui nécessite une compréhension profonde de soi-même et de ses objectifs. En définissant vos objectifs et vos priorités, vous pouvez commencer à débloquer votre plein potentiel et à atteindre la réussite.</p>
-            </div>
-            
-            <div class="notes-section">
-                <h4>📝 My Notes</h4>
-                <div class="notes-lines">
-                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
-                </div>
-            </div>
-            
-            <div class="page-break"></div>
-        </section>
-        <section class="chapter" id="chapter-2">
-            <div class="chapter-header">
-                <div class="chapter-number-badge">
-                    <span class="ch-label">CHAPTER</span>
-                    <span class="ch-num">2</span>
-                </div>
-                <h2 class="chapter-title">La puissance de la pensée positive</h2>
-                <p class="chapter-subtitle">Comment la pensée positive peut changer votre vie</p>
-            </div>
-            
-            <div class="key-points-box">
-                <h4>🎯 Key Points</h4>
-                <ul class="key-points-list"><li class="key-point">La définition de la pensée positive</li><li class="key-point">Les avantages de la pensée positive</li><li class="key-point">Les stratégies pour développer une pensée positive</li></ul>
-            </div>
-            
-            <div class="chapter-content">
-                <p>La pensée positive est un état d'esprit qui peut avoir un impact profond sur votre vie. En cultivant une pensée positive, vous pouvez améliorer votre confiance en vous, votre estime de soi et votre capacité à gérer les défis. Dans ce chapitre, nous allons explorer les avantages de la pensée positive et les stratégies pour la développer.</p>
-            </div>
-            
-            <div class="exercises-section">
-                <h4>✍️ Action Exercises</h4>
-                <div class="exercises-grid">
-            <div class="exercise-item">
-                <span class="exercise-num">1</span>
-                <p>Exercice 1 : Pratiquez la gratitude</p>
-            </div>
-            <div class="exercise-item">
-                <span class="exercise-num">2</span>
-                <p>Exercice 2 : Développez une affirmation positive</p>
-            </div></div>
-            </div>
-            
-            <div class="chapter-summary">
-                <div class="summary-icon">💡</div>
-                <p>La pensée positive est un outil puissant qui peut vous aider à atteindre vos objectifs et à améliorer votre qualité de vie. En pratiquant la gratitude et en développant des affirmations positives, vous pouvez commencer à cultiver une pensée positive et à changer votre vie.</p>
-            </div>
-            
-            <div class="notes-section">
-                <h4>📝 My Notes</h4>
-                <div class="notes-lines">
-                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
-                </div>
-            </div>
-            
-            <div class="page-break"></div>
-        </section>
-        <section class="chapter" id="chapter-3">
-            <div class="chapter-header">
-                <div class="chapter-number-badge">
-                    <span class="ch-label">CHAPTER</span>
-                    <span class="ch-num">3</span>
-                </div>
-                <h2 class="chapter-title">La gestion des émotions</h2>
-                <p class="chapter-subtitle">Comment gérer vos émotions pour atteindre la réussite</p>
-            </div>
-            
-            <div class="key-points-box">
-                <h4>🎯 Key Points</h4>
-                <ul class="key-points-list"><li class="key-point">La définition des émotions</li><li class="key-point">Les types d'émotions</li><li class="key-point">Les stratégies pour gérer les émotions</li></ul>
-            </div>
-            
-            <div class="chapter-content">
-                <p>Les émotions sont une partie naturelle de la vie humaine. Cependant, lorsqu'elles ne sont pas gérées correctement, les émotions peuvent devenir un obstacle à la réussite. Dans ce chapitre, nous allons explorer les types d'émotions et les stratégies pour les gérer.</p>
-            </div>
-            
-            <div class="exercises-section">
-                <h4>✍️ Action Exercises</h4>
-                <div class="exercises-grid">
-            <div class="exercise-item">
-                <span class="exercise-num">1</span>
-                <p>Exercice 1 : Identifiez vos émotions</p>
-            </div>
-            <div class="exercise-item">
-                <span class="exercise-num">2</span>
-                <p>Exercice 2 : Développez une stratégie pour gérer vos émotions</p>
-            </div></div>
-            </div>
-            
-            <div class="chapter-summary">
-                <div class="summary-icon">💡</div>
-                <p>La gestion des émotions est un aspect clé de la réussite. En identifiant vos émotions et en développant des stratégies pour les gérer, vous pouvez commencer à prendre le contrôle de votre vie et à atteindre vos objectifs.</p>
-            </div>
-            
-            <div class="notes-section">
-                <h4>📝 My Notes</h4>
-                <div class="notes-lines">
-                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
-                </div>
-            </div>
-            
-            <div class="page-break"></div>
-        </section>
-        <section class="chapter" id="chapter-4">
-            <div class="chapter-header">
-                <div class="chapter-number-badge">
-                    <span class="ch-label">CHAPTER</span>
-                    <span class="ch-num">4</span>
-                </div>
-                <h2 class="chapter-title">Le développement de la confiance en soi</h2>
-                <p class="chapter-subtitle">Comment développer la confiance en soi pour atteindre la réussite</p>
-            </div>
-            
-            <div class="key-points-box">
-                <h4>🎯 Key Points</h4>
-                <ul class="key-points-list"><li class="key-point">La définition de la confiance en soi</li><li class="key-point">Les avantages de la confiance en soi</li><li class="key-point">Les stratégies pour développer la confiance en soi</li></ul>
-            </div>
-            
-            <div class="chapter-content">
-                <p>La confiance en soi est un facteur clé de la réussite. En développant la confiance en soi, vous pouvez améliorer votre capacité à prendre des décisions, à gérer les défis et à atteindre vos objectifs. Dans ce chapitre, nous allons explorer les avantages de la confiance en soi et les stratégies pour la développer.</p>
-            </div>
-            
-            <div class="exercises-section">
-                <h4>✍️ Action Exercises</h4>
-                <div class="exercises-grid">
-            <div class="exercise-item">
-                <span class="exercise-num">1</span>
-                <p>Exercice 1 : Identifiez vos forces</p>
-            </div>
-            <div class="exercise-item">
-                <span class="exercise-num">2</span>
-                <p>Exercice 2 : Développez un plan pour améliorer votre confiance en soi</p>
-            </div></div>
-            </div>
-            
-            <div class="chapter-summary">
-                <div class="summary-icon">💡</div>
-                <p>La confiance en soi est un outil puissant qui peut vous aider à atteindre vos objectifs et à améliorer votre qualité de vie. En identifiant vos forces et en développant un plan pour améliorer votre confiance en soi, vous pouvez commencer à prendre le contrôle de votre vie et à atteindre la réussite.</p>
-            </div>
-            
-            <div class="notes-section">
-                <h4>📝 My Notes</h4>
-                <div class="notes-lines">
-                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
-                </div>
-            </div>
-            
-            <div class="page-break"></div>
-        </section>
-        <section class="chapter" id="chapter-5">
-            <div class="chapter-header">
-                <div class="chapter-number-badge">
-                    <span class="ch-label">CHAPTER</span>
-                    <span class="ch-num">5</span>
-                </div>
-                <h2 class="chapter-title">La communication efficace</h2>
-                <p class="chapter-subtitle">Comment communiquer de manière efficace pour atteindre la réussite</p>
-            </div>
-            
-            <div class="key-points-box">
-                <h4>🎯 Key Points</h4>
-                <ul class="key-points-list"><li class="key-point">La définition de la communication efficace</li><li class="key-point">Les types de communication</li><li class="key-point">Les stratégies pour communiquer de manière efficace</li></ul>
-            </div>
-            
-            <div class="chapter-content">
-                <p>La communication est un aspect clé de la réussite. En communiquant de manière efficace, vous pouvez améliorer vos relations, résoudre les conflits et atteindre vos objectifs. Dans ce chapitre, nous allons explorer les types de communication et les stratégies pour communiquer de manière efficace.</p>
-            </div>
-            
-            <div class="exercises-section">
-                <h4>✍️ Action Exercises</h4>
-                <div class="exercises-grid">
-            <div class="exercise-item">
-                <span class="exercise-num">1</span>
-                <p>Exercice 1 : Identifiez vos styles de communication</p>
-            </div>
-            <div class="exercise-item">
-                <span class="exercise-num">2</span>
-                <p>Exercice 2 : Développez une stratégie pour améliorer votre communication</p>
-            </div></div>
-            </div>
-            
-            <div class="chapter-summary">
-                <div class="summary-icon">💡</div>
-                <p>La communication efficace est un outil puissant qui peut vous aider à atteindre vos objectifs et à améliorer votre qualité de vie. En identifiant vos styles de communication et en développant une stratégie pour améliorer votre communication, vous pouvez commencer à prendre le contrôle de votre vie et à atteindre la réussite.</p>
-            </div>
-            
-            <div class="notes-section">
-                <h4>📝 My Notes</h4>
-                <div class="notes-lines">
-                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
-                </div>
-            </div>
-            
-            <div class="page-break"></div>
-        </section>
-        <section class="chapter" id="chapter-6">
-            <div class="chapter-header">
-                <div class="chapter-number-badge">
-                    <span class="ch-label">CHAPTER</span>
-                    <span class="ch-num">6</span>
-                </div>
-                <h2 class="chapter-title">La gestion du temps</h2>
-                <p class="chapter-subtitle">Comment gérer votre temps pour atteindre la réussite</p>
-            </div>
-            
-            <div class="key-points-box">
-                <h4>🎯 Key Points</h4>
-                <ul class="key-points-list"><li class="key-point">La définition de la gestion du temps</li><li class="key-point">Les avantages de la gestion du temps</li><li class="key-point">Les stratégies pour gérer le temps</li></ul>
-            </div>
-            
-            <div class="chapter-content">
-                <p>La gestion du temps est un aspect clé de la réussite. En gérant votre temps de manière efficace, vous pouvez améliorer votre productivité, réduire le stress et atteindre vos objectifs. Dans ce chapitre, nous allons explorer les avantages de la gestion du temps et les stratégies pour la mettre en pratique.</p>
-            </div>
-            
-            <div class="exercises-section">
-                <h4>✍️ Action Exercises</h4>
-                <div class="exercises-grid">
-            <div class="exercise-item">
-                <span class="exercise-num">1</span>
-                <p>Exercice 1 : Identifiez vos priorités</p>
-            </div>
-            <div class="exercise-item">
-                <span class="exercise-num">2</span>
-                <p>Exercice 2 : Développez un plan pour gérer votre temps</p>
-            </div></div>
-            </div>
-            
-            <div class="chapter-summary">
-                <div class="summary-icon">💡</div>
-                <p>La gestion du temps est un outil puissant qui peut vous aider à atteindre vos objectifs et à améliorer votre qualité de vie. En identifiant vos priorités et en développant un plan pour gérer votre temps, vous pouvez commencer à prendre le contrôle de votre vie et à atteindre la réussite.</p>
-            </div>
-            
-            <div class="notes-section">
-                <h4>📝 My Notes</h4>
-                <div class="notes-lines">
-                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
-                </div>
-            </div>
-            
-            <div class="page-break"></div>
-        </section>
-        <section class="chapter" id="chapter-7">
-            <div class="chapter-header">
-                <div class="chapter-number-badge">
-                    <span class="ch-label">CHAPTER</span>
-                    <span class="ch-num">7</span>
-                </div>
-                <h2 class="chapter-title">La résilience</h2>
-                <p class="chapter-subtitle">Comment développer la résilience pour atteindre la réussite</p>
-            </div>
-            
-            <div class="key-points-box">
-                <h4>🎯 Key Points</h4>
-                <ul class="key-points-list"><li class="key-point">La définition de la résilience</li><li class="key-point">Les avantages de la résilience</li><li class="key-point">Les stratégies pour développer la résilience</li></ul>
-            </div>
-            
-            <div class="chapter-content">
-                <p>La résilience est un facteur clé de la réussite. En développant la résilience, vous pouvez améliorer votre capacité à gérer les défis, à surmonter les obstacles et à atteindre vos objectifs. Dans ce chapitre, nous allons explorer les avantages de la résilience et les stratégies pour la développer.</p>
-            </div>
-            
-            <div class="exercises-section">
-                <h4>✍️ Action Exercises</h4>
-                <div class="exercises-grid">
-            <div class="exercise-item">
-                <span class="exercise-num">1</span>
-                <p>Exercice 1 : Identifiez vos points forts</p>
-            </div>
-            <div class="exercise-item">
-                <span class="exercise-num">2</span>
-                <p>Exercice 2 : Développez un plan pour améliorer votre résilience</p>
-            </div></div>
-            </div>
-            
-            <div class="chapter-summary">
-                <div class="summary-icon">💡</div>
-                <p>La résilience est un outil puissant qui peut vous aider à atteindre vos objectifs et à améliorer votre qualité de vie. En identifiant vos points forts et en développant un plan pour améliorer votre résilience, vous pouvez commencer à prendre le contrôle de votre vie et à atteindre la réussite.</p>
-            </div>
-            
-            <div class="notes-section">
-                <h4>📝 My Notes</h4>
-                <div class="notes-lines">
-                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
-                </div>
-            </div>
-            
-            <div class="page-break"></div>
-        </section>
-        <section class="chapter" id="chapter-8">
-            <div class="chapter-header">
-                <div class="chapter-number-badge">
-                    <span class="ch-label">CHAPTER</span>
-                    <span class="ch-num">8</span>
-                </div>
-                <h2 class="chapter-title">La motivation</h2>
-                <p class="chapter-subtitle">Comment développer la motivation pour atteindre la réussite</p>
-            </div>
-            
-            <div class="key-points-box">
-                <h4>🎯 Key Points</h4>
-                <ul class="key-points-list"><li class="key-point">La définition de la motivation</li><li class="key-point">Les types de motivation</li><li class="key-point">Les stratégies pour développer la motivation</li></ul>
-            </div>
-            
-            <div class="chapter-content">
-                <p>La motivation est un facteur clé de la réussite. En développant la motivation, vous pouvez améliorer votre capacité à atteindre vos objectifs et à surmonter les obstacles. Dans ce chapitre, nous allons explorer les types de motivation et les stratégies pour la développer.</p>
-            </div>
-            
-            <div class="exercises-section">
-                <h4>✍️ Action Exercises</h4>
-                <div class="exercises-grid">
-            <div class="exercise-item">
-                <span class="exercise-num">1</span>
-                <p>Exercice 1 : Identifiez vos motivations</p>
-            </div>
-            <div class="exercise-item">
-                <span class="exercise-num">2</span>
-                <p>Exercice 2 : Développez un plan pour améliorer votre motivation</p>
-            </div></div>
-            </div>
-            
-            <div class="chapter-summary">
-                <div class="summary-icon">💡</div>
-                <p>La motivation est un outil puissant qui peut vous aider à atteindre vos objectifs et à améliorer votre qualité de vie. En identifiant vos motivations et en développant un plan pour améliorer votre motivation, vous pouvez commencer à prendre le contrôle de votre vie et à atteindre la réussite.</p>
-            </div>
-            
-            <div class="notes-section">
-                <h4>📝 My Notes</h4>
-                <div class="notes-lines">
-                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
-                </div>
-            </div>
-            
-            <div class="page-break"></div>
-        </section>
-        <section class="chapter" id="chapter-9">
-            <div class="chapter-header">
-                <div class="chapter-number-badge">
-                    <span class="ch-label">CHAPTER</span>
-                    <span class="ch-num">9</span>
-                </div>
-                <h2 class="chapter-title">La créativité</h2>
-                <p class="chapter-subtitle">Comment développer la créativité pour atteindre la réussite</p>
-            </div>
-            
-            <div class="key-points-box">
-                <h4>🎯 Key Points</h4>
-                <ul class="key-points-list"><li class="key-point">La définition de la créativité</li><li class="key-point">Les avantages de la créativité</li><li class="key-point">Les stratégies pour développer la créativité</li></ul>
-            </div>
-            
-            <div class="chapter-content">
-                <p>La créativité est un facteur clé de la réussite. En développant la créativité, vous pouvez améliorer votre capacité à trouver des solutions innovantes et à atteindre vos objectifs. Dans ce chapitre, nous allons explorer les avantages de la créativité et les stratégies pour la développer.</p>
-            </div>
-            
-            <div class="exercises-section">
-                <h4>✍️ Action Exercises</h4>
-                <div class="exercises-grid">
-            <div class="exercise-item">
-                <span class="exercise-num">1</span>
-                <p>Exercice 1 : Identifiez vos idées créatives</p>
-            </div>
-            <div class="exercise-item">
-                <span class="exercise-num">2</span>
-                <p>Exercice 2 : Développez un plan pour améliorer votre créativité</p>
-            </div></div>
-            </div>
-            
-            <div class="chapter-summary">
-                <div class="summary-icon">💡</div>
-                <p>La créativité est un outil puissant qui peut vous aider à atteindre vos objectifs et à améliorer votre qualité de vie. En identifiant vos idées créatives et en développant un plan pour améliorer votre créativité, vous pouvez commencer à prendre le contrôle de votre vie et à atteindre la réussite.</p>
-            </div>
-            
-            <div class="notes-section">
-                <h4>📝 My Notes</h4>
-                <div class="notes-lines">
-                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
-                </div>
-            </div>
-            
-            <div class="page-break"></div>
-        </section>
-        <section class="chapter" id="chapter-10">
-            <div class="chapter-header">
-                <div class="chapter-number-badge">
-                    <span class="ch-label">CHAPTER</span>
-                    <span class="ch-num">10</span>
-                </div>
-                <h2 class="chapter-title">La conclusion</h2>
-                <p class="chapter-subtitle">Récapitulons les clés de la réussite</p>
-            </div>
-            
-            <div class="key-points-box">
-                <h4>🎯 Key Points</h4>
-                <ul class="key-points-list"><li class="key-point">Les clés de la réussite</li><li class="key-point">Les stratégies pour atteindre la réussite</li><li class="key-point">Les conseils pour maintenir la réussite</li></ul>
-            </div>
-            
-            <div class="chapter-content">
-                <p>Dans ce chapitre, nous allons récapituler les clés de la réussite et les stratégies pour les mettre en pratique. Nous allons également explorer les conseils pour maintenir la réussite et continuer à progresser.</p>
-            </div>
-            
-            <div class="exercises-section">
-                <h4>✍️ Action Exercises</h4>
-                <div class="exercises-grid">
-            <div class="exercise-item">
-                <span class="exercise-num">1</span>
-                <p>Exercice 1 : Récapitulez vos apprentissages</p>
-            </div>
-            <div class="exercise-item">
-                <span class="exercise-num">2</span>
-                <p>Exercice 2 : Développez un plan pour maintenir la réussite</p>
-            </div></div>
-            </div>
-            
-            <div class="chapter-summary">
-                <div class="summary-icon">💡</div>
-                <p>La réussite est un voyage qui nécessite de la détermination, de la persévérance et de la créativité. En récapitulant les clés de la réussite et en développant un plan pour les mettre en pratique, vous pouvez commencer à prendre le contrôle de votre vie et à atteindre la réussite.</p>
-            </div>
-            
-            <div class="notes-section">
-                <h4>📝 My Notes</h4>
-                <div class="notes-lines">
-                    <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
-                </div>
-            </div>
-            
-            <div class="page-break"></div>
-        </section>
+<section class="chapter" id="chapter-1">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">1</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">Le Secret de l'Authenticité</h2>
+        <p class="chapter-subtitle">Comment vivre une vie qui vous ressemble</p>
+    </div>
 
-<!-- CONCLUSION -->
+    <div class="chapter-hook">&ldquo;La plupart des gens passent leur vie à essayer de correspondre aux attentes des autres, mais qu'en est-il de vos propres désirs ?&rdquo;</div>
+
+    <div class="chapter-body">
+
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>L'importance de l'authenticité</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment identifier vos véritables désirs</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment créer une vie qui vous ressemble</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">Nous sommes souvent conditionnés à suivre les règles et à faire ce que les autres attendent de nous. Mais qu'en est-il de nos propres désirs ? Comment pouvons-nous vivre une vie qui nous ressemble ? La réponse se trouve dans l'authenticité. En étant vrai avec soi-même et en identifiant vos véritables désirs, vous pouvez créer une vie qui vous ressemble. Nous allons explorer les 3 étapes pour vivre une vie authentique : 1) Identifier vos valeurs et vos passions, 2) Développer une confiance en vous inébranlable, 3) Créer un plan d'action pour atteindre vos objectifs.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">La Technique de l'Authenticité</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercice 1 : Écrivez vos valeurs et vos passions sur un papier</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercice 2 : Créez un plan d'action pour atteindre vos objectifs</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">L'authenticité est la clé pour vivre une vie qui vous ressemble, en étant vrai avec soi-même et en identifiant vos véritables désirs.</p>
+        </div>
+
+        <div class="notes-section">
+            <h4 class="notes-label">📝 MY NOTES</h4>
+            <div class="notes-lines">
+                <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<section class="chapter" id="chapter-2">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">2</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">La Puissance de la Confiance en Soi</h2>
+        <p class="chapter-subtitle">Comment développer une confiance en vous inébranlable</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;La confiance en soi est la clé pour atteindre vos objectifs et vivre une vie épanouie, mais comment la développer ?&rdquo;</div>
+
+    <div class="chapter-body">
+
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>L'importance de la confiance en soi</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment développer une confiance en vous inébranlable</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment gérer les critiques et les échecs</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">La confiance en soi est essentielle pour atteindre vos objectifs et vivre une vie épanouie. Mais comment la développer ? La réponse se trouve dans la pratique et la persévérance. Nous allons explorer les 3 étapes pour développer une confiance en vous inébranlable : 1) Identifier vos forces et vos faiblesses, 2) Développer une mentalité positive, 3) Créer un plan d'action pour atteindre vos objectifs.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">La Technique de la Confiance en Soi</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercice 1 : Écrivez vos forces et vos faiblesses sur un papier</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercice 2 : Créez un plan d'action pour atteindre vos objectifs</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">La confiance en soi est la clé pour atteindre vos objectifs et vivre une vie épanouie, en développant une confiance en vous inébranlable.</p>
+        </div>
+
+        <div class="notes-section">
+            <h4 class="notes-label">📝 MY NOTES</h4>
+            <div class="notes-lines">
+                <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<section class="chapter" id="chapter-3">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">3</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">Le Pouvoir de la Visualisation</h2>
+        <p class="chapter-subtitle">Comment créer une vie qui vous ressemble</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;La visualisation est une technique puissante pour créer une vie qui vous ressemble, mais comment l'utiliser ?&rdquo;</div>
+
+    <div class="chapter-body">
+
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>L'importance de la visualisation</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment utiliser la visualisation pour créer une vie qui vous ressemble</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment gérer les obstacles et les échecs</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">La visualisation est une technique puissante pour créer une vie qui vous ressemble. En visualisant vos objectifs et vos rêves, vous pouvez créer une réalité qui vous ressemble. Nous allons explorer les 3 étapes pour utiliser la visualisation : 1) Identifier vos objectifs et vos rêves, 2) Créer un plan d'action pour les atteindre, 3) Utiliser la visualisation pour maintenir la motivation et la confiance.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">La Technique de la Visualisation</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercice 1 : Écrivez vos objectifs et vos rêves sur un papier</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercice 2 : Créez un plan d'action pour les atteindre</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">La visualisation est une technique puissante pour créer une vie qui vous ressemble, en visualisant vos objectifs et vos rêves.</p>
+        </div>
+
+        <div class="notes-section">
+            <h4 class="notes-label">📝 MY NOTES</h4>
+            <div class="notes-lines">
+                <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<section class="chapter" id="chapter-4">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">4</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">La Gestion du Stress et de l'Anxiété</h2>
+        <p class="chapter-subtitle">Comment gérer le stress et l'anxiété pour vivre une vie plus équilibrée</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;Le stress et l'anxiété peuvent être dévastateurs pour votre santé et votre bien-être, mais comment les gérer ?&rdquo;</div>
+
+    <div class="chapter-body">
+
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>L'importance de la gestion du stress et de l'anxiété</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment gérer le stress et l'anxiété</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment maintenir un équilibre entre le travail et la vie personnelle</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">Le stress et l'anxiété peuvent être dévastateurs pour votre santé et votre bien-être. Mais comment les gérer ? La réponse se trouve dans la pratique de la méditation et de la respiration profonde. Nous allons explorer les 3 étapes pour gérer le stress et l'anxiété : 1) Identifier les sources de stress et d'anxiété, 2) Développer une pratique de méditation et de respiration profonde, 3) Créer un plan d'action pour maintenir un équilibre entre le travail et la vie personnelle.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">La Technique de la Méditation et de la Respiration Profonde</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercice 1 : Pratiquez la méditation et la respiration profonde pendant 10 minutes par jour</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercice 2 : Créez un plan d'action pour maintenir un équilibre entre le travail et la vie personnelle</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">La gestion du stress et de l'anxiété est essentielle pour vivre une vie plus équilibrée, en pratiquant la méditation et la respiration profonde.</p>
+        </div>
+
+        <div class="notes-section">
+            <h4 class="notes-label">📝 MY NOTES</h4>
+            <div class="notes-lines">
+                <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<section class="chapter" id="chapter-5">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">5</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">Le Pouvoir de la Gratitude</h2>
+        <p class="chapter-subtitle">Comment utiliser la gratitude pour améliorer votre vie</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;La gratitude est une émotion puissante qui peut améliorer votre vie, mais comment l'utiliser ?&rdquo;</div>
+
+    <div class="chapter-body">
+
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>L'importance de la gratitude</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment utiliser la gratitude pour améliorer votre vie</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment créer un journal de gratitude</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">La gratitude est une émotion puissante qui peut améliorer votre vie. En pratiquant la gratitude, vous pouvez améliorer votre bien-être et votre bonheur. Nous allons explorer les 3 étapes pour utiliser la gratitude : 1) Identifier les choses pour lesquelles vous êtes reconnaissant, 2) Créer un journal de gratitude, 3) Partager votre gratitude avec les autres.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">La Technique de la Gratitude</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercice 1 : Écrivez 3 choses pour lesquelles vous êtes reconnaissant chaque jour</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercice 2 : Créez un journal de gratitude</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">La gratitude est une émotion puissante qui peut améliorer votre vie, en pratiquant la gratitude et en créant un journal de gratitude.</p>
+        </div>
+
+        <div class="notes-section">
+            <h4 class="notes-label">📝 MY NOTES</h4>
+            <div class="notes-lines">
+                <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<section class="chapter" id="chapter-6">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">6</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">Le Pouvoir de la Compassion</h2>
+        <p class="chapter-subtitle">Comment utiliser la compassion pour améliorer vos relations</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;La compassion est une émotion puissante qui peut améliorer vos relations, mais comment l'utiliser ?&rdquo;</div>
+
+    <div class="chapter-body">
+
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>L'importance de la compassion</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment utiliser la compassion pour améliorer vos relations</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment pratiquer la compassion envers soi-même</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">La compassion est une émotion puissante qui peut améliorer vos relations. En pratiquant la compassion envers les autres et envers soi-même, vous pouvez améliorer votre bien-être et votre bonheur. Nous allons explorer les 3 étapes pour utiliser la compassion : 1) Identifier les personnes pour lesquelles vous avez de la compassion, 2) Pratiquer la compassion envers les autres, 3) Pratiquer la compassion envers soi-même.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">La Technique de la Compassion</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercice 1 : Écrivez 3 personnes pour lesquelles vous avez de la compassion</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercice 2 : Pratiquez la compassion envers les autres et envers soi-même</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">La compassion est une émotion puissante qui peut améliorer vos relations, en pratiquant la compassion envers les autres et envers soi-même.</p>
+        </div>
+
+        <div class="notes-section">
+            <h4 class="notes-label">📝 MY NOTES</h4>
+            <div class="notes-lines">
+                <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<section class="chapter" id="chapter-7">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">7</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">Le Pouvoir de la Forgiveness</h2>
+        <p class="chapter-subtitle">Comment utiliser la forgiveness pour améliorer votre vie</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;La forgiveness est une émotion puissante qui peut améliorer votre vie, mais comment l'utiliser ?&rdquo;</div>
+
+    <div class="chapter-body">
+
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>L'importance de la forgiveness</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment utiliser la forgiveness pour améliorer votre vie</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment pratiquer la forgiveness envers les autres et envers soi-même</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">La forgiveness est une émotion puissante qui peut améliorer votre vie. En pratiquant la forgiveness envers les autres et envers soi-même, vous pouvez améliorer votre bien-être et votre bonheur. Nous allons explorer les 3 étapes pour utiliser la forgiveness : 1) Identifier les personnes ou les situations pour lesquelles vous avez de la colère ou de la rancœur, 2) Pratiquer la forgiveness envers les autres, 3) Pratiquer la forgiveness envers soi-même.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">La Technique de la Forgiveness</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercice 1 : Écrivez 3 personnes ou situations pour lesquelles vous avez de la colère ou de la rancœur</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercice 2 : Pratiquez la forgiveness envers les autres et envers soi-même</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">La forgiveness est une émotion puissante qui peut améliorer votre vie, en pratiquant la forgiveness envers les autres et envers soi-même.</p>
+        </div>
+
+        <div class="notes-section">
+            <h4 class="notes-label">📝 MY NOTES</h4>
+            <div class="notes-lines">
+                <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<section class="chapter" id="chapter-8">
+    <div class="chapter-header">
+        <div class="chapter-meta">
+            <div class="chapter-number-badge">
+                <span class="ch-label">CHAPTER</span>
+                <span class="ch-num">8</span>
+            </div>
+        </div>
+        <h2 class="chapter-title">Le Pouvoir de la Créativité</h2>
+        <p class="chapter-subtitle">Comment utiliser la créativité pour améliorer votre vie</p>
+    </div>
+
+    <div class="chapter-hook">&ldquo;La créativité est une émotion puissante qui peut améliorer votre vie, mais comment l'utiliser ?&rdquo;</div>
+
+    <div class="chapter-body">
+
+        <div class="key-points-box">
+            <h4 class="box-label">🎯 KEY POINTS</h4>
+            <ul class="key-points-list"><li class="key-point"><span class="kp-arrow">→</span><span>L'importance de la créativité</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment utiliser la créativité pour améliorer votre vie</span></li><li class="key-point"><span class="kp-arrow">→</span><span>Comment pratiquer la créativité dans votre vie quotidienne</span></li></ul>
+        </div>
+
+        <div class="chapter-content">
+            <p class="body-text">La créativité est une émotion puissante qui peut améliorer votre vie. En pratiquant la créativité, vous pouvez améliorer votre bien-être et votre bonheur. Nous allons explorer les 3 étapes pour utiliser la créativité : 1) Identifier vos passions et vos intérêts, 2) Pratiquer la créativité dans votre vie quotidienne, 3) Partager votre créativité avec les autres.</p>
+        </div>
+
+        <div class="technique-badge">
+            <span class="technique-label">🔑 KEY TECHNIQUE</span>
+            <span class="technique-name">La Technique de la Créativité</span>
+        </div>
+
+        <div class="exercises-section">
+            <h4 class="box-label">✍️ ACTION EXERCISES</h4>
+            <div class="exercises-list"><div class="exercise-item">
+                    <span class="exercise-num">1</span>
+                    <p>Exercice 1 : Écrivez 3 choses que vous aimez faire pour vous détendre</p>
+                </div><div class="exercise-item">
+                    <span class="exercise-num">2</span>
+                    <p>Exercice 2 : Pratiquez la créativité dans votre vie quotidienne</p>
+                </div></div>
+        </div>
+
+        <div class="chapter-summary">
+            <span class="summary-icon">💡</span>
+            <p class="summary-text">La créativité est une émotion puissante qui peut améliorer votre vie, en pratiquant la créativité dans votre vie quotidienne.</p>
+        </div>
+
+        <div class="notes-section">
+            <h4 class="notes-label">📝 MY NOTES</h4>
+            <div class="notes-lines">
+                <div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div><div class="note-line"></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ==================== CONCLUSION ==================== -->
 <section class="conclusion-page">
     <h2 class="page-title">Conclusion</h2>
-    <p class="conclusion-text">Félicitations pour avoir atteint la fin de ce livre ! Nous espérons que vous avez appris des choses nouvelles et utiles pour atteindre la réussite. N'oubliez pas de mettre en pratique les stratégies et les conseils que vous avez appris pour continuer à progresser et à atteindre vos objectifs.</p>
+    <p class="body-text">Félicitations pour avoir terminé ce livre ! Vous avez maintenant les outils et les techniques pour vivre une vie authentique et épanouie. N'oubliez pas de pratiquer régulièrement les exercices et les techniques que vous avez appris pour maintenir votre motivation et votre confiance. Vous êtes capable de créer la vie que vous voulez, alors allez-y et faites-le !</p>
 </section>
 
-<!-- ABOUT AUTHOR -->
+<!-- ==================== AUTHOR ==================== -->
 <section class="author-page">
     <h2 class="page-title">About the Author</h2>
     <div class="author-card">
         <div class="author-avatar">🤖</div>
         <p class="author-name">Maria</p>
-        <p class="author-bio">L'auteur de ce livre est un professionnel expérimenté qui a aidé des milliers de personnes à atteindre la réussite. Il est passionné par l'aide aux autres et est déterminé à partager ses connaissances et son expérience pour aider les autres à atteindre leurs objectifs.</p>
+        <p class="author-bio">L'auteur de ce livre est un professionnel de la motivation et du développement personnel. Il a aidé des milliers de personnes à atteindre leurs objectifs et à améliorer leur vie. Il est passionné par la création de contenu de haute qualité qui aide les gens à atteindre leur plein potentiel.</p>
     </div>
 </section>
 
-<!-- BACK COVER -->
+<!-- ==================== BACK COVER ==================== -->
 <section class="back-cover">
-    <p class="back-cover-title">Ce que personne ne t'a jamais dit</p>
-    <p class="back-cover-text">Découvrez les clés pour débloquer votre plein potentiel et atteindre la réussite</p>
-    <div class="price-badge">Professional Edition</div>
+    <h2 class="back-cover-title">Ce que personne ne t'a jamais dit</h2>
+    <p class="back-cover-text">Découvrez les vérités cachées qui vous empêchent de réaliser vos rêves</p>
+    <div class="edition-badge">✦ Professional Edition</div>
 </section>
 
-<!-- PDF DOWNLOAD BUTTON -->
-<button class="pdf-btn" id="pdf-btn" onclick="downloadPDF()">
-    📥 Download PDF
-</button>
+<!-- ==================== PDF BUTTON ==================== -->
+<button class="pdf-btn" id="pdf-btn" onclick="downloadPDF()">📥 Download PDF</button>
 
 <script>
-    // Reading progress
-    window.addEventListener('scroll', () => {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = (scrollTop / docHeight) * 100;
-        document.getElementById('reading-progress').style.width = progress + '%';
-        document.getElementById('progress-text').textContent = Math.round(progress) + '% read';
-    });
+// Reading progress bar
+window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = total > 0 ? (scrolled / total) * 100 : 0;
+    document.getElementById('reading-progress').style.width = pct.toFixed(1) + '%';
+    document.getElementById('progress-text').textContent = Math.round(pct) + '% read';
+});
 
-    // PDF Download
-    function downloadPDF() {
-        const btn = document.getElementById('pdf-btn');
-        btn.classList.add('loading');
-        btn.innerHTML = '⏳ Preparing PDF...';
-        
-        const title = document.querySelector('.cover-title').textContent || 'ebook';
-        const safeName = title.replace(/[^a-zA-Z0-9؀-ۿ]/g, '_').substring(0, 50);
-        
-        const opt = {
-            margin: 0,
-            filename: safeName + '.pdf',
-            image: { type: 'jpeg', quality: 0.95 },
-            html2canvas: {
-                scale: 2,
-                useCORS: true,
-                backgroundColor: '#0a0a0a',
-                logging: false
-            },
-            jsPDF: {
-                unit: 'mm',
-                format: [120, 213],
-                orientation: 'portrait'
-            },
-            pagebreak: { mode: ['avoid-all', 'css'] }
-        };
-        
-        // Hide UI elements during PDF generation
-        document.getElementById('pdf-btn').style.display = 'none';
-        document.getElementById('reading-progress').style.display = 'none';
-        document.querySelector('.nav-bar').style.display = 'none';
-        
-        html2pdf().set(opt).from(document.body).save().then(() => {
-            // Restore UI
-            document.getElementById('pdf-btn').style.display = 'flex';
-            document.getElementById('reading-progress').style.display = 'block';
-            document.querySelector('.nav-bar').style.display = 'flex';
-            btn.classList.remove('loading');
-            btn.innerHTML = '📥 Download PDF';
-        }).catch(() => {
-            document.getElementById('pdf-btn').style.display = 'flex';
-            document.querySelector('.nav-bar').style.display = 'flex';
-            btn.classList.remove('loading');
-            btn.innerHTML = '📥 Download PDF';
-            alert('PDF ready! Use browser Print → Save as PDF for best quality.');
-            window.print();
-        });
+// Smooth scroll to chapter
+function scrollToChapter(num) {
+    const el = document.getElementById('chapter-' + num);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+// PDF Download
+async function downloadPDF() {
+    const btn = document.getElementById('pdf-btn');
+    btn.style.opacity = '0.6';
+    btn.textContent = '⏳ Preparing...';
+
+    const hide = ['pdf-btn','reading-progress'];
+    hide.forEach(id => { const el = document.getElementById(id); if(el) el.style.display='none'; });
+    document.querySelector('.nav-bar').style.display = 'none';
+
+    const title = document.querySelector('.cover-title')?.textContent || 'book';
+    const safeName = title.replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'_').substring(0,50);
+
+    const opt = {
+        margin: 0,
+        filename: safeName + '.pdf',
+        image: { type: 'jpeg', quality: 0.92 },
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#030712',
+            logging: false,
+            letterRendering: true
+        },
+        jsPDF: {
+            unit: 'mm',
+            format: [120, 213],
+            orientation: 'portrait'
+        },
+        pagebreak: { mode: ['css','avoid-all'] }
+    };
+
+    try {
+        await html2pdf().set(opt).from(document.body).save();
+    } catch(e) {
+        alert('Use browser Print → Save as PDF for best results.');
+        window.print();
+    } finally {
+        hide.forEach(id => { const el = document.getElementById(id); if(el) el.style.display=''; });
+        document.querySelector('.nav-bar').style.display = 'flex';
+        btn.style.opacity = '1';
+        btn.innerHTML = '📥 Download PDF';
     }
+}
 </script>
-
 </body>
 </html>
